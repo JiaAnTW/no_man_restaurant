@@ -39,4 +39,4 @@
 * 字串: 使用**單上引號**
   範例:`var word='Hello world!'`
 * 屬性: 使用**雙上引號**、開頭小寫，以直線分隔
-  範例`<div class='num-block' id='second'></div>`
+  範例`<div class="num-block" id="second"></div>`
