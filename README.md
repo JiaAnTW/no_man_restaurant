@@ -1,6 +1,30 @@
 
 # UIDD2019 無人餐廳 開發者手冊
 
+## 專案結構
+* build
+* config
+* dist 
+  > 編譯後出現
+* server
+  > 後端
+  * model 
+    > 與資料庫溝通
+  * controller
+    > 與前端溝通
+  * routers
+    > 由後端控制各路由(url)
+    * index.js
+      > 後端主程式
+* src
+  > view(前端)
+  * asset
+  * components
+  * routers
+    > 由前端控制view路由
+* static
+* test
+
 ## 如何開始開發?
 * 環境設定:
     1. 請先<code>Fork</code>一份repo到自己的github。
