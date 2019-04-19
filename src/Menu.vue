@@ -1,11 +1,11 @@
 <template>
     <div>
-        這裡是首頁
+        這裡是變動的地方
     </div>
 </template>
 
 <script>
 export default {
-  name: 'Home'
+  name: 'Menu'
 }
 </script>
