@@ -24,6 +24,21 @@ module.exports = {
     // allow async-await
     'generator-star-spacing': 'off',
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-irregular-whitespace':"off",
+    "no-extra-semi":"off",
+    "no-extra-parens":"off",
+    "no-multi-spaces":"off",
+    "space-infix-ops":"off",
+    "space-before-blocks":"off",
+    "indent":"off",
+    "no-useless-constructor":"off",
+    "semi":"off",
+    "quotes":"off",
+    "space-before-function-paren":"off",
+    "keyword-spacing":"off",
+    "no-trailing-spaces":"off",
+    "no-multiple-empty-lines":"off"
+    
   }
 }
