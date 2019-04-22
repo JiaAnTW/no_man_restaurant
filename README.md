@@ -36,6 +36,15 @@
 `upstream  https://github.com/JiaAnTW/no_man_restaurant.git  (push)`
     7. 每次要開發前，都先執行` git fetch upstream `確認有沒有更新版本。如果有更新到`package.json`，就要執行<code>  npm i  </code>或是<code>  yarn  </code>。
 
+* 如果你是在luffy除錯:
+    1. 請打開`package.json`，修改`"script"`底下的`"dev"`改為`"scripts": {
+    "dev": "webpack-dev-server --host 0.0.0.0 --public --inline --progress --config build/webpack.dev.conf.js",`
+    2. 進入`build`資料夾底下的`webpack.dev.conf.js`，把` devServer:{`前面改為` devServer: {
+    clientLogLevel: 'warning',
+    disableHostCheck: true,`
+    3. 執行`npm start`後，terminal會顯示`locadhost:某數字`，你在自己電腦輸入`http://luffy.ee.ncku.edu.tw:某數字`即可預覽前端結果
+    
+
 我自己是習慣複製一份從github抓下來的專案到另外一個地方開發，每次要傳github或要更新之前再copy回去。不過這個看個人~
 * 如果你想開發 **前端** ，請:
     1. 開啟命令列(cmd/terminal)後，cd到這份專案的路徑下。
