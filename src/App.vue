@@ -11,12 +11,16 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+html {
+  font-size: 4px;
+  font-size: 1vw;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@media (min-width: 596px){
+  html {
+  font-size: 6px;
+  font-size: 1.2vw;
+}
 }
 </style>

@@ -14,10 +14,13 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "bootstrap": "^4.3.1",
+    "bootstrap-vue": "^2.0.0-rc.19",
     "express": "^4.16.4",
+    "line-pay": "^1.0.15",
     "mysql": "^2.17.1",
-    "vue": "^2.5.2",
-    "vue-resource": "^1.5.1",
+    "vue": "^2.6.10",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
