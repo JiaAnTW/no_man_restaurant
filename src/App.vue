@@ -19,8 +19,22 @@ html {
 
 @media (min-width: 596px){
   html {
-  font-size: 6px;
-  font-size: 1.2vw;
+    font-size: 6px;
+    font-size: 1.0vw;
+  }
 }
+
+@media (min-width: 896px){
+  html {
+    font-size: 8px;
+    font-size: 1.0vw;
+  }
+}
+
+@media (min-width: 1024px){
+  html {
+    font-size: 10px;
+    font-size: 1.0vw;
+  }
 }
 </style>

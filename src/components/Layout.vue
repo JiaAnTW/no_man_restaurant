@@ -9,7 +9,7 @@
       <!--注意，請把你.vue檔中最外層的div增加兩個css屬性: "flex-grow:1"和"-webkit-flex-grow:1" -->
       <!--這兩個屬性會幫你自動把長寬貼齊step-container，詳情請搜尋css flexbox -->
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
-
+      <order/>
       <!--把你做的component放在上面。(你可以試試看把order放進來)-->
     </div>
     <div class="nav-bar">
@@ -28,6 +28,7 @@ export default {
     return {
       msg: '這裡是固定的版面',
       order: [{name:"漢堡",price:1},{name:"漢堡",price:1}],
+      cart: [],
       steps:["menu","favorite","cart","profile"],
       nowAt: 1,
     }
@@ -53,7 +54,7 @@ export default {
   position: absolute;
   left: 0;
   top: 0;
-  width: 100rem;
+  width: 100vw;
   max-width: 100%;
   height: 100vh;
   max-height: 100%;
