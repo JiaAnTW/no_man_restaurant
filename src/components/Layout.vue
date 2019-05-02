@@ -19,20 +19,41 @@
 </template>
 
 <script>
-import Order from '../Order.vue'//記得include你做的Component
-import { normalize } from 'path';
+import Order from '../Order.vue';//記得include你做的Component
+import axios from "axios";
+import Vue from "vue";
+Vue.prototype.$axios = axios;
 export default {
   name: 'Layout',
   components: {Order},//也要把你做的Component在這註冊
   data () {
     return {
       msg: '這裡是固定的版面',
-      order: [{name:"漢堡",price:1},{name:"漢堡",price:1}],
+      menu:[],
       cart: [],
+      viewDish: 0,
       steps:["menu","favorite","cart","profile"],
       nowAt: 1,
     }
   },
+  methods:{
+    viewSingleDish: function(id){
+      this.viewDish=id;
+    },
+    addToCart: function(items){
+      cart.push(items);
+    },
+  },//當你想拿後端資料的時候再把這裡的註解拿掉
+    //mounted: function(){
+      //var self=this;
+      //this.$axios({
+        //methods: 'get',
+        //url: '/api/get/menu'
+      //})
+      //.then((res) => {
+        //self.menu = res.data;
+      //});
+  //},
   watch:{
     nowAt: function(){
       const handleStyleChange=()=>{
@@ -92,6 +113,7 @@ export default {
   flex-grow:3;
   -webkit-flex-grow:3;
   display: flex;
+  overflow: hidden;
 }
 
 .nav-bar{

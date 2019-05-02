@@ -1,4 +1,3 @@
-
 # UIDD2019 無人餐廳 開發者手冊
 ## 專案結構
 * build
@@ -24,8 +23,7 @@
 * test
 
 ## 程式結構
-![](https://i.imgur.com/qafFwnP.jpg)
-
+![](https://i.imgur.com/jLOHEBg.jpg)
 
 ## 如何開始開發?
 * 環境設定:
