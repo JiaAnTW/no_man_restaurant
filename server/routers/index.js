@@ -27,14 +27,17 @@ var Menu = require( '../models/menu.js');
 Menu=new Menu();
 app.get('/api/get/menu', (...args)=> Menu.Index(...args));
 app.post('/api/post/add', (...args)=> Menu.Add(...args));
+app.put('/api/post/edit', (...args)=> Menu.Edit(...args));
 //app.post('/api/post/add', function(req,res){
     //console.log(req.body["name"])
 //});
+
 
 var User = require( '../models/user.js');
 User=new User();
 app.post('/api/post/login', (...args)=> User.Login(...args));
 app.post('/api/post/index',(...args)=> User.Index(...args));
+
 
 
 

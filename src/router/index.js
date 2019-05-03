@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Layout from '@/components/Layout'
+import Admin from '@/Admin'
 import Home from '../Home'
 
 Vue.use(Router)
@@ -20,6 +21,11 @@ export default new Router({
       component: Layout
       // You can edit/add/remove/change the objects in children to reach SPA //
       // 如果路徑希望接續父router，path不要以/開頭。若不希望接續則反之。
+    },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: Admin
     }
   ]
 })
