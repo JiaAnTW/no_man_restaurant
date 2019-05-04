@@ -20,6 +20,7 @@
                 <b-form-input id="input-3" v-model="detail" :state="state" trim></b-form-input>
             </b-form-group>
             <button v-on:click="sendImage">送出</button>
+            <button v-on:click="deleteDish">刪除</button>
             </b-form-group>
         </div>
     </div>
@@ -70,6 +71,7 @@ export default {
           this.style.display="none";
       },
       sendImage: function(){
+        this.title=this.name;
         var self=this;
         const method=(this.new===true)?"post":"put";
         const route=(this.new===true)?"add":"edit";
@@ -102,14 +104,31 @@ export default {
       clearImage:function(){
         this.isImage=false;
         this.image=require('../assets/noPic.png');
-      }
+      },
+      deleteDish: function(){
+        var self=this;
+        var check = confirm("確定要刪除?");
+        if(check==true){
+          this.$axios({
+          method: "delete",
+          url: '/api/post/menu',
+          data:{
+              id:self.id,
+          }
+        })
+        .then((res) => {
+           
+          });
+        this.$emit('delete-dish',self.id);
+        }
+      },
   },
   mounted:function(){
       console.log(this.data)
       this.id=this.data.id;
       this.title=this.data.name;
       this.name=(this.data.name==="點擊編輯新餐點")?'':this.data.name;
-      this.image=(this.data.image==null)?require('../assets/noPic.png'):require('../assets/'+this.data.image+".png");
+      this.image=(this.data.image==null)?require('../assets/noPic.png'):this.data.image;
       this.price=this.data.price;
       this.detail=this.data.detail;
       this.isImage=(this.data.image==null)?false:true;

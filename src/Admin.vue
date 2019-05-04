@@ -1,6 +1,6 @@
 <template>
     <div>
-        <edit-Dish v-for="(dish,index) in menu" :key="index" :data="dish"/>
+        <edit-Dish v-for="(dish,index) in menu" :key="index" :data="dish" @delete-dish="deleteDish"/>
         <b-button variant="dark" class="new" v-on:click="addDish">+新增餐點</b-button>
     </div>
 </template>
@@ -19,29 +19,6 @@ export default {
       }
   },
   methods:{
-      sendImage: function(){
-        var self=this;
-        this.$axios({
-        method: 'post',
-        url: '/api/post/image',
-        data:{
-            image: self.image,
-            filename: 'testpic'
-        }
-      })
-      .then((res) => {
-            
-        });
-      },
-      changeImage:function(e) {
-        var file = e.target.files[0]
-        var reader = new FileReader()
-        var self = this
-        reader.readAsDataURL(file)
-        reader.onload = function(e) {
-          self.image = this.result
-        }
-      },
       addDish:function(){
         const newData={
           id:-1,
@@ -50,6 +27,12 @@ export default {
           detail:""
         };
         this.menu.push(newData)
+      },
+      deleteDish:function(id){
+        var index=this.menu.find(function(item, index, array){
+         return item.id == id;           // 取得大於五歲的
+        });
+        this.menu.splice(index, 1);
       }
   },
   mounted: function(){

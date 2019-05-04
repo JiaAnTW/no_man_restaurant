@@ -23,6 +23,13 @@ module.exports=class menu{
                 return(err);
             }
             var data = rows;
+            //data.forEach(element => {
+                //if(element.image!=null){
+                    //console.log('../../src/assets/dish/'+element.image+'.png')
+                    //const path='../../src/assets/dish/'+element.image+'.png';
+                    //element.image=require(path);
+                //}
+            //});
             res.send(data);
         });
     }
@@ -47,7 +54,8 @@ module.exports=class menu{
             const data={
                 id: new_id,
                 name: req.body["name"],
-                image: (req.body["image"]==null)?null:this.Image(req.body["image"],"dish_"+new_id),
+                //image: (req.body["image"]==null)?null:this.Image(req.body["image"],"dish_"+new_id),
+                image: req.body["image"],
                 price: req.body["price"],
                 detail: req.body["detail"]
             };
@@ -70,7 +78,8 @@ module.exports=class menu{
             const data={
                 id: req.body["id"],
                 name: req.body["name"],
-                image: (req.body["image"]==null)?null:this.Image(req.body["image"],"dish_"+req.body["id"]),
+                //image: (req.body["image"]==null)?null:this.Image(req.body["image"],"dish_"+req.body["id"]),
+                image: req.body["image"],
                 price: req.body["price"],
                 detail: req.body["detail"]
             };

@@ -4,6 +4,7 @@ module.exports=class user{
         this.mysql=require("mysql");
         this.con=this.mysql.createConnection({
             host: "localhost",
+            //host: "http://luffy.ee.ncku.edu.tw",
             user: "uidd2019_groupb",
             password: "JjKxenffSYSbc546",
             database: "uidd2019_groupb"

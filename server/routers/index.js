@@ -28,6 +28,7 @@ Menu=new Menu();
 app.get('/api/get/menu', (...args)=> Menu.Index(...args));
 app.post('/api/post/add', (...args)=> Menu.Add(...args));
 app.put('/api/post/edit', (...args)=> Menu.Edit(...args));
+app.delete('/api/post/menu', (...args)=> Menu.Delete(...args));
 //app.post('/api/post/add', function(req,res){
     //console.log(req.body["name"])
 //});
