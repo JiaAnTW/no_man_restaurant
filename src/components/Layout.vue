@@ -43,17 +43,18 @@ export default {
     addToCart: function(items){
       cart.push(items);
     },
-  },//當你想拿後端資料的時候再把這裡的註解拿掉
-    //mounted: function(){
-      //var self=this;
-      //this.$axios({
-        //methods: 'get',
+  },
+    mounted: function(){
+      var self=this;
+      this.$axios({
+        methods: 'get',
+        url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/menu'
         //url: '/api/get/menu'
-      //})
-      //.then((res) => {
-        //self.menu = res.data;
-      //});
-  //},
+      })
+      .then((res) => {
+        self.menu = res.data;
+      });
+  },
   watch:{
     nowAt: function(){
       const handleStyleChange=()=>{

@@ -3,11 +3,11 @@ module.exports=class user{
     constructor(){
         this.mysql=require("mysql");
         this.con=this.mysql.createConnection({
-            host: "localhost",
-            //host: "http://luffy.ee.ncku.edu.tw",
-            user: "uidd2019_groupb",
+            //host: "localhost",
+            host: "luffy.ee.ncku.edu.tw",
+            user: "uidd2019_groupB",
             password: "JjKxenffSYSbc546",
-            database: "uidd2019_groupb"
+            database: "uidd2019_groupB"
         });
         
     }

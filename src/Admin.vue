@@ -39,7 +39,8 @@ export default {
     var self=this;
     this.$axios({
       methods: 'get',
-      url: '/api/get/menu'
+      url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/menu',
+      //url: '/api/get/menu',
       })
       .then((res) => {
         self.menu = res.data;
