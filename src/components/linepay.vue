@@ -11,7 +11,30 @@ import Vue from "vue";
 Vue.prototype.$axios = axios
 export default {
   name: 'Home',
+  mounted: function(){
+    var self=this;
+    this.$axios({
+      method: 'post',
+      url: '/api/post/login',
+      data: {
+        username:"admin",
+        password:"admin123"
+      },
+    }).then((res) => {
+        this.token=res.data["token"];
+      });
+  },
   methods:{
+    test: function(){
+      this.$axios({
+      method: 'post',
+      url: '/api/post/index',
+      data: {
+        token:this.token,
+      },
+    }).then((res) => {
+      })
+    },
     post123: function(){
       console.log("快給我錢")
       this.$axios(
@@ -36,9 +59,12 @@ export default {
           withCredentials: true,
         }
       ).then(response=>{
-        window.open(response.body["info"]["paymentUrl"]["web"], "_blank")
+        window.open(response.data["info"]["paymentUrl"]["web"], "_blank")
       })
     }
   }
 }
 </script>
+  methods:{
+
+  },

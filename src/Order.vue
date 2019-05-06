@@ -12,7 +12,7 @@
           <button value="plus" v-on:click="handleNumberChange">+</button>
         </div>
         <div class="cart">
-          <button>Add to cart</button>
+          <button v-on:click="addToCart">Add to cart</button>
         </div>
     </div>
 </template>
@@ -22,10 +22,11 @@ import Dish from './components/Dish.vue'
 export default {
   name: 'Order',
   components: {Dish},//也要把你做的Component在這註冊
+  props:["data"],
   data () {
     return {
       number: 0,
-      name: '黑膠起司牛肉堡',
+      name: "無資料",
       isOpen: false,
     }
   },
@@ -36,6 +37,14 @@ export default {
       else if(this.number>0)
         this.number--;
     },
+    addToCart: function(){
+      this.$emit('add-cart',{name:this.name,number:this.number});
+    }
+  },
+  watch:{
+    data: function(){
+      this.name= this.data.name;
+    }
   }
 }
 </script>
@@ -51,6 +60,11 @@ export default {
     -webkit-align-items: center; 
   }
 
+  .title{
+    align-items:flex-end;
+    -webkit-align-items: flex-end;
+  }
+
 
 
   .order{
@@ -62,7 +76,7 @@ export default {
   }
 
   .title{
-    flex-grow: 0.2;    
+    flex-grow: 0.5;    
   }
 
   .title h1{
