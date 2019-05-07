@@ -33,7 +33,7 @@
 
 .Member{
   display:flex;
-  background-color: black;
+  background-color: rgb(48, 48, 48);
   flex-grow:1;
   -webkit-flex-grow:1;
   justify-content: center;/*置中*/
@@ -103,7 +103,7 @@
 #log {
   display: flex;
   justify-content: center;
-  background-color:black;
+  background-color:rgb(48, 48, 48);
   border: 0px;
   margin: 0px;
   padding:0px;
@@ -111,7 +111,7 @@
 }
 
 #forget_pass{
-  background-color:black;
+  background-color:rgb(48, 48, 48);
   border: 0px;
   margin-top: 10px;
   margin-bottom: 10px;

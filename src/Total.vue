@@ -74,7 +74,7 @@ export default {
     -webkit-flex-grow:1;
     flex-direction:column;
     -webkit-flex-direction:column;
-    background-color: black; 
+    background-color:rgb(48, 48, 48); 
 }
 
 .data{
