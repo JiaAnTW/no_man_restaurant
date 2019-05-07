@@ -133,7 +133,7 @@ export default {
 }
 
 #inner{
-    background-image: url("./assets/logo.png");
+    background-image: url("./assets/icon/no_user.png");
     border-radius:50%;
     background-position: center center;
     background-size: cover;

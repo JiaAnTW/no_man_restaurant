@@ -1,39 +1,55 @@
 <template>
   <div class="Layout">
     <div class="slogan-container">
-      <button class="top-btn">music</button>
+      <button class="top-btn"><div class="back"></div></button>
       <h1>Sun Burger</h1>
-      <button class="top-btn">login</button>
+      <button :style="search" class="top-btn">login</button>
     </div>
     <div class="step-container">
       <!--注意，請把你.vue檔中最外層的div增加兩個css屬性: "flex-grow:1"和"-webkit-flex-grow:1" -->
       <!--這兩個屬性會幫你自動把長寬貼齊step-container，詳情請搜尋css flexbox -->
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
       
+      <order v-if="nowAt=== 'menu'" :data="menu[10]"/>
+      <member v-else-if="nowAt=== 'profile'" />
+      <total v-else-if="nowAt=== 'cart'"/>
+      
       <!--把你做的component放在上面。(你可以試試看把order放進來)-->
     </div>
     <div class="nav-bar">
-      <button  v-for="(step,index) in steps" v-bind:key={index}>{{ step }}</button>
+      <button  v-for="(step,index) in steps" v-bind:key={index} v-on:click="changeNowAt(step.name)">
+        <img class="nav-icon" :src="step.icon" :alt="step.name"/><br/>
+        {{ step.name }}
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 import Order from '../Order.vue';//記得include你做的Component
+import Total from '../Total.vue';
+import Member from '../Member.vue'; 
 import axios from "axios";
 import Vue from "vue";
+import { defaultCipherList } from 'constants';
 Vue.prototype.$axios = axios;
 export default {
   name: 'Layout',
-  components: {Order},//也要把你做的Component在這註冊
+  components: {Order,Total,Member},//也要把你做的Component在這註冊
   data () {
     return {
       msg: '這裡是固定的版面',
       menu:[],
       cart: [],
       viewDish: 0,
-      steps:["menu","favorite","cart","profile"],
-      nowAt: 1,
+      steps:[
+        {name:"menu",icon:require('../assets/icon/burger.png')},
+        {name:"favorite",icon:require('../assets/icon/love.png')},
+        {name:"cart",icon:require('../assets/icon/cart.png')},
+        {name:"profile",icon:require('../assets/icon/member.png')}
+      ],
+      search: {visibility: "hidden"},
+      nowAt: "menu",
     }
   },
   methods:{
@@ -41,15 +57,18 @@ export default {
       this.viewDish=id;
     },
     addToCart: function(items){
-      cart.push(items);
+      this.cart.push(items);
     },
+    changeNowAt: function(next){
+      this.nowAt=next;
+    }
   },
     mounted: function(){
       var self=this;
       this.$axios({
         methods: 'get',
-        url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/menu'
-        //url: '/api/get/menu'
+        url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/menu',
+        //url: '/api/get/menu',
       })
       .then((res) => {
         self.menu = res.data;
@@ -57,11 +76,14 @@ export default {
   },
   watch:{
     nowAt: function(){
-      const handleStyleChange=()=>{
-        if(this.nowAt===1){
-        }
+      switch(this.nowAt){
+        case 'menu':
+          this.search={};
+          break;
+        default:
+          this.search={visibility:"hidden"};
+          break;
       }
-      handleStyleChange();
     }
   }
 }
@@ -82,37 +104,45 @@ export default {
   max-height: 100%;
 }
 .slogan-container{
-  border-bottom: 1px solid gray;
+  background-color: rgb(48, 48, 48);
+  
+  border-bottom: 1px solid rgb(48, 48, 48);
   height: 7.5vh;
   display: flex;
   justify-content: space-around;
   -webkit-justify-content:space-around; 
   align-items: center;
   -webkit-align-items: center;
-  border-bottom-right-radius: 7px;
-  border-bottom-left-radius: 7px;
+
 }
 
 .slogan-container h1{
-
+  border: 1px solid rgb(48, 48, 48);
   font-weight: 300;
   font-size: 5.5rem;
-  color: gray;
+  color: white;
 
 }
 
 .top-btn{
+  display: flex;
   background-color: rgba(0, 0, 0, 0);
   padding:  5px 10px;
   font-size: 4.5rem;
+  width: 5rem;
   border: none;
   outline: none;
-  color: gray;
+  color: white;
+  justify-content: flex-start;
+  -webkit-justify-content:flex-start; 
+  align-items: center;
+  -webkit-align-items: center;
 }
 
 .step-container{
   flex-grow:3;
   -webkit-flex-grow:3;
+  background-color: rgb(48, 48, 48);
   display: flex;
   overflow: hidden;
 }
@@ -121,8 +151,8 @@ export default {
   border-top: 1px solid gray;
   height: 7.0vh;
   display: flex;
-  justify-content: space-around;
-  -webkit-justify-content:space-around; 
+  justify-content: center;
+  -webkit-justify-content:center; 
   align-items: center;
   -webkit-align-items: center;
   border-top-right-radius: 7px;
@@ -131,13 +161,27 @@ export default {
 
 
 .nav-bar button{
-  font-size: 5rem;
+  font-size: 2rem;
   color: gray;
   background-color: rgba(0, 0, 0, 0);
-  width: 5em;
-  height: 5rem;
+  margin: 0rem 1.3rem;
+  width: 5.5em;
+  height: 100%;
   border: none;
   outline: none;
+}
+
+.nav-bar img{
+  height: 40%;
+}
+
+.back{
+  width: 1.5rem;
+  height: 1.5rem;
+  border-top:1.2px solid white;
+  border-right:1.2px solid white;
+  transform:rotate(-135deg);
+  font-size: 2rem;
 }
 
 </style>

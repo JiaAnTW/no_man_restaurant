@@ -86,7 +86,7 @@
 }
 
 #inner {
-    background-image:url("./assets/logo.png");
+    background-image:url("./assets/icon/no_user.png");
     background-size:cover;
     background-position:center center;
     height: 100%;

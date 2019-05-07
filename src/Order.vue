@@ -3,7 +3,7 @@
         <div class="title"><h1>{{ name }}</h1></div>
         <div class="dish">
           <div class="info-container">
-            <dish/>
+            <dish :image="image"/>
            </div> 
         </div>
         <div class="number">
@@ -27,6 +27,7 @@ export default {
     return {
       number: 0,
       name: "無資料",
+      image: '',
       isOpen: false,
     }
   },
@@ -44,7 +45,12 @@ export default {
   watch:{
     data: function(){
       this.name= this.data.name;
+      this.image=this.data.image;
     }
+  },
+  mounted:function(){
+      this.name= this.data.name;
+      this.image=this.data.image;
   }
 }
 </script>
@@ -76,42 +82,50 @@ export default {
   }
 
   .title{
-    flex-grow: 0.5;    
+    flex-grow: 0.3;
+    color: white;    
   }
 
   .title h1{
     font-size: 5rem;
+    text-decoration: underline;
   }
 
   .dish{
-    flex-grow: 6;
+    flex-grow: 2;
   }
 
   .dish .info-container{
     height: 85%;
-    width: 85%;
-    overflow: hidden;
-    border: 1px solid gray;
+    width: 90%;
     display: flex;
+    overflow: hidden;
+    border: 10px solid rgb(80, 80, 80);
+    border-bottom: none; 
     border-radius: 15px;
   }
 
   .number{
-    flex-grow: 1.5;
+    flex-grow: 1;
   }
 
   .number button{
     border-radius: 50px;
     width: 3rem;
     height: 3rem;
-    background-color: rgba(0,0,0,0);
-    border: 1px solid gray;
+    color: rgb(45, 45, 45);
+    font-size: 6rem;
+    font-weight: 600;
+    line-height: 0rem;
+    background-color: rgba(243,243,243,1);
+    border: 0px solid gray;
   }
 
   .number span{
     width: 35%;
     font-size: 6rem;
     text-align: center;
+    color: white;
   }
 
   .cart{
@@ -122,13 +136,13 @@ export default {
   }
 
   .cart button{
-    margin-top: 3%;
-    height: 45%;
+    margin-top: 6%;
+    height: 40%;
     width: 90%;
     font-size: 6rem;
     border-radius: 10px;
-    background-color: rgba(0,0,0,0);
-    border: 1px solid black;
+    background-color: rgba(243,243,243,1);
+    border: 1px solid rgb(45, 45, 45);
   }
 </style>
 
