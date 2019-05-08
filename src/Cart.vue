@@ -3,26 +3,24 @@
       <div class = "title">Your Cart</div>
       <div class = "order">
       <table>
-      <tbody>
-      <tr class=cartdata v-for = "cartdatas in lists"  :key="cartdatas">
-      <td class="image">
-      <img class="foodimg" src="./assets/beef.png" style="display:block; margin:auto;" alt="cartdatas.name" />
-      </td>
-      <td class="foodname">
-       <h1>{{cartdatas.name}}</h1>
-       <h1>${{cartdatas.price}}</h1>
-      </td>
-
-      <td class="num">
-        <button  value="minus" v-on:click="handleNumberChange">-</button>
-        <span>{{ cartdatas.num }}</span>
-        <button  value="plus" v-on:click="handleNumberChange">+</button>
-      </td>
-
-      <td class="del">
-      <button class="can" value="zero" v-on:click="handleNumberChange"></button>
-      </td>
-      </tr>
+        <tbody>
+          <tr class=cartdata v-for = "(cartdatas,index) in lists"  :key="index">
+            <td class="image">
+              <img class="foodimg" src="./assets/beef.png" style="display:block; margin:auto;" alt="cartdatas.name" />
+            </td>
+            <td class="foodname">
+            <h1>{{cartdatas.name}}</h1>
+            <h1>${{cartdatas.price}}</h1>
+            </td>
+            <td class="num">
+              <button  value="minus" v-on:click="handleNumberChange(-1,index)">-</button>
+              <span>{{ cartdatas.num }}</span>
+              <button  value="plus" v-on:click="handleNumberChange(1,index)">+</button>
+           </td>
+            <td class="del">
+              <button class="can" value="zero" v-on:click="handleNumberChange"></button>
+            </td>
+          </tr>
         </tbody>
       </table>
       </div>
@@ -34,8 +32,6 @@
       <div class = "send">
         <button>Place your order</button>
       </div>
-      <div class="ground"></div>
-      
     </div>
 
     
@@ -44,29 +40,17 @@
 <script>
 export default {
   name: 'Cart',
+  props: ['data'],
   data () {
   return{
     lists:[
       {
-      pos:0,
-      checked:false,
-			src: './assets/8.png',
-			name:'墨西雙椒1',
-			price:100,
-			num: 0,
-			saveandremove:true,
-      type:'商品',
-      },
-      {
-      pos:1,
-      checked:false,
-			src: './assets/8.png',
-			name:'墨西雙椒2',
-			price:120,
-			num: 0,
-			saveandremove:true,
-      type:'商品',
-      },
+        id:0,
+			  src: './assets/8.png',
+			  name:'墨西雙椒1',
+			  price:100,
+			  num: 0,
+      }
     ],
     cont:0,
     tot:0,
@@ -74,29 +58,26 @@ export default {
 },
 
  methods:{
-    handleNumberChange: function(e){
-      if(e.target.value==="plus" && this.lists[this.cont].num<9 )
-        this.lists[this.cont].num++;
-      else if(e.target.value==="minus" && this.lists[this.cont].num>0)
-        this.lists[this.cont].num--;
-      else if(e.target.value==="zero" && this.lists[this.cont].num>0)
-        this.lists[this.cont].num=0;
-      this.tot=lists[this.cont].num*lists[this.cont].price;
+    handleNumberChange: function(value,index){
+      if(this.lists[index].num+value>=0){
+        this.lists[index].num+=value;
+        this.tot+=value*this.lists[index].price;
+      }
     },
+    deleteDish:function(index){
 
-    sum:function(e){
-      this.tot=lists[this.cont].num*lists[this.cont].price;
-    },
-
-    counter:function(e){
-      if(e.target.value==="add")
-      this.cont++;
-    },
-    
+    }   
  },
+ watch:{
+   data:function(){
+     this.lists=this.data;
+   }
+ },
+ mounted:function(){
+     this.lists=this.data;
+   }
+ }
 
-
-}
 </script>
 <style scope>
 
@@ -150,10 +131,11 @@ float: left;
 
 .cart
 {
-font-family:'Trebuchet MS';
-display: flex;
-flex-direction:column;
--webkit-flex-direction:column;
+  display: flex;
+  flex-direction:column;
+  -webkit-flex-direction:column;
+  flex-grow:1;
+  -webkit-flex-grow:1;
 }
 
 .order button
@@ -182,7 +164,6 @@ flex-direction:column;
   top:15vh;
   left:34%;
   font-size: 6.5rem;
-  font-family: 'Rye', 'cursive','Trebuchet MS';
   color:rgb(245, 245, 245);
   z-index:3;
 }
@@ -219,7 +200,6 @@ height: 80%;
   vertical-align:middle;
   text-align: left;
   font-size: 3.5rem;
-  font-family: 'Trebuchet MS','細明體';
 }
 
 .order .num{  width:25vw;  }
@@ -240,7 +220,6 @@ border-bottom: 1.5px solid rgb(184, 184, 184);
 padding-bottom: 3%;
 padding-left: 4%;
 padding-right: 7%;
-font-family:'Trebuchet MS','標楷體';
 color:rgb(245, 245, 245);
 z-index:3;
 }
@@ -267,7 +246,6 @@ z-index:3;
   height: 40%;
   width: 100%;
   font-size: 5.5rem;
-  font-family:Trebuchet MS;
   border-radius: 15px;
   padding:1.6vw 21.5vw;
   background-color: rgb(255, 255, 255);
@@ -283,14 +261,6 @@ z-index:3;
   color:white;
 }
 
-.ground
-{
-  position: absolute;
-  height:100%;
-  width:100%;
-  background-color: rgb(0, 0, 0);
-  z-index:1;
-}
 
 .num button
 {
@@ -317,7 +287,11 @@ z-index:3;
     vertical-align: -webkit-baseline-middle;
     text-align: center;
     color: rgb(0, 0, 0);
-    font-family: 'Times New Roman';
+}
+
+.can{
+  background-color: rgba(243,243,243,0);
+  border: none;
 }
 
 </style>
