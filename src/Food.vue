@@ -5,11 +5,11 @@
       </div>
       <div class="choice" :style="fly">
         <button class="btn2" @click="close"></button>
-        <div class="list_frame">
-          <span class="list" v-for="text in choices" :key="text.menu">
+          <div class="list_frame">
+          <div class="list" v-for="text in choices" :key="text.menu">
             {{text.menu}}
-          </span>
-        </div>
+          </div>
+          </div>
       </div>
       <div class="block" v-for="pictures in lists" :key="pictures.food">
         {{pictures.food}}
@@ -113,22 +113,26 @@ export default {
     background-color:rgb(94, 90, 90);
     visibility:visible;
     z-index:1;
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    -webkit-justify-content: center;
   }
+  
   .list_frame{
-    margin-top:14vh;
-    height: 60vh;
+    height: 70%;
   }
+
   .list{
     font-family:'Segoe UI';
     font-size: 15px;
     color: lightgray;
-    position: absolute;
-    text-align:end;
-    right:0;
+    text-align:center;
     border-bottom:1px solid lightgray;
+    width: 100%;
     height:7vh;
-    width:100vw;
   }
+
   .btn{
     position:relative;
     height:26vh;
@@ -137,7 +141,7 @@ export default {
     z-index:2;
   }
   .btn2{
-    position:relative;
+    position: absolute;;
     height:85vh;
     width:60vw;
     float:right;
