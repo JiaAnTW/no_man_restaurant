@@ -9,11 +9,11 @@
       <!--注意，請把你.vue檔中最外層的div增加兩個css屬性: "flex-grow:1"和"-webkit-flex-grow:1" -->
       <!--這兩個屬性會幫你自動把長寬貼齊step-container，詳情請搜尋css flexbox -->
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
-      
-      <order v-if="nowAt=== 'menu'" :data="menu[10]"/>
+
+      <food v-if="nowAt=== 'menu'" :data="menu"/>
       <member v-else-if="nowAt=== 'profile'" />
       <total v-else-if="nowAt=== 'cart'"/>
-      
+
       <!--把你做的component放在上面。(你可以試試看把order放進來)-->
     </div>
     <div class="nav-bar">
@@ -28,14 +28,15 @@
 <script>
 import Order from '../Order.vue';//記得include你做的Component
 import Total from '../Total.vue';
-import Member from '../Member.vue'; 
+import Member from '../Member.vue';
+import Food from '../Food.vue';
 import axios from "axios";
 import Vue from "vue";
 import { defaultCipherList } from 'constants';
 Vue.prototype.$axios = axios;
 export default {
   name: 'Layout',
-  components: {Order,Total,Member},//也要把你做的Component在這註冊
+  components: {Order,Total,Member,Food},//也要把你做的Component在這註冊
   data () {
     return {
       msg: '這裡是固定的版面',
@@ -92,9 +93,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .Layout{
-  display:flex;  
+  display:flex;
   flex-direction:column;
-  -webkit-flex-direction:column;   
+  -webkit-flex-direction:column;
   position: absolute;
   left: 0;
   top: 0;
@@ -105,12 +106,12 @@ export default {
 }
 .slogan-container{
   background-color: rgb(48, 48, 48);
-  
+
   border-bottom: 1px solid rgb(48, 48, 48);
   height: 7.5vh;
   display: flex;
   justify-content: space-around;
-  -webkit-justify-content:space-around; 
+  -webkit-justify-content:space-around;
   align-items: center;
   -webkit-align-items: center;
 
@@ -134,7 +135,7 @@ export default {
   outline: none;
   color: white;
   justify-content: flex-start;
-  -webkit-justify-content:flex-start; 
+  -webkit-justify-content:flex-start;
   align-items: center;
   -webkit-align-items: center;
 }
@@ -152,7 +153,7 @@ export default {
   height: 7.0vh;
   display: flex;
   justify-content: center;
-  -webkit-justify-content:center; 
+  -webkit-justify-content:center;
   align-items: center;
   -webkit-align-items: center;
   border-top-right-radius: 7px;

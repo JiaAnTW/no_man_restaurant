@@ -1,9 +1,16 @@
 <template>
     <div class="Food">
       <div class="slide">
-        <button class="btn" @click="choose"></button>
+        <button class="btn" @click="open"></button>
       </div>
-      <div class="choice" :style="fly"></div>
+      <div class="choice" :style="fly">
+        <button class="btn2" @click="close"></button>
+        <div class="list_frame">
+          <span class="list" v-for="text in choices" :key="text.menu">
+            {{text.menu}}
+          </span>
+        </div>
+      </div>
       <div class="block" v-for="pictures in lists" :key="pictures.food">
         {{pictures.food}}
       </div>
@@ -13,6 +20,7 @@
 <script>
 export default {
   name: 'Food',
+  props:["data"],
   data(){
     return{
       lists:[
@@ -23,6 +31,12 @@ export default {
         {food:''},
         {food:''},
       ],
+      choices:[
+        {menu:'burgers'},
+        {menu:'drinks'},
+        {menu:'salad'},
+        {menu:'french fries'},
+      ],
       fly:{
         left:'-70vw',
       },
@@ -30,16 +44,29 @@ export default {
     }
   },
   methods:{
-    choose:function(){
-      console.log("123");
+    open:function(){
       if(this.out===false){
-        this.fly={left:'-11.5vw'}
+        this.fly={left:'-10.8vw'}
         this.out=true;
       }
-      
+    },
+    close:function(){
+      if(this.out===true){
+        this.fly={left:'-70vw'}
+        this.out=false;
+      }
     }
-  }, 
-    
+  },
+  watch:{
+    data: function(){
+      this.name= this.data.name;
+      this.image=this.data.image;
+    }
+  },
+  mounted:function(){
+      this.name= this.data.name;
+      this.image=this.data.image;
+  }
 }
 
 </script>
@@ -51,27 +78,30 @@ export default {
     flex-flow:row;
     flex-wrap:wrap;
     margin-top:4vh;
-    margin-left:7vw;
+    margin-left:8vw;
     flex-grow:1;
     -webkit-flex-grow:1;
+    overflow-y: auto;
   }
   .block{
     border:1px solid gray;
     border-radius:10%;
     width:40vw;
-    height:22vh;
+    height:40vw;
     margin-left:0.5rem;
     margin-right:0.5rem;
+    background-color:rgb(94, 90, 90);
   }
   .slide{
     border:1px solid gray;
-    border-radius:8%;
+    border-radius:12%;
     width:18vw;
     height:26vh;
     position:fixed;
     margin-top:25vh;
     left:-14vw;
-    z-index:2;
+    background-color:rgb(94, 90, 90);
+    z-index:1;
   }
   .choice{
     border:1px solid gray;
@@ -80,16 +110,39 @@ export default {
     height:85vh;
     position:fixed;
     margin-top:-4vh;
-    background-color:transparent;
+    background-color:rgb(94, 90, 90);
     visibility:visible;
     z-index:1;
+  }
+  .list_frame{
+    margin-top:14vh;
+    height: 60vh;
+  }
+  .list{
+    font-family:'Segoe UI';
+    font-size: 15px;
+    color: lightgray;
+    position: absolute;
+    text-align:end;
+    right:0;
+    border-bottom:1px solid lightgray;
+    height:7vh;
+    width:100vw;
   }
   .btn{
     position:relative;
     height:26vh;
     float:right;
     border-radius:8%;
-    /*visibility:;*/
     z-index:2;
+  }
+  .btn2{
+    position:relative;
+    height:85vh;
+    width:60vw;
+    float:right;
+    border-radius:8%;
+    opacity:0;
+    z-index:3;
   }
 </style>

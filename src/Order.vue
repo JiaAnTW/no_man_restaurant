@@ -4,7 +4,7 @@
         <div class="dish">
           <div class="info-container">
             <dish :image="image"/>
-           </div> 
+           </div>
         </div>
         <div class="number">
           <button value="minus" v-on:click="handleNumberChange">-</button>
@@ -21,7 +21,7 @@
 import Dish from './components/Dish.vue'
 export default {
   name: 'Order',
-  components: {Dish},//也要把你做的Component在這註冊
+  components: {Dish,},//也要把你做的Component在這註冊
   props:["data"],
   data () {
     return {
@@ -63,7 +63,7 @@ export default {
     justify-content: center;
     align-items: center;
     -webkit-justify-content: center;
-    -webkit-align-items: center; 
+    -webkit-align-items: center;
   }
 
   .title{
@@ -78,12 +78,12 @@ export default {
     -webkit-flex-grow:1;
     display: flex;
     flex-direction:column;
-    -webkit-flex-direction:column;  
+    -webkit-flex-direction:column;
   }
 
   .title{
     flex-grow: 0.3;
-    color: white;    
+    color: white;
   }
 
   .title h1{
@@ -101,7 +101,7 @@ export default {
     display: flex;
     overflow: hidden;
     border: 10px solid rgb(80, 80, 80);
-    border-bottom: none; 
+    border-bottom: none;
     border-radius: 15px;
   }
 
