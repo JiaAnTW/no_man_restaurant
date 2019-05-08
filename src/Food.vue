@@ -11,8 +11,9 @@
           </div>
           </div>
       </div>
-      <div class="block" v-for="pictures in lists" :key="pictures.food">
-        {{pictures.food}}
+      <div class="block" v-for="pictures in lists" :key="pictures.id">
+        <!--img src="picture.image" alt="food"/-->
+        {{pictures.id}}
       </div>
     </div>
 </template>
@@ -59,37 +60,36 @@ export default {
   },
   watch:{
     data: function(){
-      this.name= this.data.name;
-      this.image=this.data.image;
+      this.list= this.data;
     }
   },
   mounted:function(){
-      this.name= this.data.name;
-      this.image=this.data.image;
+      this.list= this.data;
   }
 }
 
 </script>
 <style scoped>
   .Food{
-    height:80vh;
-    position:fixed;
     display:flex;
     flex-flow:row;
     flex-wrap:wrap;
-    margin-top:4vh;
-    margin-left:8vw;
+
     flex-grow:1;
     -webkit-flex-grow:1;
     overflow-y: auto;
+    justify-content:center;
+    -webkit-justify-content: center;
+    align-content:center;
+    -webkit-align-content: center;
   }
   .block{
     border:1px solid gray;
     border-radius:10%;
     width:40vw;
     height:40vw;
-    margin-left:0.5rem;
-    margin-right:0.5rem;
+    margin: 1rem 0.5rem;
+
     background-color:rgb(94, 90, 90);
   }
   .slide{
@@ -98,7 +98,7 @@ export default {
     width:18vw;
     height:26vh;
     position:fixed;
-    margin-top:25vh;
+    margin-top:29vh;
     left:-14vw;
     background-color:rgb(94, 90, 90);
     z-index:1;
@@ -109,7 +109,7 @@ export default {
     width:60vw;
     height:85vh;
     position:fixed;
-    margin-top:-4vh;
+    margin-top:0vh;
     background-color:rgb(94, 90, 90);
     visibility:visible;
     z-index:1;
@@ -118,7 +118,7 @@ export default {
     justify-content:center;
     -webkit-justify-content: center;
   }
-  
+
   .list_frame{
     height: 70%;
   }
