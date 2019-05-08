@@ -1,5 +1,6 @@
 <template>
     <div class="Food">
+      
       <div class="slide">
         <button class="btn" @click="open"></button>
       </div>
@@ -11,9 +12,11 @@
           </div>
           </div>
       </div>
-      <div class="block" v-for="pictures in lists" :key="pictures.id">
-        <!--img src="picture.image" alt="food"/-->
-        {{pictures.id}}
+      <div class="block-container">
+        <div class="block" v-for="pictures in lists" :key="pictures.id">
+          <!--img src="picture.image" alt="food"/-->
+          {{pictures.id}}
+        </div>
       </div>
     </div>
 </template>
@@ -60,11 +63,11 @@ export default {
   },
   watch:{
     data: function(){
-      this.list= this.data;
+      this.lists= this.data;
     }
   },
   mounted:function(){
-      this.list= this.data;
+      this.lists= this.data;
   }
 }
 
@@ -72,16 +75,10 @@ export default {
 <style scoped>
   .Food{
     display:flex;
-    flex-flow:row;
-    flex-wrap:wrap;
-
     flex-grow:1;
     -webkit-flex-grow:1;
-    overflow-y: auto;
     justify-content:center;
     -webkit-justify-content: center;
-    align-content:center;
-    -webkit-align-content: center;
   }
   .block{
     border:1px solid gray;
@@ -122,7 +119,17 @@ export default {
   .list_frame{
     height: 70%;
   }
-
+  .block-container{
+    flex-flow: row wrap;
+    overflow-y: auto;
+    justify-content:flex-start;
+    -webkit-justify-content: flex-start;
+    align-content:flex-start;
+    -webkit-align-content: flex-start;
+    width:  90vw;
+    height: 85vh;
+    border: 1px solid red;
+  }
   .list{
     font-family:'Segoe UI';
     font-size: 15px;
