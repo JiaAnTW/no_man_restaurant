@@ -14,7 +14,7 @@
       </div>
       <div class="block-container">
         <div class="block" v-for="pictures in lists" :key="pictures.id">
-          <!--img src="picture.image" alt="food"/-->
+          <!--img :src="pictures.image" alt="food"/-->
           {{pictures.id}}
         </div>
       </div>

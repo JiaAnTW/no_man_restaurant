@@ -19,6 +19,12 @@
             <b-form-group id="fieldset-3" description="Let us know your name." label="餐點介紹" label-cols="3" label-cols-lg="1" label-size="lg"  label-align-sm="right" label-for="input-3" :invalid-feedback="invalidFeedback" :valid-feedback="validFeedback" :state="state">
                 <b-form-input id="input-3" v-model="detail" :state="state" trim></b-form-input>
             </b-form-group>
+            <b-form-group id="fieldset-4" description="Let us know your name." label="餐點介紹" label-cols="3" label-cols-lg="1" label-size="lg"  label-align-sm="right"  :invalid-feedback="invalidFeedback" :valid-feedback="validFeedback" :state="state">
+                <b-form-radio v-model="type" name="radios" value="burger">漢堡</b-form-radio>
+                <b-form-radio v-model="type" name="radios" value="drinks">飲料</b-form-radio>
+                <b-form-radio v-model="type" name="radios" value="salad">沙拉</b-form-radio>
+                <b-form-radio v-model="type" name="radios" value="fried">炸物</b-form-radio>
+            </b-form-group>
             <button v-on:click="sendImage">送出</button>
             <button v-on:click="deleteDish">刪除</button>
             </b-form-group>
@@ -40,6 +46,7 @@ export default {
           name:'',
           price: 0,
           detail:'',
+          type:'',
           image: require('../assets/noPic.png'),
           isImage: false,
           style: {display: "none"},
@@ -84,7 +91,8 @@ export default {
             name: self.name,
             price: self.price,
             detail: self.detail,
-            image: (self.isImage==false)?null:self.image
+            image: (self.isImage==false)?null:self.image,
+            type: self.type
         }
       })
       .then((res) => {

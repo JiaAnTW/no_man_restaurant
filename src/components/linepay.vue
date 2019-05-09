@@ -2,6 +2,7 @@
     <div>
         這裡是首頁
         <button v-on:click="post123">點我啊</button>
+        <button v-on:click="confirm">確認</button>
     </div>
 </template>
 
@@ -15,7 +16,8 @@ export default {
     var self=this;
     this.$axios({
       method: 'post',
-      url: '/api/post/login',
+      //url: '/api/post/login',
+      url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/login',
       data: {
         username:"admin",
         password:"admin123"
@@ -36,35 +38,28 @@ export default {
       })
     },
     post123: function(){
-      console.log("快給我錢")
+      this.$emit('show-loading',true);
       this.$axios(
         {
           method: "post",
-          baseURL: "/line",
-          url: '/v2/payments/request',
-          data:{
-	          "productName": "媽祖託夢器",
-            "amount": 1,
-            "confirmUrl": "loacalhost:8081/#/Home",
-            "currency": "TWD",
-            "orderId": "9487",
-            "productImageUrl": "https://img5.cna.com.tw/www/WebPhotos/1024/20190418/337616899030.jpg"
-          },
-            headers:{
-              'X-Requested-With': 'XMLHttpRequest', // 若有送出header需求, PHP要設定相對的header參數 
-              "X-LINE-channelId": "1567873613",
-              "X-LINE-channelSecret": "7121812b7e2a57010730d79eedc3aa01",
-              "content-type":"application/json;charset=UTF-8"
-          },
-          withCredentials: true,
+          url: '/api/post/pay'
         }
       ).then(response=>{
-        window.open(response.data["info"]["paymentUrl"]["web"], "_blank")
+        window.open(response.data["url"], "_blank")
+        this.$emit('show-loading',false);
+      })
+    },
+    confirm: function(){
+      this.$emit('show-loading',true);
+      this.$axios(
+        {
+          method: "post",
+          url: '/api/post/pay/confirm'
+        }
+      ).then(response=>{
+        this.$emit('show-loading',false);
       })
     }
   }
 }
 </script>
-  methods:{
-
-  },

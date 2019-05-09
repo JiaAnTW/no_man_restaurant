@@ -1,8 +1,9 @@
 <template>
     <div class="dish">
       <img class="dish-img" :src="image" alt="dish"/>
-      <div class="background"></div>
-      <div class="detail">
+      <button class="open-btn" @click="changeOpen"><div></div></button>
+      <div class="background" :style="backgroundStyle"></div>
+      <div class="detail" :style="detailStyle">
         <ul>
           {{bornStar}}<br/><br/>
           {{whatItMade}}<br/><br/>
@@ -21,6 +22,16 @@ export default {
   data () {
     return {
       score: 3,
+      isOpen: true,
+      colorSet:[
+        "linear-gradient(180deg, #f11ca0 0%, #2013f6 100%)",
+        "linear-gradient(180deg, #f19b3d 0%, #2013f6 100%)",
+        "linear-gradient(180deg, #f0a133 0%, #f42033 100%)",
+        "linear-gradient(180deg, #f42033 0%, #270540 100%)",
+        "linear-gradient(180deg, #6ce1b9 0%, #673ceb 100%)",
+      ],
+      backgroundStyle:{ marginTop:"0",backgroundImage:"linear-gradient(180deg, #2af598 0%, #009efd 40%)"},
+      detailStyle:{ marginTop:"0"},
       madeof:["小麥麵包","法式香草醬"],
       nut:[
           { name:"熱量", value:87},
@@ -52,7 +63,24 @@ export default {
     }
   },
   methods:{
-
+    changeOpen:function(){
+      this.isOpen=!this.isOpen;
+    }
+  },
+  watch:{
+    isOpen:function(){
+      if(this.isOpen===true){
+        this.detailStyle={marginTop:"0"};
+        this.backgroundStyle={marginTop:"0",backgroundImage:this.colorSet[4]};
+      }
+      else{
+        this.detailStyle={marginTop:"-100%"};
+        this.backgroundStyle={marginTop:"-100%",backgroundImage:this.colorSet[4]};
+      }
+    }
+  },
+  created:function(){
+    this.backgroundStyle={marginTop:"0%",backgroundImage:this.colorSet[4]};
   }
 }
 </script>
@@ -68,28 +96,48 @@ export default {
       
     }
     .open-btn{
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0);
-        border: none;
+        position: absolute;
+        z-index: 4;
+
         outline: none;
+        border: none;
+        background-color: transparent;
+        top: 0;
+    }
+
+    .open-btn div{
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 7px 12.5px 0 12.5px;
+        
+        border-color: white rgba(243,243,243,0) rgba(243,243,243,0) rgba(243,243,243,0);
     }
     .background{
       position: absolute;
       width: 100%;
       height: 100%;
       opacity: 0.7;
-      background-image: linear-gradient(180deg, #2af598 0%, #009efd 40%);
+      z-index: 2;
+      -webkit-transition: margin-top 1s ease-in-out;
+      -moz-transition: margin-top 1s ease-in-out;
+      -o-transition: margin-top 1s ease-in-out;
+      transition: margin-top 1s ease-in-out; 
     }
     .detail{
       position: absolute;
       color: white;
       width: 100%;
       height: 100%;
+      z-index: 3;
       overflow-y: auto;
       overflow-x: hidden;
-      background-color: rgba(243,243,243,0.5);
+      background-color: rgba(243,243,243,0.35);
       padding: 4rem 2rem;
+      -webkit-transition: margin-top 1s ease-in-out;
+      -moz-transition: margin-top 1s ease-in-out;
+      -o-transition: margin-top 1s ease-in-out;
+      transition: margin-top 1s ease-in-out; 
     }
 
     .detail ul{

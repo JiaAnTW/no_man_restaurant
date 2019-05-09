@@ -7,7 +7,7 @@ module.exports=class menu{
             //host: "http://luffy.ee.ncku.edu.tw",
             user: "uidd2019_groupb",
             password: "JjKxenffSYSbc546",
-            database: "uidd2019_groupb"
+            database: "uidd2019_groupB"
         });
         this.Image=this.Image.bind(this);
     }
@@ -58,7 +58,8 @@ module.exports=class menu{
                 //image: (req.body["image"]==null)?null:this.Image(req.body["image"],"dish_"+new_id),
                 image: req.body["image"],
                 price: req.body["price"],
-                detail: req.body["detail"]
+                detail: req.body["detail"],
+                type: req.body["type"]
             };
             this.con.query('INSERT INTO menu SET ?', data, function(err, rows) {
                 if (err) {
@@ -82,7 +83,8 @@ module.exports=class menu{
                 //image: (req.body["image"]==null)?null:this.Image(req.body["image"],"dish_"+req.body["id"]),
                 image: req.body["image"],
                 price: req.body["price"],
-                detail: req.body["detail"]
+                detail: req.body["detail"],
+                type: req.body["type"]
             };
             this.con.query('UPDATE menu SET ? WHERE id = ?', [data,data.id], function(err, rows) {
                 if (err) {

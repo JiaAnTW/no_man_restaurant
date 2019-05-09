@@ -4,7 +4,7 @@
         <div class="dish">
           <div class="info-container">
             <dish :image="image"/>
-           </div>
+           </div> 
         </div>
         <div class="number">
           <button value="minus" v-on:click="handleNumberChange">-</button>
@@ -21,7 +21,7 @@
 import Dish from './components/Dish.vue'
 export default {
   name: 'Order',
-  components: {Dish,},//也要把你做的Component在這註冊
+  components: {Dish},//也要把你做的Component在這註冊
   props:["data"],
   data () {
     return {
@@ -39,18 +39,26 @@ export default {
         this.number--;
     },
     addToCart: function(){
-      this.$emit('add-cart',{name:this.name,number:this.number});
+      this.$emit('add-cart',{
+        name:this.name,
+        num:this.number,
+        src:this.image,
+        id: this.data.id,
+        price: this.data.price
+      });
     }
   },
   watch:{
     data: function(){
       this.name= this.data.name;
       this.image=this.data.image;
+      //this.menu=this.data.menu;
     }
   },
   mounted:function(){
       this.name= this.data.name;
       this.image=this.data.image;
+      //this.menu=this.data.menu;
   }
 }
 </script>
@@ -63,7 +71,7 @@ export default {
     justify-content: center;
     align-items: center;
     -webkit-justify-content: center;
-    -webkit-align-items: center;
+    -webkit-align-items: center; 
   }
 
   .title{
@@ -78,12 +86,12 @@ export default {
     -webkit-flex-grow:1;
     display: flex;
     flex-direction:column;
-    -webkit-flex-direction:column;
+    -webkit-flex-direction:column;  
   }
 
   .title{
-    flex-grow: 0.3;
-    color: white;
+    flex-grow: 1;
+    color: white;    
   }
 
   .title h1{
@@ -92,16 +100,16 @@ export default {
   }
 
   .dish{
-    flex-grow: 2;
+    flex-grow: 1.0;
   }
 
   .dish .info-container{
-    height: 85%;
-    width: 90%;
+    height: 80vw;
+    width: 90vw;
     display: flex;
     overflow: hidden;
     border: 10px solid rgb(80, 80, 80);
-    border-bottom: none;
+    border-bottom: none; 
     border-radius: 15px;
   }
 
@@ -116,7 +124,7 @@ export default {
     color: rgb(45, 45, 45);
     font-size: 6rem;
     font-weight: 600;
-    line-height: 0rem;
+    line-height: 0.1rem;
     background-color: rgba(243,243,243,1);
     border: 0px solid gray;
   }
