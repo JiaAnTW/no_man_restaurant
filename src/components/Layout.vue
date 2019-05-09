@@ -10,8 +10,8 @@
       <!--這兩個屬性會幫你自動把長寬貼齊step-container，詳情請搜尋css flexbox -->
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
 
-      <food v-if="nowAt=== 'menu'" :data="menu"/>
-      <order v-else-if="nowAt==='favorite'" @add-cart="addToCart"  :data="menu[watchDish]" :inCart="checkCart"/>
+      <food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu"/>
+      <order v-else-if="nowAt==='order'" @add-cart="addToCart"  :data="menu[viewDish]" :inCart="checkCart"/>
       <member v-else-if="nowAt=== 'profile'" @get-token="gettoken"/>
       <cart v-else-if="nowAt=== 'cart'" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
       <total v-else-if="nowAt=== 'total'" :bill-data="bill"/>
@@ -48,14 +48,13 @@ export default {
       cart: [],//購物車
       viewDish: 0,
       steps:[ //用來建立最下面的導覽列
-        {name:"total",icon:require('../assets/icon/burger.png')},
+        {name:"menu",icon:require('../assets/icon/burger.png')},
         {name:"favorite",icon:require('../assets/icon/love.png')},
         {name:"cart",icon:require('../assets/icon/cart.png')},
         {name:"profile",icon:require('../assets/icon/member.png')}
       ],
       search: {visibility: "hidden"}, //右上角搜尋按鍵的css
       nowAt: "loading", //目前step的顯示元件，loading時不顯示任何元件,
-      watchDish: 0,
       isLoading: true, //loading畫面是否顯示
       bill:{},//用來從cart.vue傳進total的訂單
       token:'',
@@ -76,6 +75,7 @@ export default {
   methods:{
     viewSingleDish: function(id){//當點擊Food.vue的其中一個block後，用這個function把選擇的餐點傳入order.vue
       this.viewDish=id;
+      this.changeNowAt('order');
     },
     addToCart: function(items){ //用來增加商品至購物車，輸入參數為一物件，格式見Dish.vue
       var index=this.cart.findIndex(function(item, index, array){

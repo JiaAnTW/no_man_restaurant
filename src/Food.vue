@@ -13,10 +13,10 @@
           </div>
       </div>
       <div class="block-container">
-        <div class="block" v-for="pictures in lists" :key="pictures.id">
-          <!--img :src="pictures.image" alt="food"-->
-          <button class="btn3"></button>
-          {{pictures.id}}
+        <div class="block" v-for="(pictures,index) in lists" :key="pictures.id">
+          <button class="btn3" @click="viewDish(pictures.id)"></button>
+          <div class="img-container" :style="backgroundImage[index]"></div>
+          <h2>{{pictures.name}} |  ${{pictures.price}}</h2>
         </div>
       </div>
       <div class="contact">
@@ -52,7 +52,12 @@ export default {
       ig:'https://www.instagram.com/_yang1029/',
       out:false,
       changed:false,
+      lists:[],
+      backgroundImage:[]
     }
+  },
+  computed:{
+
   },
   methods:{
     open:function(){
@@ -69,6 +74,9 @@ export default {
         this.out=false;
       }
     },
+    viewDish:function(id){
+      this.$emit('view-dish',id);
+    }
   },
   watch:{
     data: function(){
@@ -77,6 +85,9 @@ export default {
   },
   mounted:function(){
       this.lists= this.data;
+      this.data.forEach(Element=>{
+        this.backgroundImage.push({backgroundImage:'url('+Element.image+')'})
+      })
   }
 }
 
@@ -114,6 +125,7 @@ export default {
     flex-direction: column;
   }
   .block{
+    position: relative;
     border:1px solid gray;
     border-radius:10%;
     width:40vw;
@@ -133,8 +145,25 @@ export default {
     margin-top:4.5vh;
     margin-left:1.5vw;
     width: 86vw;
-    height: 85vh;
+    height: 75vh;
   }
+
+  .img-container{
+    width: 100%;
+    height: 85%;
+    background-position: 50% 50%;
+    background-size: 65% auto;
+    background-repeat: no-repeat;
+  }
+
+
+  .block h2{
+    width: 100%;
+    font-size: 1.7vh;
+    text-align: center;
+    color: white;
+  }
+
   .list_frame{
     height: 28vh;
     margin: 10vh 0vw 10vh 0vw;
@@ -150,6 +179,7 @@ export default {
     padding:2vh 2vh 2vh 7vh;
     z-index:2;
   }
+
   .btn{
     position:relative;
     height:26vh;
@@ -167,7 +197,9 @@ export default {
     z-index:3;
   }
   .btn3{
-    position: relative;
+    position:absolute;
+    top:0;
+    left: 0;
     border-radius:10%;
     height:100%;
     width:100%;
@@ -188,7 +220,7 @@ export default {
     background-color:rgb(48, 48, 48);
     display:flex;
     flex-flow:row;
-    margin-top:79.15vh;
+    margin-top:78.15vh;
     color:white;
     padding:3vh 0vw 2vh 0vw;
     justify-content:center;
@@ -198,7 +230,6 @@ export default {
     height:7vh;
   }
   .fbicon{
-    width:3vw;
     height:2vh;
     position: fixed;
     margin:0vh 2vw 0vh 2vw;
