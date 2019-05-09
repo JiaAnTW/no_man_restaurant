@@ -3,7 +3,7 @@
         <div class="title"><h1>{{ name }}</h1></div>
         <div class="dish">
           <div class="info-container">
-            <dish :image="image"/>
+            <dish :image="image" :colorSet="colorSet"/>
            </div> 
         </div>
         <div class="number">
@@ -12,7 +12,7 @@
           <button value="plus" v-on:click="handleNumberChange">+</button>
         </div>
         <div class="cart">
-          <button v-on:click="addToCart">Add to cart</button>
+          <button v-on:click="addToCart" :style="btnStyle"><div class="mask" :style="maskStyle"></div>Add to cart</button>
         </div>
     </div>
 </template>
@@ -29,7 +29,29 @@ export default {
       name: "無資料",
       image: '',
       isOpen: false,
+      colorSet:[
+        "linear-gradient(180deg, #f11ca0 0%, #2013f6 100%)",
+        "linear-gradient(180deg, #f19b3d 0%, #2013f6 100%)",
+        "linear-gradient(180deg, #f0a133 0%, #f42033 100%)",
+        "linear-gradient(180deg, #f42033 0%, #270540 100%)",
+        "linear-gradient(180deg, #6ce1b9 0%, #673ceb 100%)",
+      ],
     }
+  },
+  computed:{
+    btnStyle:function(){
+      const colorSet=[
+        "linear-gradient(270eg, #f11ca0 0%, #2013f6 100%)",
+        "linear-gradient(270deg, #f19b3d 0%, #2013f6 100%)",
+        "linear-gradient(270deg, #f0a133 0%, #f42033 100%)",
+        "linear-gradient(270deg, #f42033 0%, #270540 100%)",
+        "linear-gradient(270deg, #6ce1b9 0%, #673ceb 100%)",
+      ]
+      return {backgroundImage: colorSet[3]};
+    },
+    maskStyle:function(){
+      return {backgroundColor: "rgba(243,243,243,0.4)"};
+    },
   },
   methods:{
     handleNumberChange: function(e){
@@ -63,6 +85,17 @@ export default {
 }
 </script>
 <style scoped>
+
+  .mask{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+  }
+
+
   button{
     outline: none;
   }
@@ -151,6 +184,7 @@ export default {
     border-radius: 10px;
     background-color: rgba(243,243,243,1);
     border: 1px solid rgb(45, 45, 45);
+    position: relative;
   }
 </style>
 

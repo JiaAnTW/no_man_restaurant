@@ -11,8 +11,7 @@
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
 
       <food v-if="nowAt=== 'menu'" :data="menu"/>
-      <order v-else-if="nowAt==='favorite'" @add-cart="addToCart"  :data="menu[1]"/>
-      <!--line-pay @show-loading="shouldShowLoading" v-else-if="nowAt==='favorite'"/-->
+      <order v-else-if="nowAt==='favorite'" @add-cart="addToCart"  :data="menu[watchDish]" :inCart="checkCart"/>
       <member v-else-if="nowAt=== 'profile'" />
       <cart v-else-if="nowAt=== 'cart'" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
       <total v-else-if="nowAt=== 'total'" :data="bill"/>
@@ -45,21 +44,33 @@ export default {
   components: {Order,Total,Member,LinePay,Loading,Food,Cart},//也要把你做的Component在這註冊
   data () {
     return {
-      msg: '這裡是固定的版面',
-      menu:[],
-      cart: [],
+      menu:[],//菜單
+      cart: [],//購物車
       viewDish: 0,
-      steps:[
+      steps:[ //用來建立最下面的導覽列
         {name:"menu",icon:require('../assets/icon/burger.png')},
         {name:"favorite",icon:require('../assets/icon/love.png')},
         {name:"cart",icon:require('../assets/icon/cart.png')},
         {name:"profile",icon:require('../assets/icon/member.png')}
       ],
-      search: {visibility: "hidden"},
-      nowAt: "loading",
-      isLoading: true,
-      bill:{}
+      search: {visibility: "hidden"}, //右上角搜尋按鍵的css
+      nowAt: "loading", //目前step的顯示元件，loading時不顯示任何元件,
+      watchDish: 0,
+      isLoading: true, //loading畫面是否顯示
+      bill:{}//用來從cart.vue傳進total的訂單
     }
+  },
+  computed:{
+    checkCart:function(){
+      var index=this.cart.findIndex(function(item, index, array){
+        return item.id == this.menu[this.watchDish].id;
+      });
+      if(index!=-1){
+        return true;
+      }
+      else
+        return false;
+    },
   },
   methods:{
     viewSingleDish: function(id){//當點擊Food.vue的其中一個block後，用這個function把選擇的餐點傳入order.vue
@@ -97,7 +108,7 @@ export default {
       this.bill=data;
     }
   },
-    mounted: function(){ //當畫面已經渲染上DOM後，像後端請求資料
+    mounted: function(){ //當畫面已經渲染上DOM後，向後端請求資料
       var self=this;
       this.$axios({
         methods: 'get',

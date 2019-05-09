@@ -18,18 +18,11 @@
 <script>
 export default {
   name: 'Dish',
-  props: ["image"],
+  props: ["image","colorSet"],
   data () {
     return {
       score: 3,
       isOpen: true,
-      colorSet:[
-        "linear-gradient(180deg, #f11ca0 0%, #2013f6 100%)",
-        "linear-gradient(180deg, #f19b3d 0%, #2013f6 100%)",
-        "linear-gradient(180deg, #f0a133 0%, #f42033 100%)",
-        "linear-gradient(180deg, #f42033 0%, #270540 100%)",
-        "linear-gradient(180deg, #6ce1b9 0%, #673ceb 100%)",
-      ],
       backgroundStyle:{ marginTop:"0",backgroundImage:"linear-gradient(180deg, #2af598 0%, #009efd 40%)"},
       detailStyle:{ marginTop:"0"},
       madeof:["小麥麵包","法式香草醬"],

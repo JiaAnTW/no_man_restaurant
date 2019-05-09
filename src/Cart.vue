@@ -9,8 +9,7 @@
               <img class="foodimg" src="./assets/beef.png" style="display:block; margin:auto;" alt="cartdatas.name" />
             </td>
             <td class="foodname">
-            <h1>{{cartdatas.name}}</h1>
-            <h1>${{cartdatas.price}}</h1>
+            <h1>{{cartdatas.name}}<br/>${{cartdatas.price}}</h1>
             </td>
             <td class="num">
               <button  value="minus" v-on:click="handleNumberChange(-1,index)">-</button>
@@ -66,13 +65,14 @@ computed:{
       this.$emit('delete-cart',index)
     },
     linePay: function(){
-      const self=this;
-      this.$emit('show-loading',true);
-      this.$axios(
-        {
-          method: "post",
-          url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/pay',
-          data:{
+      if(this.tot>0){
+        const self=this;
+        this.$emit('show-loading',true);
+        this.$axios(
+          {
+            method: "post",
+            url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/pay',
+            data:{
             productName: "SunBurger的餐點",
             amount: self.tot,
             confirmUrl: "localhost:8080/#/",
@@ -83,7 +83,8 @@ computed:{
         this.$emit('show-loading',false);
         self.notPay=false;
         self.transactionId=response.data.transactionId;
-      })
+        })
+      }
     },
     linePayConfirm: function(){
       this.$emit('show-loading',true);
@@ -167,8 +168,9 @@ float: left;
 
 .order td
 {
-  height: 6rem;
+  height: 11vh;
  border-bottom: 1.5px solid rgb(184, 184, 184);
+  color: rgb(45, 45, 45);
 }
 
 .crossline{  height:5%;  }
@@ -196,8 +198,8 @@ float: left;
 
 .can
 {
-  height:100%;
-  width: 100%;
+  height:70%;
+  width: 90%;
   background-image: url('./assets/icon/can.png');
   background-position:50% 50%;
   background-repeat: no-repeat;
@@ -210,11 +212,12 @@ float: left;
 .title
 {
   position: absolute;
-  top:15vh;
-  left:34%;
-  font-size: 6.5rem;
+  top:13vh;
+  left:38%;
+
+  font-size: 5.5rem;
   color:rgb(245, 245, 245);
- 
+  text-decoration: underline;
 }
 
 .order
@@ -228,11 +231,15 @@ border: 1px solid gray;
 border-radius: 15px;
 background-color: rgb(255, 255, 255);
 overflow-y: scroll;
-padding-top: 7%;
+padding: 7% 1%;
 
 }
 
-.order h1{  font-size: 3.5rem;  }
+.order h1{
+  line-height: 160%;  
+  font-size: 3.5rem;  
+  color: rgb(45, 45, 45);
+}
 
 .order .foodname{  width:25vw;  }
 
@@ -265,6 +272,8 @@ height: 80%;
 {
    width:15vw;
    vertical-align: -webkit-baseline-middle;
+   display: flex;
+   align-items: center;
 }
 
 .total
@@ -285,8 +294,13 @@ color:rgb(245, 245, 245);
 {
   font-size: 5rem;
   text-align: left;
-  width: 35%;
+  width: 50%;
   font-size: 6rem;
+}
+
+.total .r
+{
+  text-align: right;
 }
 
 .send
@@ -331,14 +345,14 @@ position: absolute;
 { 
     padding-left: 0.8rem;
     padding-right: 0.8rem;
-    font-size: 6rem;
+    font-size: 5rem;
     vertical-align: -webkit-baseline-middle;
     text-align: center;
-    color: rgb(0, 0, 0);
+    color: rgb(45, 45, 45);
 }
 
 .can{
-  background-color: rgba(243,243,243,0);
+  background-color: rgba(0,0,0,0.1);
   border: none;
 }
 
