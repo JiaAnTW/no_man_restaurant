@@ -53,6 +53,7 @@
 <script>
 export default {
   name: 'Total',
+  props:['data'],
   data () {
     return {
       time: 20,

@@ -3,7 +3,7 @@
     <div class="slogan-container">
       <button class="top-btn"><div class="back"></div></button>
       <h1>Sun Burger</h1>
-      <button :style="search" class="top-btn">login</button>
+      <button :style="search" class="top-btn"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
     </div>
     <div class="step-container">
       <!--注意，請把你.vue檔中最外層的div增加兩個css屬性: "flex-grow:1"和"-webkit-flex-grow:1" -->
@@ -11,24 +11,29 @@
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
 
       <food v-if="nowAt=== 'menu'" :data="menu"/>
+      <order v-else-if="nowAt==='favorite'" @add-cart="addToCart"  :data="menu[watchDish]" :inCart="checkCart"/>
       <member v-else-if="nowAt=== 'profile'" />
-      <total v-else-if="nowAt=== 'cart'"/>
-
+      <cart v-else-if="nowAt=== 'cart'" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
+      <total v-else-if="nowAt=== 'total'" :data="bill"/>
       <!--把你做的component放在上面。(你可以試試看把order放進來)-->
     </div>
     <div class="nav-bar">
-      <button  v-for="(step,index) in steps" v-bind:key={index} v-on:click="changeNowAt(step.name)">
+      <button  v-for="(step,index) in steps" v-bind:key="index" v-on:click="changeNowAt(step.name)">
         <img class="nav-icon" :src="step.icon" :alt="step.name"/><br/>
         {{ step.name }}
       </button>
     </div>
+    <loading v-if="isLoading"/>
   </div>
 </template>
 
 <script>
 import Order from '../Order.vue';//記得include你做的Component
 import Total from '../Total.vue';
+import Cart from '../Cart.vue';
 import Member from '../Member.vue';
+import LinePay from './linepay.vue';
+import Loading from './Loading.vue';
 import Food from '../Food.vue';
 import axios from "axios";
 import Vue from "vue";
@@ -36,35 +41,74 @@ import { defaultCipherList } from 'constants';
 Vue.prototype.$axios = axios;
 export default {
   name: 'Layout',
-  components: {Order,Total,Member,Food},//也要把你做的Component在這註冊
+  components: {Order,Total,Member,LinePay,Loading,Food,Cart},//也要把你做的Component在這註冊
   data () {
     return {
-      msg: '這裡是固定的版面',
-      menu:[],
-      cart: [],
+      menu:[],//菜單
+      cart: [],//購物車
       viewDish: 0,
-      steps:[
+      steps:[ //用來建立最下面的導覽列
         {name:"menu",icon:require('../assets/icon/burger.png')},
         {name:"favorite",icon:require('../assets/icon/love.png')},
         {name:"cart",icon:require('../assets/icon/cart.png')},
         {name:"profile",icon:require('../assets/icon/member.png')}
       ],
-      search: {visibility: "hidden"},
-      nowAt: "menu",
+      search: {visibility: "hidden"}, //右上角搜尋按鍵的css
+      nowAt: "loading", //目前step的顯示元件，loading時不顯示任何元件,
+      watchDish: 0,
+      isLoading: true, //loading畫面是否顯示
+      bill:{}//用來從cart.vue傳進total的訂單
     }
+  },
+  computed:{
+    checkCart:function(){
+      var index=this.cart.findIndex(function(item, index, array){
+        return item.id == this.menu[this.watchDish].id;
+      });
+      if(index!=-1){
+        return true;
+      }
+      else
+        return false;
+    },
   },
   methods:{
-    viewSingleDish: function(id){
+    viewSingleDish: function(id){//當點擊Food.vue的其中一個block後，用這個function把選擇的餐點傳入order.vue
       this.viewDish=id;
     },
-    addToCart: function(items){
-      this.cart.push(items);
+    addToCart: function(items){ //用來增加商品至購物車，輸入參數為一物件，格式見Dish.vue
+      var index=this.cart.findIndex(function(item, index, array){
+        return item.id == items.id;
+      });
+      
+      if(index!=-1){
+        this.cart[index].num+=items.num;
+      }
+      else
+        this.cart.push(items);
     },
-    changeNowAt: function(next){
+    changeNowAt: function(next){ //改變step-container的顯示元件
       this.nowAt=next;
+    },
+    shouldShowLoading: function(show){ //用來顯示/隱藏loading畫面
+      this.isLoading=show;
+    },
+    handleCartChange: function(value,index){ //對已經在購物車中的商品作數量改變，value為1或-1
+      if(this.cart[index].num+value>=0){
+        this.cart[index].num+=value;
+      }
+    },
+    handleCartDelete:function(id){ //用商品id去尋找已經在購物車中的特定商品並做刪除
+      var index=this.cart.findIndex(function(item, index, array){ 
+        return item.id == id;
+      });
+      this.cart.splice(index, 1);
+    },
+    sendBill:function(data){
+      this.bill=data;
     }
   },
-    mounted: function(){
+    mounted: function(){ //當畫面已經渲染上DOM後，向後端請求資料
       var self=this;
       this.$axios({
         methods: 'get',
@@ -73,6 +117,8 @@ export default {
       })
       .then((res) => {
         self.menu = res.data;
+        self.isLoading=false;//在資料抓到之前會顯示讀取畫面，抓到之後讓讀取畫面消失
+        self.nowAt="menu";
       });
   },
   watch:{
@@ -93,25 +139,26 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .Layout{
-  display:flex;
+  display:flex;  
   flex-direction:column;
-  -webkit-flex-direction:column;
+  -webkit-flex-direction:column;   
   position: absolute;
   left: 0;
   top: 0;
   width: 100vw;
   max-width: 100%;
   height: 100vh;
+  background-color: rgb(48, 48, 48);
   max-height: 100%;
 }
 .slogan-container{
   background-color: rgb(48, 48, 48);
-
+  
   border-bottom: 1px solid rgb(48, 48, 48);
   height: 7.5vh;
   display: flex;
   justify-content: space-around;
-  -webkit-justify-content:space-around;
+  -webkit-justify-content:space-around; 
   align-items: center;
   -webkit-align-items: center;
 
@@ -134,10 +181,16 @@ export default {
   border: none;
   outline: none;
   color: white;
-  justify-content: flex-start;
-  -webkit-justify-content:flex-start;
+  justify-content: center;
+  -webkit-justify-content:center; 
   align-items: center;
   -webkit-align-items: center;
+}
+
+
+.top-btn img{
+  width: 2rem;
+  margin: 0 0;
 }
 
 .step-container{
@@ -153,11 +206,12 @@ export default {
   height: 7.0vh;
   display: flex;
   justify-content: center;
-  -webkit-justify-content:center;
+  -webkit-justify-content:center; 
   align-items: center;
   -webkit-align-items: center;
   border-top-right-radius: 7px;
   border-top-left-radius: 7px;
+  background-color: rgb(243, 243, 243);
 }
 
 

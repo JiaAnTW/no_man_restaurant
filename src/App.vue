@@ -19,7 +19,11 @@ export default {
 html {
   font-size: 4px;
   font-size: 1vw;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Segoe UI';
+}
+
+button{
+  font-family: 'Segoe UI';
 }
 
 @media (min-width: 596px){

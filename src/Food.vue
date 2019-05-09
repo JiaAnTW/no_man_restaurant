@@ -1,5 +1,6 @@
 <template>
     <div class="Food">
+      
       <div class="slide">
         <button class="btn" @click="open"></button>
       </div>
@@ -14,6 +15,7 @@
       </div>
       <div class="block-container">
         <div class="block" v-for="pictures in lists" :key="pictures.id">
+<<<<<<< HEAD
           <!--img :src="pictures.image" alt="food"-->
           <button class="btn3"></button>
           {{pictures.id}}
@@ -26,6 +28,11 @@
           <a :href="ig"><img class="igicon" src="./assets/icon/ig icon.png"></a>
         </div>
         <div class="line"></div>
+=======
+          <!--img :src="pictures.image" alt="food"/-->
+          {{pictures.id}}
+        </div>
+>>>>>>> 28c198505f70fe618f0f5701590a7075f383ba4a
       </div>
     </div>
 </template>
@@ -88,6 +95,18 @@ export default {
     -webkit-flex-grow:1;
     justify-content:center;
     -webkit-justify-content: center;
+<<<<<<< HEAD
+=======
+  }
+  .block{
+    border:1px solid gray;
+    border-radius:10%;
+    width:40vw;
+    height:40vw;
+    margin: 1rem 0.5rem;
+
+    background-color:rgb(94, 90, 90);
+>>>>>>> 28c198505f70fe618f0f5701590a7075f383ba4a
   }
   .slide{
     border:1px solid gray;
@@ -139,6 +158,20 @@ export default {
     height: 28vh;
     margin: 10vh 0vw 10vh 0vw;
   }
+<<<<<<< HEAD
+=======
+  .block-container{
+    flex-flow: row wrap;
+    overflow-y: auto;
+    justify-content:flex-start;
+    -webkit-justify-content: flex-start;
+    align-content:flex-start;
+    -webkit-align-content: flex-start;
+    width:  90vw;
+    height: 85vh;
+    border: 1px solid red;
+  }
+>>>>>>> 28c198505f70fe618f0f5701590a7075f383ba4a
   .list{
     font-family:'Segoe UI';
     font-size: 15px;
