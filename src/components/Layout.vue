@@ -12,9 +12,9 @@
 
       <food v-if="nowAt=== 'menu'" :data="menu"/>
       <order v-else-if="nowAt==='favorite'" @add-cart="addToCart"  :data="menu[watchDish]" :inCart="checkCart"/>
-      <member v-else-if="nowAt=== 'profile'" />
+      <member v-else-if="nowAt=== 'profile'" @get-token="gettoken"/>
       <cart v-else-if="nowAt=== 'cart'" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
-      <total v-else-if="nowAt=== 'total'" :data="bill"/>
+      <total v-else-if="nowAt=== 'total'" :bill-data="bill"/>
       <!--把你做的component放在上面。(你可以試試看把order放進來)-->
     </div>
     <div class="nav-bar">
@@ -48,7 +48,7 @@ export default {
       cart: [],//購物車
       viewDish: 0,
       steps:[ //用來建立最下面的導覽列
-        {name:"menu",icon:require('../assets/icon/burger.png')},
+        {name:"total",icon:require('../assets/icon/burger.png')},
         {name:"favorite",icon:require('../assets/icon/love.png')},
         {name:"cart",icon:require('../assets/icon/cart.png')},
         {name:"profile",icon:require('../assets/icon/member.png')}
@@ -57,7 +57,8 @@ export default {
       nowAt: "loading", //目前step的顯示元件，loading時不顯示任何元件,
       watchDish: 0,
       isLoading: true, //loading畫面是否顯示
-      bill:{}//用來從cart.vue傳進total的訂單
+      bill:{},//用來從cart.vue傳進total的訂單
+      token:'',
     }
   },
   computed:{
@@ -106,6 +107,9 @@ export default {
     },
     sendBill:function(data){
       this.bill=data;
+    },
+    gettoken:function(token){
+      this.token=token;
     }
   },
     mounted: function(){ //當畫面已經渲染上DOM後，向後端請求資料

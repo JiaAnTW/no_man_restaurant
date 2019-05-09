@@ -53,18 +53,29 @@
 <script>
 export default {
   name: 'Total',
-  props:['data'],
+  props:['bill-data'],
   data () {
     return {
-      time: 20,
-      name: 'Default_Name',
-      money: 220,
-      guest_number:24066250,
+      time:this.billData.time,
+      name:this.billData.name,
+      money:this.billData.amount,
+      guest_number:this.billData.guest_id
     }
   },
   methods:{
-    
-  }
+    esttime:function(){
+      this.time=this.billData.time-Date.now();
+  }   
+  },
+
+  computed: {
+  
+  },
+
+   mounted() {
+    this.esttime();
+    setInterval(this.esttime.bind(this) , 1000)    
+    },
 }
 </script>
 

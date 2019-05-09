@@ -97,7 +97,7 @@ computed:{
             transactionId:self.transactionId,
             amount:this.tot,
             id:0,
-            time: Date.now()+1000*60*20
+           
           }
         }
       ).then(response=>{
@@ -106,8 +106,9 @@ computed:{
           self.notPay=true;
           this.$emit('send-bill',{
             name:"吳銘世",
-            amout: this.tot,
-            guest_id: 0
+            amount: this.tot,
+            guest_id: 0,
+            time: Date.now()+1000*60*20
           })
           this.$emit('direct-to-show','total');
           

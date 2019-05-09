@@ -12,12 +12,12 @@
 
 <div id="second">
         <form>
-        <input type="text" placeholder="Email address" style="text-align: center" class="login-area">
+        <input type="text" v-model="email" placeholder="Email address" style="text-align: center" class="login-area">
         <br><br>
-        <input type="password" placeholder="Password" style="text-align: center" class="login-area">
+        <input type="password" v-model="password" placeholder="Password" style="text-align: center" class="login-area">
         <br><br><br><br>
         </form>
-        <button id="log">Log in</button> 
+        <button id="log" @click="login">Log in</button> 
 </div>
 
 <div id="third">
@@ -28,7 +28,33 @@
 </div>
     </div>
 </template>
-
+<<script>
+export default {
+  data(){
+    return{
+    email:'',
+    password:'',
+    token:'',
+  }
+  },
+  methods: {
+    login:function(){
+    var self=this;
+    this.$axios({
+      method: 'post',
+      url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/login',
+      data: {
+        username:self.email,
+        password:self.password,
+      },
+    }).then((res) => {
+        this.token=res.data["token"];
+        this.$emit('get-token',self.token);/*傳送代碼*/ 
+      });
+  },
+    }
+}
+</script>>
 <style scoped>
 
 .Member{
@@ -48,7 +74,6 @@
     justify-content: center;
      align-items: center;
     -webkit-align-items: center;
-    /*border: 1px solid red;*/
 }
 
 #second{
@@ -60,7 +85,6 @@
     -webkit-align-items: center;
     flex-direction:column;
     -webkit-flex-direction:column;
-    /*border: 1px solid yellow;   */
 }
 
 #third{
@@ -73,7 +97,6 @@
     flex-direction:column;
     -webkit-flex-direction:column; 
     font-size:15px; 
-   /* border: 1px solid green; */
 }
 
 #userpic{
