@@ -4,7 +4,7 @@
       <div class = "order">
       <table>
         <tbody>
-          <tr class=cartdata v-for = "(cartdatas,index) in lists"  :key="index">
+          <tr class=cartdata v-for = "(cartdatas,index) in data"  :key="index">
             <td class="image">
               <img class="foodimg" src="./assets/beef.png" style="display:block; margin:auto;" alt="cartdatas.name" />
             </td>
@@ -14,23 +14,24 @@
             </td>
             <td class="num">
               <button  value="minus" v-on:click="handleNumberChange(-1,index)">-</button>
-              <span>{{ cartdatas.num }}</span>
+              <h3>{{ cartdatas.num }}</h3>
               <button  value="plus" v-on:click="handleNumberChange(1,index)">+</button>
            </td>
             <td class="del">
-              <button class="can" value="zero" v-on:click="handleNumberChange"></button>
+              <button class="can" value="zero" v-on:click="deleteDish(index)"></button>
             </td>
           </tr>
         </tbody>
       </table>
       </div>
 
-      <div class = "total" v-for = "total in lists"  :key="total">
+      <div class = "total">
         <span class="l">Total:</span> 
         <span class="r">  $  {{tot}} </span>
       </div>
       <div class = "send">
-        <button>Place your order</button>
+        <button v-if="notPay" v-on:click="linePay">Place your order</button>
+        <button v-else v-on:click="linePayConfirm">Check your pay</button>
       </div>
     </div>
 
@@ -43,29 +44,74 @@ export default {
   props: ['data'],
   data () {
   return{
-    lists:[
-      {
-        id:0,
-			  src: './assets/8.png',
-			  name:'墨西雙椒1',
-			  price:100,
-			  num: 0,
-      }
-    ],
     cont:0,
-    tot:0,
+    notPay: true,
+    transactionId:0
   }
 },
-
+computed:{
+  tot:function(){
+    var sum=0;
+    this.data.forEach(Element=>{
+      sum+=Element.num*Element.price;
+    })
+    return sum;
+  }
+},
  methods:{
     handleNumberChange: function(value,index){
-      if(this.lists[index].num+value>=0){
-        this.lists[index].num+=value;
-        this.tot+=value*this.lists[index].price;
-      }
+      this.$emit('handle-number-change',value,index)
     },
     deleteDish:function(index){
-
+      this.$emit('delete-cart',index)
+    },
+    linePay: function(){
+      const self=this;
+      this.$emit('show-loading',true);
+      this.$axios(
+        {
+          method: "post",
+          url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/pay',
+          data:{
+            productName: "SunBurger的餐點",
+            amount: self.tot,
+            confirmUrl: "localhost:8080/#/",
+          }
+        }
+      ).then(response=>{
+        window.open(response.data["url"], "_blank")
+        this.$emit('show-loading',false);
+        self.notPay=false;
+        self.transactionId=response.data.transactionId;
+      })
+    },
+    linePayConfirm: function(){
+      this.$emit('show-loading',true);
+      const self=this;
+      this.$axios(
+        {
+          method: "post",
+          url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/pay/confirm',
+          data:{
+            transactionId:self.transactionId,
+            amount:this.tot,
+            id:0,
+            time: Date.now()+1000*60*20
+          }
+        }
+      ).then(response=>{
+        if(response.data==='Success.'){
+          this.$emit('show-loading',false);
+          self.notPay=true;
+          this.$emit('send-bill',{
+            name:"吳銘世",
+            amout: this.tot,
+            guest_id: 0
+          })
+          this.$emit('direct-to-show','total');
+          
+        }
+      })
     }   
  },
  watch:{
@@ -84,7 +130,7 @@ export default {
  button
 {
   outline: none;
-  z-index:3;
+  
 }
 
 .number button{
@@ -99,7 +145,7 @@ export default {
     border: 0px solid gray;
   }
 
-.cartdata{  z-index:10;  }
+.cartdata{    }
 
 .l
 {
@@ -127,7 +173,11 @@ float: left;
 
 .crossline{  height:5%;  }
 
-.cart ,.order{  display: flex;  }
+.cart ,.order{  
+  display: flex;  
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
 
 .cart
 {
@@ -146,16 +196,15 @@ float: left;
 
 .can
 {
-  position: absolute;
-  height:10%;
-  width: 16.5%;
+  height:100%;
+  width: 100%;
   background-image: url('./assets/icon/can.png');
   background-position:50% 50%;
   background-repeat: no-repeat;
-  background-size:  43% 90%;
+  background-size:  35% auto;
   padding-left: 1%;
   padding-right: 1%; 
-  z-index: 6;
+ 
 }
 
 .title
@@ -165,7 +214,7 @@ float: left;
   left:34%;
   font-size: 6.5rem;
   color:rgb(245, 245, 245);
-  z-index:3;
+ 
 }
 
 .order
@@ -179,12 +228,13 @@ border: 1px solid gray;
 border-radius: 15px;
 background-color: rgb(255, 255, 255);
 overflow-y: scroll;
-z-index:3;
+padding-top: 7%;
+
 }
 
 .order h1{  font-size: 3.5rem;  }
 
-.order .foodname{  width:30vw;  }
+.order .foodname{  width:25vw;  }
 
 .image{  width:20vw;  }
 
@@ -200,9 +250,16 @@ height: 80%;
   vertical-align:middle;
   text-align: left;
   font-size: 3.5rem;
+  display: flex;
+  align-items: center;
 }
 
-.order .num{  width:25vw;  }
+.order .num{  
+  width:25vw;  
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  }
 
 .order .del
 {
@@ -221,7 +278,7 @@ padding-bottom: 3%;
 padding-left: 4%;
 padding-right: 7%;
 color:rgb(245, 245, 245);
-z-index:3;
+
 }
 
 .total span
@@ -237,7 +294,6 @@ z-index:3;
 top:80.76vh;
 left:8%;
 position: absolute;
-z-index:3;
 }
 
 .send button
@@ -253,13 +309,6 @@ z-index:3;
   cursor:pointer;
 }
 
-.send button:hover
-{
-  background-color:rgb(0, 0, 0);
-  border-color: rgb(170, 170, 170);
-  border-width: 1.5px;
-  color:white;
-}
 
 
 .num button
@@ -278,11 +327,10 @@ z-index:3;
 
 .num button:hover{   background-color: rgb(240, 240, 240);  }
 
-.num span
+.num h3
 { 
     padding-left: 0.8rem;
     padding-right: 0.8rem;
-    width: 15rem;
     font-size: 6rem;
     vertical-align: -webkit-baseline-middle;
     text-align: center;

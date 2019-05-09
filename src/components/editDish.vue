@@ -85,7 +85,8 @@ export default {
         const compareImg=require('../assets/noPic.png');
         this.$axios({
         method: method,
-        url: '/api/post/'+route,
+        url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/'+route,
+        //url: '/api/post/'+route,
         data:{
             id:self.id,
             name: self.name,

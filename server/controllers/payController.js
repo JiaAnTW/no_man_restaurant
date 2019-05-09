@@ -49,7 +49,7 @@ module.exports=class payController{
         });
         let confirmation = {
             transactionId: this.lineInfo.transactionId,
-            amount: this.lineInfo.amount,
+            amount: req.body.amount,
             currency: this.lineInfo.currency
         }
         pay.confirm(confirmation).then((response) => {
@@ -62,7 +62,7 @@ module.exports=class payController{
                 startTime: Date.now(),
                 getTime: -1
             }
-            User.addBill(req.id,bill)
+            User.addBill(req.body.id,bill)
         })
 
     }

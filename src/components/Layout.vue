@@ -11,16 +11,15 @@
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
 
       <food v-if="nowAt=== 'menu'" :data="menu"/>
-      <!--order v-else-if="nowAt==='favorite'" @add-cart="addToCart"  :data="menu[1]"/-->
-      <!--order v-else-if="nowAt==='favorite'"  :data="menu[1]"/-->
-      <line-pay @show-loading="shouldShowLoading" v-else-if="nowAt==='favorite'"/>
+      <order v-else-if="nowAt==='favorite'" @add-cart="addToCart"  :data="menu[1]"/>
+      <!--line-pay @show-loading="shouldShowLoading" v-else-if="nowAt==='favorite'"/-->
       <member v-else-if="nowAt=== 'profile'" />
-      <cart v-else-if="nowAt=== 'cart'" :data="cart"/>
-      
+      <cart v-else-if="nowAt=== 'cart'" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
+      <total v-else-if="nowAt=== 'total'" :data="bill"/>
       <!--把你做的component放在上面。(你可以試試看把order放進來)-->
     </div>
     <div class="nav-bar">
-      <button  v-for="(step,index) in steps" v-bind:key={index} v-on:click="changeNowAt(step.name)">
+      <button  v-for="(step,index) in steps" v-bind:key="index" v-on:click="changeNowAt(step.name)">
         <img class="nav-icon" :src="step.icon" :alt="step.name"/><br/>
         {{ step.name }}
       </button>
@@ -58,24 +57,47 @@ export default {
       ],
       search: {visibility: "hidden"},
       nowAt: "loading",
-      isLoading: true
+      isLoading: true,
+      bill:{}
     }
   },
   methods:{
-    viewSingleDish: function(id){
+    viewSingleDish: function(id){//當點擊Food.vue的其中一個block後，用這個function把選擇的餐點傳入order.vue
       this.viewDish=id;
     },
-    addToCart: function(items){
-      this.cart.push(items);
+    addToCart: function(items){ //用來增加商品至購物車，輸入參數為一物件，格式見Dish.vue
+      var index=this.cart.findIndex(function(item, index, array){
+        return item.id == items.id;
+      });
+      
+      if(index!=-1){
+        this.cart[index].num+=items.num;
+      }
+      else
+        this.cart.push(items);
     },
-    changeNowAt: function(next){
+    changeNowAt: function(next){ //改變step-container的顯示元件
       this.nowAt=next;
     },
-    shouldShowLoading: function(show){
+    shouldShowLoading: function(show){ //用來顯示/隱藏loading畫面
       this.isLoading=show;
+    },
+    handleCartChange: function(value,index){ //對已經在購物車中的商品作數量改變，value為1或-1
+      if(this.cart[index].num+value>=0){
+        this.cart[index].num+=value;
+      }
+    },
+    handleCartDelete:function(id){ //用商品id去尋找已經在購物車中的特定商品並做刪除
+      var index=this.cart.findIndex(function(item, index, array){ 
+        return item.id == id;
+      });
+      this.cart.splice(index, 1);
+    },
+    sendBill:function(data){
+      this.bill=data;
     }
   },
-    mounted: function(){
+    mounted: function(){ //當畫面已經渲染上DOM後，像後端請求資料
       var self=this;
       this.$axios({
         methods: 'get',
@@ -84,7 +106,7 @@ export default {
       })
       .then((res) => {
         self.menu = res.data;
-        self.isLoading=false;
+        self.isLoading=false;//在資料抓到之前會顯示讀取畫面，抓到之後讓讀取畫面消失
         self.nowAt="menu";
       });
   },

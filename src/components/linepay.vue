@@ -37,29 +37,7 @@ export default {
     }).then((res) => {
       })
     },
-    post123: function(){
-      this.$emit('show-loading',true);
-      this.$axios(
-        {
-          method: "post",
-          url: '/api/post/pay'
-        }
-      ).then(response=>{
-        window.open(response.data["url"], "_blank")
-        this.$emit('show-loading',false);
-      })
-    },
-    confirm: function(){
-      this.$emit('show-loading',true);
-      this.$axios(
-        {
-          method: "post",
-          url: '/api/post/pay/confirm'
-        }
-      ).then(response=>{
-        this.$emit('show-loading',false);
-      })
-    }
+
   }
 }
 </script>
