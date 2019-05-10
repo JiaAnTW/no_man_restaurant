@@ -12,8 +12,8 @@
             </div>
           </div>
       </div>
-      <div class="block-container" id="block">
-        <div class="block" v-for="(pictures,index) in lists" :key="pictures.id">
+      <div class="block-container" id="block" ref="block" @scroll="handleScroll">
+        <div class="block" v-for="(pictures,index) in lists" :key="pictures.id" :ref="index">
           <button class="btn3" @click="viewDish(pictures.id)"></button>
           <div class="img-container" :style="backgroundImage[index]"></div>
           <h2>{{pictures.name}} |  ${{pictures.price}}</h2>
@@ -78,7 +78,8 @@ export default {
       this.$emit('view-dish',id);
     },
     handleScroll:function () {
-      const container = this.$el.querySelector('#block')
+      var container = this.$refs['block']
+      console.log(container)
       console.log(container.scrollTop)
     },
   },
@@ -92,7 +93,7 @@ export default {
       this.data.forEach(Element=>{
         this.backgroundImage.push({backgroundImage:'url('+Element.image+')'})
       })
-      window.addEventListener('scroll', this.handleScroll)
+      console.log(this.$refs['10'].offsetTop)
   },
 
 }
@@ -108,12 +109,12 @@ export default {
   }
   .slide{
     border:1px solid gray;
-    border-radius:12%;
+    border-radius:12px;
     width:18vw;
-    height:26vh;
+    height:40vw;
     position:fixed;
-    margin-top:29vh;
-    left:-14vw;
+    margin-top:31vh;
+    left:-15vw;
     background-color:rgb(94, 90, 90);
     z-index:1;
   }
@@ -132,11 +133,11 @@ export default {
   }
   .block{
     position: relative;
-    border:1px solid gray;
+    border:0px solid gray;
     border-radius:10%;
     width:40vw;
     height:40vw;
-    margin: 1rem 0.5rem;
+    margin: 1rem 0.7rem;
     background-color:rgb(94, 90, 90);
     z-index:0;
   }
@@ -150,7 +151,7 @@ export default {
     -webkit-align-content: flex-start;
     margin-top:4.5vh;
     margin-left:1.5vw;
-    width: 86vw;
+    width: 88vw;
     height: 75vh;
   }
 
@@ -164,6 +165,7 @@ export default {
 
 
   .block h2{
+    font-family: 'Microsoft JhengHei';
     width: 100%;
     font-size: 1.7vh;
     text-align: center;
@@ -238,7 +240,7 @@ export default {
   .fbicon{
     height:2vh;
     position: fixed;
-    margin:0vh 2vw 0vh 2vw;
+    margin:0vh 2vw 0vh 2.5vw;
     left:43vw;
     z-index:2;
   }
@@ -246,7 +248,7 @@ export default {
     width:3.5vw;
     height:2vh;
     position: fixed;
-    margin:0vh 2vw 0vh 2vw;
+    margin:0vh 2vw 0vh 3vw;
     right: 43vw;
     z-index:2;
   }

@@ -22,7 +22,7 @@ import Dish from './components/Dish.vue'
 export default {
   name: 'Order',
   components: {Dish},//也要把你做的Component在這註冊
-  props:["data","isCart"],
+  props:["data"],
   data () {
     return {
       number: 0,
@@ -36,6 +36,7 @@ export default {
         "linear-gradient(180deg, #f42033 0%, #270540 100%)",
         "linear-gradient(180deg, #6ce1b9 0%, #673ceb 100%)",
       ],
+      isCart: false
     }
   },
   computed:{
@@ -59,10 +60,14 @@ export default {
   },
   methods:{
     handleNumberChange: function(e){
-      if(e.target.value==="plus")
+      if(e.target.value==="plus"){
         this.number++;
-      else if(this.number>0)
+        this.isCart=true;
+      }
+      else if(this.number>0){
         this.number--;
+        this.isCart=true;
+      }
     },
     addToCart: function(){
       this.$emit('add-cart',{

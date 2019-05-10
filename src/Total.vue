@@ -44,11 +44,13 @@
     <div id="arrive_time">
         <div class="adj"></div>
             <div class="adj"></div>
-            <div id="order_msg">
-                <h1 style="color:white;font-size:4.5rem"> Order can be picked in:
-                </h1> 
+            <div class="msg-container">
+                <div id="order_msg">
+                    <h1 style="color:white;font-size:4.5rem"> Order can be picked in:
+                    </h1> 
+                </div>
+                <span id="order_time">{{timeshow}}</span> 
             </div>
-            <span id="order_time">{{timeshow}}</span> 
     </div>
 </div>
 </template>
@@ -137,6 +139,8 @@ export default {
 }   
 
 #name{
+    font-family: 'Microsoft JhengHei';
+    color: rgba(0, 0, 0, 0.7);
     display: flex;
     flex-grow: 4;
     align-items: center;
@@ -200,13 +204,17 @@ export default {
    /* border: solid 1px red;*/
 }
 
+.msg_container{
+    width: 100%;
+}
+
 #order_msg{
     text-decoration: none;
     border-bottom: 0.1px solid white;
 }
 
 #order_time{
-    font-size:35px;
+    font-size:45px;
     color: white;
     position: absolute;
     right:7%;

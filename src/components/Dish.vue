@@ -1,7 +1,7 @@
 <template>
     <div class="dish">
-      <img class="dish-img" :src="image" alt="dish"/>
-      <button class="open-btn" @click="changeOpen"><div></div></button>
+      <img class="dish-img" :src="image" :style="imgStyle" alt="dish"/>
+      <button class="open-btn" @click="changeOpen" :style="btnStyle"><div></div></button>
       <div class="background" :style="backgroundStyle"></div>
       <div class="detail" :style="detailStyle">
         <ul>
@@ -24,7 +24,9 @@ export default {
       score: 3,
       isOpen: true,
       backgroundStyle:{ marginTop:"0",backgroundImage:"linear-gradient(180deg, #2af598 0%, #009efd 40%)"},
+      imgStyle:{filter:"blur(2px)",opacity:"0.3"},
       detailStyle:{ marginTop:"0"},
+      btnStyle:{top:0},
       madeof:["小麥麵包","法式香草醬"],
       nut:[
           { name:"熱量", value:87},
@@ -65,10 +67,22 @@ export default {
       if(this.isOpen===true){
         this.detailStyle={marginTop:"0"};
         this.backgroundStyle={marginTop:"0",backgroundImage:this.color};
+        this.imgStyle={filter:"blur(3px)",opacity:"0.3"};
+        this.btnStyle={top:"0",transform:"rotate(0deg)"}
+        const changeStyle=()=>{
+          this.btnStyle={ top:"0",transform:"rotate(0deg)"}
+        }
+        setTimeout(changeStyle,1500);
       }
       else{
-        this.detailStyle={marginTop:"-100%"};
-        this.backgroundStyle={marginTop:"-100%",backgroundImage:this.color};
+        this.detailStyle={marginTop:"100%"};
+        this.backgroundStyle={marginTop:"100%",backgroundImage:this.color};
+        this.imgStyle={};
+        this.btnStyle={top:"95%",transform:"rotate(180deg)"}
+        const changeStyle=()=>{
+          this.btnStyle={top:"95%", transform:"rotate(180deg)"}
+        }
+        setTimeout(changeStyle,1000);
       }
     }
   },
@@ -83,9 +97,10 @@ export default {
       width: 100%;
       height: 100%;
       overflow: hidden;
+      background-color: #505050;
     }
     .dish-img{
-      height: 70%;
+      height: 90%;
       
     }
     .open-btn{
@@ -96,6 +111,10 @@ export default {
         border: none;
         background-color: transparent;
         top: 0;
+        -webkit-transition: top 0.98s ease-in-out;
+        -moz-transition: top 0.98s ease-in-out;
+        -o-transition: top 0.98s ease-in-out;
+        transition: top 0.98s ease-in-out; 
     }
 
     .open-btn div{
@@ -103,14 +122,14 @@ export default {
         height: 0;
         border-style: solid;
         border-width: 7px 12.5px 0 12.5px;
-        
+  
         border-color: white rgba(243,243,243,0) rgba(243,243,243,0) rgba(243,243,243,0);
     }
     .background{
       position: absolute;
       width: 100%;
       height: 100%;
-      opacity: 0.7;
+      opacity: 0.4;
       z-index: 2;
       -webkit-transition: margin-top 1s ease-in-out;
       -moz-transition: margin-top 1s ease-in-out;
@@ -125,7 +144,7 @@ export default {
       z-index: 3;
       overflow-y: auto;
       overflow-x: hidden;
-      background-color: rgba(243,243,243,0.35);
+      background-color: rgba(243,243,243,0);
       padding: 4rem 2rem;
       -webkit-transition: margin-top 1s ease-in-out;
       -moz-transition: margin-top 1s ease-in-out;
@@ -134,16 +153,18 @@ export default {
     }
 
     .detail ul{
+      font-family: 'Microsoft JhengHei';
       list-style: none;
-      font-size: 2.7rem;
+      font-size: 3.5rem;
       letter-spacing: 0.2rem;
       line-height: 1.4rem;
     }
     .detail li{
+      font-family: 'Microsoft JhengHei';
       list-style: none;
-      font-size: 2.7rem;
+      font-size: 3.5rem;
       letter-spacing: 0.2rem;
-      line-height: 1.5rem;
+      line-height: 2.5rem;
     }
 </style>
 

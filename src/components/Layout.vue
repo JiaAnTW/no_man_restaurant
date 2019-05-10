@@ -141,7 +141,6 @@ export default {
   },
   computed:{
     isCart:function(){
-      console.log(this.menu[this.viewDish].id)
       var self=this;
       var index=this.cart.findIndex(function(item, index, array){
         return item.id == self.menu[self.viewDish].id;
@@ -222,7 +221,7 @@ export default {
 
 .nav-bar{
   border-top: 1px solid gray;
-  height: 7.0vh;
+  height: 8.0vh;
   display: flex;
   justify-content: center;
   -webkit-justify-content:center; 
@@ -235,7 +234,7 @@ export default {
 
 
 .nav-bar button{
-  font-size: 2rem;
+  font-size: 2.9rem;
   color: gray;
   background-color: rgba(0, 0, 0, 0);
   margin: 0rem 1.3rem;
