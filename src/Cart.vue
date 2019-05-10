@@ -12,9 +12,9 @@
             <h1>{{cartdatas.name}}<br/>${{cartdatas.price}}</h1>
             </td>
             <td class="num">
-              <button  value="minus" v-on:click="handleNumberChange(-1,index)">-</button>
+              <button class="minus_"  value="minus" v-on:click="handleNumberChange(-1,index)">-</button>
               <h3>{{ cartdatas.num }}</h3>
-              <button  value="plus" v-on:click="handleNumberChange(1,index)">+</button>
+              <button class="plus_"  value="plus" v-on:click="handleNumberChange(1,index)">+</button>
            </td>
             <td class="del">
               <button class="can" value="zero" v-on:click="deleteDish(index)"></button>
@@ -150,25 +150,11 @@ computed:{
 </script>
 <style scoped>
 
+
  button
 {
   outline: none;
-  
 }
-
-.number button{
-    border-radius: 50px;
-    width: 3rem;
-    height: 3rem;
-    color: rgb(45, 45, 45);
-    font-size: 6rem;
-    font-weight: 600;
-    line-height: 0rem;
-    background-color: rgba(243,243,243,1);
-    border: 0px solid gray;
-  }
-
-.cartdata{    }
 
 .l
 {
@@ -178,7 +164,9 @@ float: left;
 
 .r
 {
+  position: absolute;
   width:100%;
+  left:65%;
   float: right;
 }
 
@@ -191,7 +179,7 @@ float: left;
 .order td
 {
   height: 11vh;
- border-bottom: 1.5px solid rgb(184, 184, 184);
+  border-bottom: 1px solid rgb(200, 200, 200);
   color: rgb(45, 45, 45);
 }
 
@@ -214,21 +202,22 @@ float: left;
 
 .order button
 {
-  margin-top:3%;
+  margin-top:2%;
   cursor:pointer;
 }
 
 .can
 {
-  height:70%;
-  width: 90%;
+  height:45%;
+  width: 100%;
   background-image: url('./assets/icon/can.png');
   background-position:50% 50%;
   background-repeat: no-repeat;
-  background-size:  35% auto;
+  background-size:  25% auto;
   padding-left: 1%;
   padding-right: 1%; 
- 
+  background-color: rgba(100, 100, 100, 0.1);
+  border: none;
 }
 
 .title
@@ -236,7 +225,6 @@ float: left;
   position: absolute;
   top:13vh;
   left:38%;
-
   font-size: 5.5rem;
   color:rgb(245, 245, 245);
   text-decoration: underline;
@@ -254,7 +242,6 @@ border-radius: 15px;
 background-color: rgb(255, 255, 255);
 overflow-y: scroll;
 padding: 7% 1%;
-
 }
 
 .order h1{
@@ -284,7 +271,7 @@ height: 80%;
 }
 
 .order .num{  
-  width:25vw;  
+  width:22vw;  
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -292,7 +279,7 @@ height: 80%;
 
 .order .del
 {
-   width:15vw;
+   width:18vw;
    vertical-align: -webkit-baseline-middle;
    display: flex;
    align-items: center;
@@ -348,16 +335,18 @@ position: absolute;
 
 
 .num button
-{
-    border-radius: 2rem;
-    width: 2.5rem;
-    height: 2.5rem;
+{ 
+    padding:0 0 0.2rem 0.4rem;
+    border-radius: 1.8rem;
+    width: 1.8rem;
+    height: 1.8rem;
     color: rgb(0, 0, 0);
-    font-size: 5rem;
+    font-size: 3.5rem;
     font-weight: 600;
     line-height: 0%;
     background-color: rgb(255, 255, 255);
     border: 0.1rem solid gray;
+    text-align: center;
     vertical-align: middle;
   }
 
@@ -372,10 +361,4 @@ position: absolute;
     text-align: center;
     color: rgb(45, 45, 45);
 }
-
-.can{
-  background-color: rgba(0,0,0,0.1);
-  border: none;
-}
-
 </style>
