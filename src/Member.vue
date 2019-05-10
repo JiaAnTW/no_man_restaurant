@@ -4,8 +4,8 @@
       <div id="userpic">
         <div id="inner"></div>
         <br><br>
-            <div id="username" style="width:100%;text-align:center">
-            <h1 style="color:white">SB: Test_Name</h1>
+            <div  style="width:100%;text-align:center">
+            <h1 style="color:white;font-size:22px" >S | B</h1>
         </div>
     </div>
     </div>
@@ -22,7 +22,7 @@
 
 <div id="third">
     <span style="color:white"> New to Sun Burger? 
-        <a href="https://www.facebook.com/Scratchburgertw/" style="color:white">Sign up</a>
+        <a href="https://www.facebook.com/Scratchburgertw/" style="color:white;font-size:15px">Sign up</a>
      </span>
    <button id="forget_pass">I forgot my password</button>
 </div>
@@ -35,6 +35,7 @@ export default {
     email:'',
     password:'',
     token:'',
+    name:'',
   }
   },
   methods: {
@@ -75,6 +76,7 @@ export default {
     justify-content: center;
      align-items: center;
     -webkit-align-items: center;
+    /*border:solid 1px red;*/
 }
 
 #second{
@@ -128,6 +130,7 @@ export default {
   display: flex;
   justify-content: center;
   background-color:rgb(48, 48, 48);
+  font-size: 15px;
   border: 0px;
   margin: 0px;
   padding:0px;
@@ -137,10 +140,10 @@ export default {
 #forget_pass{
   background-color:rgb(48, 48, 48);
   border: 0px;
-  margin-top: 10px;
+  margin-top: 5px;
   margin-bottom: 10px;
   padding:0px;
   color:white;
-  font-size:15px;
+  font-size:10px;
 }
 </style>

@@ -1,13 +1,14 @@
 <template>
 <div class="total">
     <div id="header">
-        <h1 style="color:white">Your Order</h1>
+        <h1 style="color:white;font-size:5.5rem">Your Order</h1>
     </div>
 
     <div id="member_info">
       <div class="adj"></div>
+       <div class="adj"></div>
        <div id="name"> 
-           <h1> Name: {{name}}</h1>
+           <h1 style="font-size:5.5rem"> Name: {{name}}</h1>
        </div>
 
         <div id="adj_pos">
@@ -21,8 +22,9 @@
     <div id="item">
         <div class="data">
             <div class="adj"></div>
-               <div class="mid">
-                <h1 style="color:white"> Total: ${{money}} NTD</h1> 
+            <div class="adj"></div>
+               <div id="money">
+                    <h1 style="color:white;font-size:5.5rem;"> Total: ${{money}} NTD</h1> 
                </div> 
                 <div class="adj"></div>
                 <div class="adj"></div>
@@ -30,8 +32,9 @@
           
         <div class="data">
             <div class="adj"></div>  
-               <div class="mid"> 
-                <h1 style="color:white"> Guest Number: {{guest_number}}</h1>
+            <div class="adj"></div>
+               <div id="number"> 
+                <h1 style="color:white;font-size:5.5rem"> Guest Number: {{guest_number}}</h1>
                </div>
              <div class="adj"></div>
              <div class="adj"></div>
@@ -39,12 +42,13 @@
     </div>
 
     <div id="arrive_time">
+        <div class="adj"></div>
             <div class="adj"></div>
             <div id="order_msg">
-                <h1 style="color:white "> Order can be picked in:
+                <h1 style="color:white;font-size:4.5rem"> Order can be picked in:
                 </h1> 
             </div>
-            <span id="order_time">{{timeshow}} <span style="font-size:30px">min</span></span> 
+            <span id="order_time">{{timeshow}}</span> 
     </div>
 </div>
 </template>
@@ -76,11 +80,11 @@ export default {
   computed: {
       timeshow:function(){
         if(this.time>0)
-            return this.time;
+            return this.time+" min";
         else if( this.time===0)
             return "餐點已完成";
         else
-            return "你還沒點餐啦= =";
+            return "餐點已完成";
       }
   },
 
@@ -106,20 +110,32 @@ export default {
     display: flex;
     align-items: center;
     flex-grow: 1;
+    
 }
 
 .adj{
-   width: 20px;
+   width: 18px;
+   /*border: solid 1px red;*/
 }
 
-.mid{
+#money{
     font-size: 8px;
     text-decoration: none;
     border-bottom: 0.1px solid white;
     justify-content: flex-start;
-    flex-grow:1; 
+    align-self: center;
+    flex-grow:1;
 }
-      
+
+#number{
+    font-size: 8px;
+    text-decoration: none;
+    border-bottom: 0.1px solid white;
+    justify-content: flex-start;
+     align-self: flex-start;
+    flex-grow:1;
+}   
+
 #name{
     display: flex;
     flex-grow: 4;
@@ -133,19 +149,22 @@ export default {
     -webkit-align-item:center;
     justify-content: space-around;
     -webkit-justify-item:space-around; 
-    flex-grow: 0.2;
-    font-size: 8px;
+    flex-grow: 0.5;
 }
 
 #member_info{
     display: flex;
-    flex-grow: 0;
+    flex-grow: 0.1;
     background-color:#eee;
+    /*border: solid 1px red;*/
 }
 
 #adj_pos{
     justify-content: center;
-    flex-grow: 2;
+    -webkit-justify-item:center;
+    align-items: center;
+    -webkit-align-item:center;
+    flex-grow: 1;
 }
 
 #userpic{
@@ -167,9 +186,10 @@ export default {
 
 #item{
     display: flex;
-    flex-grow: 1;
+    flex-grow: 2;
     flex-direction:column;
     -webkit-flex-direction:column;
+    /*border: solid 1px red;*/
 }
 
 #arrive_time{
@@ -177,18 +197,18 @@ export default {
     justify-content: flex-start;
     flex-grow: 2;
     align-items: center;
+   /* border: solid 1px red;*/
 }
 
 #order_msg{
-    font-size: 6px;
     text-decoration: none;
     border-bottom: 0.1px solid white;
 }
 
 #order_time{
-    font-size: 55px;
+    font-size:35px;
     color: white;
     position: absolute;
-    right:15%;
+    right:7%;
 }
 </style>
