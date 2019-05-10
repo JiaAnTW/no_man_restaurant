@@ -44,7 +44,7 @@
                 <h1 style="color:white "> Order can be picked in:
                 </h1> 
             </div>
-            <span id="order_time">{{time}} <span style="font-size:30px">min</span></span> 
+            <span id="order_time">{{timeshow}} <span style="font-size:30px">min</span></span> 
     </div>
 </div>
 </template>
@@ -56,7 +56,7 @@ export default {
   props:['bill-data'],
   data () {
     return {
-      time:this.billData.time,
+      time: null,
       name:this.billData.name,
       money:this.billData.amount,
       guest_number:this.billData.guest_id
@@ -64,15 +64,28 @@ export default {
   },
   methods:{
     esttime:function(){
-      this.time=this.billData.time-Date.now();
-  }   
+    if(this.time>0)
+      this.time=Math.floor((this.billData.time-Date.now())/(1000*60));
+    else if(this.time==null)
+        this.time=this.time; 
+    else
+        this.time=0; 
+    }
   },
 
   computed: {
-  
+      timeshow:function(){
+        if(this.time>0)
+            return this.time;
+        else if( this.time===0)
+            return "餐點已完成";
+        else
+            return "你還沒點餐啦= =";
+      }
   },
 
    mounted() {
+       this.time=this.billData.time;
     this.esttime();
     setInterval(this.esttime.bind(this) , 1000)    
     },

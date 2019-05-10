@@ -1,9 +1,9 @@
 <template>
   <div class="Layout">
     <div class="slogan-container">
-      <button class="top-btn"><div class="back"></div></button>
+      <button class="top-btn" @click="changeNowAt(before)" :style="search[0]"><div class="back"></div></button>
       <h1>Sun Burger</h1>
-      <button :style="search" class="top-btn"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
+      <button :style="search[1]" class="top-btn"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
     </div>
     <div class="step-container">
       <!--注意，請把你.vue檔中最外層的div增加兩個css屬性: "flex-grow:1"和"-webkit-flex-grow:1" -->
@@ -11,10 +11,10 @@
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
 
       <food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu"/>
-      <order v-else-if="nowAt==='order'" @add-cart="addToCart"  :data="menu[viewDish]" :inCart="checkCart"/>
+      <order v-else-if="nowAt==='order'" @add-cart="addToCart"  :data="menu[viewDish]" :isCart="isCart"/>
       <member v-else-if="nowAt=== 'profile'" @get-token="gettoken"/>
-      <cart v-else-if="nowAt=== 'cart'" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
-      <total v-else-if="nowAt=== 'total'" :bill-data="bill"/>
+      <cart v-else-if="nowAt=== 'cart'" :token="token" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
+      <total v-else-if="nowAt=== 'total' || nowAt=== 'favorite'" :bill-data="bill"/>
       <!--把你做的component放在上面。(你可以試試看把order放進來)-->
     </div>
     <div class="nav-bar">
@@ -53,28 +53,20 @@ export default {
         {name:"cart",icon:require('../assets/icon/cart.png')},
         {name:"profile",icon:require('../assets/icon/member.png')}
       ],
-      search: {visibility: "hidden"}, //右上角搜尋按鍵的css
+      search: [{visibility: "hidden"},{visibility: "hidden"}], //右上角搜尋按鍵的css
       nowAt: "loading", //目前step的顯示元件，loading時不顯示任何元件,
       isLoading: true, //loading畫面是否顯示
       bill:{},//用來從cart.vue傳進total的訂單
       token:'',
+      before: 'menu'
     }
-  },
-  computed:{
-    checkCart:function(){
-      var index=this.cart.findIndex(function(item, index, array){
-        return item.id == this.menu[this.watchDish].id;
-      });
-      if(index!=-1){
-        return true;
-      }
-      else
-        return false;
-    },
   },
   methods:{
     viewSingleDish: function(id){//當點擊Food.vue的其中一個block後，用這個function把選擇的餐點傳入order.vue
-      this.viewDish=id;
+      var index=this.menu.findIndex(function(item, index, array){
+        return item.id == id;
+      });
+      this.viewDish=index;
       this.changeNowAt('order');
     },
     addToCart: function(items){ //用來增加商品至購物車，輸入參數為一物件，格式見Dish.vue
@@ -87,6 +79,7 @@ export default {
       }
       else
         this.cart.push(items);
+      this.changeNowAt('cart');
     },
     changeNowAt: function(next){ //改變step-container的顯示元件
       this.nowAt=next;
@@ -110,6 +103,7 @@ export default {
     },
     gettoken:function(token){
       this.token=token;
+      this.changeNowAt('cart')
     }
   },
     mounted: function(){ //當畫面已經渲染上DOM後，向後端請求資料
@@ -129,12 +123,33 @@ export default {
     nowAt: function(){
       switch(this.nowAt){
         case 'menu':
-          this.search={};
+          this.search=[{visibility:"hidden"},{visibility:"visible"}];
           break;
+        case 'order':
+          this.search=[{visibility:"visible"},{visibility:"hidden"}];
+          this.before='menu'
+          break;
+        case 'cart':
+          this.search=[{visibility:"visible"},{visibility:"hidden"}];
+          this.before='menu'
+        break;
         default:
-          this.search={visibility:"hidden"};
+          this.search=[{visibility:"hidden"},{visibility:"hidden"}];
           break;
       }
+    }
+  },
+  computed:{
+    isCart:function(){
+      console.log(this.menu[this.viewDish].id)
+      var self=this;
+      var index=this.cart.findIndex(function(item, index, array){
+        return item.id == self.menu[self.viewDish].id;
+      });
+      if(index!=-1)
+        return true;
+      else
+        return false; 
     }
   }
 }

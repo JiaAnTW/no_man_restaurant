@@ -4,7 +4,7 @@
       <div id="userpic">
         <div id="inner"></div>
         <br><br>
-            <div id="username" style="width:215px">
+            <div id="username" style="width:100%;text-align:center">
             <h1 style="color:white">SB: Test_Name</h1>
         </div>
     </div>
@@ -50,6 +50,7 @@ export default {
     }).then((res) => {
         this.token=res.data["token"];
         this.$emit('get-token',self.token);/*傳送代碼*/ 
+
       });
   },
     }

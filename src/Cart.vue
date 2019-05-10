@@ -6,7 +6,7 @@
         <tbody>
           <tr class=cartdata v-for = "(cartdatas,index) in data"  :key="index">
             <td class="image">
-              <img class="foodimg" src="./assets/beef.png" style="display:block; margin:auto;" alt="cartdatas.name" />
+              <img class="foodimg" :src="cartdatas.src" style="display:block; margin:auto;" alt="cartdatas.name" />
             </td>
             <td class="foodname">
             <h1>{{cartdatas.name}}<br/>${{cartdatas.price}}</h1>
@@ -40,7 +40,7 @@
 <script>
 export default {
   name: 'Cart',
-  props: ['data'],
+  props: ['data','token'],
   data () {
   return{
     cont:0,
@@ -64,26 +64,47 @@ computed:{
     deleteDish:function(index){
       this.$emit('delete-cart',index)
     },
-    linePay: function(){
-      if(this.tot>0){
-        const self=this;
-        this.$emit('show-loading',true);
-        this.$axios(
+    loginConfirm:function(){
+      this.$axios(
           {
             method: "post",
-            url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/pay',
+            url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/index',
             data:{
-            productName: "SunBurger的餐點",
-            amount: self.tot,
-            confirmUrl: "localhost:8080/#/",
+              token:this.token
           }
         }
       ).then(response=>{
-        window.open(response.data["url"], "_blank")
-        this.$emit('show-loading',false);
-        self.notPay=false;
-        self.transactionId=response.data.transactionId;
-        })
+          if(response.data==='你是會員')
+            return true;
+          else 
+            return false
+      })
+    },
+    linePay: function(){
+      if(this.tot>0){
+        if(this.token!=''){
+          const self=this;
+          this.$emit('show-loading',true);
+          this.$axios(
+            {
+              method: "post",
+              url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/pay',
+              data:{
+              productName: "SunBurger的餐點",
+              amount: self.tot,
+              confirmUrl: "localhost:8080/#/",
+            }
+          }
+        ).then(response=>{
+          window.open(response.data["url"], "_blank")
+          this.$emit('show-loading',false);
+          self.notPay=false;
+          self.transactionId=response.data.transactionId;
+          })
+        }
+        else{
+          alert("想要買這個餐點?哼哼哼，在沒有登入之前我是不會讓你通過這裡的",this.$emit('direct-to-show','profile'))
+        }
       }
     },
     linePayConfirm: function(){

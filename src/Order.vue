@@ -3,7 +3,7 @@
         <div class="title"><h1>{{ name }}</h1></div>
         <div class="dish">
           <div class="info-container">
-            <dish :image="image" :colorSet="colorSet"/>
+            <dish :image="image" :color="colorSet[this.data.id%5]"/>
            </div> 
         </div>
         <div class="number">
@@ -22,7 +22,7 @@ import Dish from './components/Dish.vue'
 export default {
   name: 'Order',
   components: {Dish},//也要把你做的Component在這註冊
-  props:["data"],
+  props:["data","isCart"],
   data () {
     return {
       number: 0,
@@ -40,14 +40,18 @@ export default {
   },
   computed:{
     btnStyle:function(){
-      const colorSet=[
-        "linear-gradient(270eg, #f11ca0 0%, #2013f6 100%)",
+      if(this.isCart===true){
+        const colorSet=[
+        "linear-gradient(270deg, #f11ca0 0%, #2013f6 100%)",
         "linear-gradient(270deg, #f19b3d 0%, #2013f6 100%)",
         "linear-gradient(270deg, #f0a133 0%, #f42033 100%)",
         "linear-gradient(270deg, #f42033 0%, #270540 100%)",
         "linear-gradient(270deg, #6ce1b9 0%, #673ceb 100%)",
-      ]
-      return {backgroundImage: colorSet[3]};
+        ]
+        return {backgroundImage: colorSet[this.data.id%5]};
+      }
+      else
+        return{}
     },
     maskStyle:function(){
       return {backgroundColor: "rgba(243,243,243,0.4)"};

@@ -18,7 +18,7 @@
 <script>
 export default {
   name: 'Dish',
-  props: ["image","colorSet"],
+  props: ["image","color"],
   data () {
     return {
       score: 3,
@@ -64,16 +64,16 @@ export default {
     isOpen:function(){
       if(this.isOpen===true){
         this.detailStyle={marginTop:"0"};
-        this.backgroundStyle={marginTop:"0",backgroundImage:this.colorSet[4]};
+        this.backgroundStyle={marginTop:"0",backgroundImage:this.color};
       }
       else{
         this.detailStyle={marginTop:"-100%"};
-        this.backgroundStyle={marginTop:"-100%",backgroundImage:this.colorSet[4]};
+        this.backgroundStyle={marginTop:"-100%",backgroundImage:this.color};
       }
     }
   },
   created:function(){
-    this.backgroundStyle={marginTop:"0%",backgroundImage:this.colorSet[4]};
+    this.backgroundStyle={marginTop:"0%",backgroundImage:this.color};
   }
 }
 </script>

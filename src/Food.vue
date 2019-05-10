@@ -12,7 +12,7 @@
             </div>
           </div>
       </div>
-      <div class="block-container">
+      <div class="block-container" id="block">
         <div class="block" v-for="(pictures,index) in lists" :key="pictures.id">
           <button class="btn3" @click="viewDish(pictures.id)"></button>
           <div class="img-container" :style="backgroundImage[index]"></div>
@@ -76,7 +76,11 @@ export default {
     },
     viewDish:function(id){
       this.$emit('view-dish',id);
-    }
+    },
+    handleScroll:function () {
+      const container = this.$el.querySelector('#block')
+      console.log(container.scrollTop)
+    },
   },
   watch:{
     data: function(){
@@ -88,7 +92,9 @@ export default {
       this.data.forEach(Element=>{
         this.backgroundImage.push({backgroundImage:'url('+Element.image+')'})
       })
-  }
+      window.addEventListener('scroll', this.handleScroll)
+  },
+
 }
 
 </script>
