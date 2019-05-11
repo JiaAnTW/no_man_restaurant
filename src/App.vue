@@ -22,7 +22,7 @@ html {
   font-family: 'Segoe UI';
 }
 
-button{
+button,h1,h2,h3,div,span{
   font-family: 'Segoe UI';
 }
 

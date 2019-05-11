@@ -173,7 +173,7 @@ export default {
   background-color: rgb(48, 48, 48);
   
   border-bottom: 1px solid rgb(48, 48, 48);
-  height: 7.5vh;
+  height: 8.5vh;
   display: flex;
   justify-content: space-around;
   -webkit-justify-content:space-around; 
@@ -185,7 +185,7 @@ export default {
 .slogan-container h1{
   border: 1px solid rgb(48, 48, 48);
   font-weight: 300;
-  font-size: 5.5rem;
+  font-size: 3.5vh;
   color: white;
 
 }

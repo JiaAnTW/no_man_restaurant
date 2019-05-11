@@ -6,14 +6,14 @@
       <div class="choice" :style="fly">
         <button class="btn2" @click="close"></button>
           <div class="list_frame">
-            <div class="list" v-for="text in choices" :key="text.menu">
-              <button class="listbtn" :style="fly2"></button>
+            <div class="list" v-for="(text,index) in choices" :key="index" :style="listColor[index]">
+              <button class="listbtn" @click="scrollTo(index)" :style="fly2"></button>
               {{text.menu}}
             </div>
           </div>
       </div>
       <div class="block-container" id="block" ref="block" @scroll="handleScroll">
-        <div class="block" v-for="(pictures,index) in lists" :key="pictures.id" :ref="index">
+        <div class="block" v-for="(pictures,index) in lists" :key="pictures.id" :ref="pictures.type+'-'+pictures.id">
           <button class="btn3" @click="viewDish(pictures.id)"></button>
           <div class="img-container" :style="backgroundImage[index]"></div>
           <h2>{{pictures.name}} |  ${{pictures.price}}</h2>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { resolve } from 'url';
 export default {
   name: 'Food',
   props:["data"],
@@ -39,8 +40,8 @@ export default {
       choices:[
         {menu:'burgers'},
         {menu:'drinks'},
-        {menu:'salad'},
         {menu:'french fries'},
+        {menu:'salad'},
       ],
       fly:{
         left:'-70vw',
@@ -51,9 +52,11 @@ export default {
       fb:'https://www.facebook.com/JiaAnChang.Andy',
       ig:'https://www.instagram.com/_yang1029/',
       out:false,
-      changed:false,
       lists:[],
-      backgroundImage:[]
+      backgroundImage:[],
+      postionRecord:[],
+      listColor:[],
+      nowAt:0
     }
   },
   computed:{
@@ -70,6 +73,7 @@ export default {
     close:function(){
       if(this.out===true){
         this.fly={left:'-70vw'}
+        //this.fly={left:'-10.8vw'}
         this.fly2={left:'-100vw'}
         this.out=false;
       }
@@ -77,10 +81,42 @@ export default {
     viewDish:function(id){
       this.$emit('view-dish',id);
     },
-    handleScroll:function () {
+    scrollTo: function(index){
+       var container = this.$refs['block']
+       this.scroll(this.postionRecord[index]+150)
+    },
+    scroll:function(position){
       var container = this.$refs['block']
-      console.log(container)
-      console.log(container.scrollTop)
+      container.scrollTop=position
+      //if(container.scrollTop<position){
+          //container.scrollTop=container.scrollTop+10;
+          //setTimeout(this.scroll(position),1000)
+      //}
+      //else if(container.scrollTop>position){
+          //container.scrollTop=container.scrollTop-10;
+          //setTimeout(this.scroll(position),1000)
+      //}
+    },
+    handleScroll:function () {
+      var index=0;
+      var container = this.$refs['block']
+      //const setIndex=new Promise((resolve)=>{
+
+        while(container.scrollTop>this.postionRecord[ index ]&& index <this.postionRecord.length)
+          index++;
+        this.nowAt=index;
+        //resolve();
+      //})
+     
+        for(let i=0;i<this.postionRecord.length;i++){
+            this.listColor[i]={backgroundColor:'rgba(0,0,0,0)'} ;
+        }
+            
+        //}
+      console.log(this.nowAt)
+      this.listColor[index-1]={backgroundColor:'rgba(0,0,0,0.3)'} 
+      //setIndex.then(()=>{this.listColor[index-1]={backgroundColor:'rgba(0,0,0,0.3)'}})
+      
     },
   },
   watch:{
@@ -88,12 +124,24 @@ export default {
       this.lists= this.data;
     }
   },
-  mounted:function(){
+  created:function(){
       this.lists= this.data;
       this.data.forEach(Element=>{
         this.backgroundImage.push({backgroundImage:'url('+Element.image+')'})
       })
-      console.log(this.$refs['10'].offsetTop)
+  },
+  mounted:function(){
+    var watchType='';
+    for(let i=0;i<this.lists.length;++i){
+      if(this.lists[i].type!=watchType){
+        watchType=this.lists[i].type;
+        this.listColor.push({backgroundColor:'rgba(0,0,0,0)'})
+        this.postionRecord.push(this.$refs[watchType+'-'+this.lists[i].id][0].offsetTop-this.$refs['block'].offsetTop-150)
+        if(this.lists.length>1 && this.postionRecord[this.postionRecord.length-1]==this.postionRecord[this.postionRecord.length-2])
+          this.postionRecord[this.postionRecord.length-1]+=50;
+      }
+    }
+    this.listColor[0]={backgroundColor:'rgba(0,0,0,0.3)'}
   },
 
 }
@@ -113,7 +161,7 @@ export default {
     width:18vw;
     height:40vw;
     position:fixed;
-    margin-top:31vh;
+    margin-top:28vh;
     left:-15vw;
     background-color:rgb(94, 90, 90);
     z-index:1;
@@ -124,9 +172,8 @@ export default {
     width:60vw;
     height:73.15vh;
     position:fixed;
-    margin-top:6vh;
+    margin-top:3vh;
     background-color:rgb(94, 90, 90);
-    visibility:visible;
     z-index:1;
     display: flex;
     flex-direction: column;
@@ -149,7 +196,7 @@ export default {
     -webkit-justify-content: flex-start;
     align-content:flex-start;
     -webkit-align-content: flex-start;
-    margin-top:4.5vh;
+    margin-top:1.5vh;
     margin-left:1.5vw;
     width: 88vw;
     height: 75vh;
@@ -202,7 +249,6 @@ export default {
     float:right;
     border-radius:8%;
     opacity:0;
-    z-index:3;
   }
   .btn3{
     position:absolute;
@@ -228,7 +274,7 @@ export default {
     background-color:rgb(48, 48, 48);
     display:flex;
     flex-flow:row;
-    margin-top:78.15vh;
+    margin-top:76.15vh;
     color:white;
     padding:3vh 0vw 2vh 0vw;
     justify-content:center;

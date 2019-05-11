@@ -12,7 +12,7 @@
           <button value="plus" v-on:click="handleNumberChange">+</button>
         </div>
         <div class="cart">
-          <button v-on:click="addToCart" :style="btnStyle"><div class="mask" :style="maskStyle"></div>Add to cart</button>
+          <button v-on:click="addToCart" :style="btnStyle"><div class="mask" :style="maskStyle">Add to cart</div>Add to cart</button>
         </div>
     </div>
 </template>
@@ -66,7 +66,7 @@ export default {
       }
       else if(this.number>0){
         this.number--;
-        this.isCart=true;
+        this.isCart=(this.number==0)?false:true;
       }
     },
     addToCart: function(){
@@ -146,8 +146,8 @@ export default {
   }
 
   .dish .info-container{
-    height: 80vw;
-    width: 90vw;
+    height: 45vh;
+    width: 50vh;
     display: flex;
     overflow: hidden;
     border: 10px solid rgb(80, 80, 80);
@@ -194,6 +194,10 @@ export default {
     background-color: rgba(243,243,243,1);
     border: 1px solid rgb(45, 45, 45);
     position: relative;
+  }
+  .cart div{
+    font-size: 6rem;
+    color: 1px solid black;
   }
 </style>
 

@@ -68,19 +68,23 @@ export default {
         this.detailStyle={marginTop:"0"};
         this.backgroundStyle={marginTop:"0",backgroundImage:this.color};
         this.imgStyle={filter:"blur(3px)",opacity:"0.3"};
-        this.btnStyle={top:"0",transform:"rotate(0deg)"}
+        const changeStyle1=()=>{
+          this.btnStyle={ top:"0%",transform:"rotate(180deg)"}
+        }
+        setTimeout(changeStyle1,0);
+        //this.btnStyle={top:"-7%",transform:"rotate(180deg)"}
         const changeStyle=()=>{
           this.btnStyle={ top:"0",transform:"rotate(0deg)"}
         }
-        setTimeout(changeStyle,1500);
+        setTimeout(changeStyle,1000);
       }
       else{
         this.detailStyle={marginTop:"100%"};
         this.backgroundStyle={marginTop:"100%",backgroundImage:this.color};
         this.imgStyle={};
-        this.btnStyle={top:"95%",transform:"rotate(180deg)"}
+        this.btnStyle={top:"108%",transform:"rotate(0deg)"}
         const changeStyle=()=>{
-          this.btnStyle={top:"95%", transform:"rotate(180deg)"}
+          this.btnStyle={top:"97%", transform:"rotate(180deg)"}
         }
         setTimeout(changeStyle,1000);
       }
@@ -106,15 +110,14 @@ export default {
     .open-btn{
         position: absolute;
         z-index: 4;
-
         outline: none;
         border: none;
         background-color: transparent;
-        top: 0;
-        -webkit-transition: top 0.98s ease-in-out;
-        -moz-transition: top 0.98s ease-in-out;
-        -o-transition: top 0.98s ease-in-out;
-        transition: top 0.98s ease-in-out; 
+        margin-top: 0;
+        -webkit-transition: top 1s ease-in-out;
+        -moz-transition: top 1s ease-in-out;
+        -o-transition: top 1s ease-in-out;
+        transition: top 1s ease-in-out; 
     }
 
     .open-btn div{
