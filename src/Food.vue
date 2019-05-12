@@ -55,8 +55,9 @@ export default {
       lists:[],
       backgroundImage:[],
       postionRecord:[],
-      listColor:[],
-      nowAt:0
+      //listColor:[],
+      nowAt:1,
+      isScroll: false
     }
   },
   computed:{
@@ -82,22 +83,33 @@ export default {
       this.$emit('view-dish',id);
     },
     scrollTo: function(index){
+       this.isScroll=true;
        var container = this.$refs['block']
        this.scroll(this.postionRecord[index]+150)
+        for(let i=0;i<this.postionRecord.length;i++){
+            //this.listColor[i]={backgroundColor:'rgba(0,0,0,0)'};
+        }
+        this.nowAt=index+1;
+         this.isScroll=false;   
+        //}
+        //this.listColor[index]={backgroundColor:'rgba(0,0,0,0.3)'};
     },
     scroll:function(position){
       var container = this.$refs['block']
       container.scrollTop=position
       //if(container.scrollTop<position){
-          //container.scrollTop=container.scrollTop+10;
+         // container.scrollTop=container.scrollTop+100;
           //setTimeout(this.scroll(position),1000)
       //}
       //else if(container.scrollTop>position){
-          //container.scrollTop=container.scrollTop-10;
+          //container.scrollTop=container.scrollTop-100;
           //setTimeout(this.scroll(position),1000)
       //}
+      //else
+        //this.isScroll=false;
     },
     handleScroll:function () {
+      if(this.isScroll==false){
       var index=0;
       var container = this.$refs['block']
       //const setIndex=new Promise((resolve)=>{
@@ -109,15 +121,27 @@ export default {
       //})
      
         for(let i=0;i<this.postionRecord.length;i++){
-            this.listColor[i]={backgroundColor:'rgba(0,0,0,0)'} ;
+            //this.listColor[i]={backgroundColor:'rgba(0,0,0,0)'};
         }
             
         //}
-      console.log(this.nowAt)
-      this.listColor[index-1]={backgroundColor:'rgba(0,0,0,0.3)'} 
-      //setIndex.then(()=>{this.listColor[index-1]={backgroundColor:'rgba(0,0,0,0.3)'}})
-      
+        console.log(this.nowAt)
+        //this.listColor[index-1]={backgroundColor:'rgba(0,0,0,0.3)'};
+        //setIndex.then(()=>{this.listColor[index-1]={backgroundColor:'rgba(0,0,0,0.3)'}})
+      }
     },
+  },
+  computed:{
+    listColor(){
+      var output=[];
+      for(let i=0;i<this.postionRecord.length;++i){
+        if(i==this.nowAt-1)
+          output.push({backgroundColor:'rgba(0,0,0,0.3)'})
+        else
+          output.push({backgroundColor:'rgba(0,0,0,0)'})
+      }
+      return output;
+    }
   },
   watch:{
     data: function(){
@@ -135,13 +159,14 @@ export default {
     for(let i=0;i<this.lists.length;++i){
       if(this.lists[i].type!=watchType){
         watchType=this.lists[i].type;
-        this.listColor.push({backgroundColor:'rgba(0,0,0,0)'})
+        //this.listColor.push({backgroundColor:'rgba(0,0,0,0)'})
         this.postionRecord.push(this.$refs[watchType+'-'+this.lists[i].id][0].offsetTop-this.$refs['block'].offsetTop-150)
         if(this.lists.length>1 && this.postionRecord[this.postionRecord.length-1]==this.postionRecord[this.postionRecord.length-2])
           this.postionRecord[this.postionRecord.length-1]+=50;
       }
     }
-    this.listColor[0]={backgroundColor:'rgba(0,0,0,0.3)'}
+    //this.listColor[0]={backgroundColor:'rgba(0,0,0,0.3)'}
+    
   },
 
 }
@@ -224,6 +249,7 @@ export default {
     margin: 10vh 0vw 10vh 0vw;
   }
   .list{
+    position: relative;
     font-family:'Segoe UI';
     font-size: 15px;
     color: rgb(231, 224, 224);
@@ -233,6 +259,15 @@ export default {
     height:7vh;
     padding:2vh 2vh 2vh 7vh;
     z-index:2;
+  }
+
+  .mask{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.3)
   }
 
   .btn{
