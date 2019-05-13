@@ -111,7 +111,7 @@ export default {
         this.nowAt=index+1;
         resolve()
       }))
-      changeView.then(()=>{this.isScroll=false;})
+      changeView.then(()=>{setTimeout(()=>{this.isScroll=false},500)})
     },
     handleScroll:function () {
       if(this.isScroll==false){
