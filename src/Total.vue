@@ -147,6 +147,10 @@ export default {
     font-size: 10px;
 }
 
+#name h1{
+    font-family: 'Microsoft JhengHei';
+}
+
 #header{
     display: flex;
     align-items: center;
@@ -218,5 +222,6 @@ export default {
     color: white;
     position: absolute;
     right:7%;
+    bottom: 18vh;
 }
 </style>

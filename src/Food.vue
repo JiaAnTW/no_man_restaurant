@@ -7,13 +7,13 @@
         <button class="btn2" @click="close"></button>
           <div class="list_frame">
             <div class="list" v-for="(text,index) in choices" :key="index" :style="listColor[index]">
-              <button class="listbtn" @click="scrollTo(index)" :style="fly2"></button>
+              <button class="listbtn" @click="scroll(text.menu,index)" :style="fly2"></button>
               {{text.menu}}
             </div>
           </div>
       </div>
       <div class="block-container" id="block" ref="block" @scroll="handleScroll">
-        <div class="block" v-for="(pictures,index) in lists" :key="pictures.id" :ref="pictures.type+'-'+pictures.id">
+        <div class="block" v-for="(pictures,index) in lists" :key="pictures.id" :ref="pictures.type+'-'+pictures.id" :id="'dish-'+pictures.id">
           <button class="btn3" @click="viewDish(pictures.id)"></button>
           <div class="img-container" :style="backgroundImage[index]"></div>
           <h2>{{pictures.name}} |  ${{pictures.price}}</h2>
@@ -31,6 +31,23 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import VueScrollTo from 'vue-scrollto';
+
+var options = {
+     container: "#block",
+     easing: "ease",
+     offset: 0,
+     force: true,
+     cancelable: true,
+     onStart: false,
+     onDone: false,
+     onCancel: false,
+     x: false,
+     y: true
+ }
+
+
 import { resolve } from 'url';
 export default {
   name: 'Food',
@@ -38,9 +55,9 @@ export default {
   data(){
     return{
       choices:[
-        {menu:'burgers'},
+        {menu:'burger'},
         {menu:'drinks'},
-        {menu:'french fries'},
+        {menu:'fried'},
         {menu:'salad'},
       ],
       fly:{
@@ -82,52 +99,27 @@ export default {
     viewDish:function(id){
       this.$emit('view-dish',id);
     },
-    scrollTo: function(index){
-       this.isScroll=true;
-       var container = this.$refs['block']
-       this.scroll(this.postionRecord[index]+150)
-        for(let i=0;i<this.postionRecord.length;i++){
-            //this.listColor[i]={backgroundColor:'rgba(0,0,0,0)'};
+    scroll:function(type,index){
+      const changeView=new Promise((resolve=>{
+        this.isScroll=true;
+        var target=1;
+        for(target=1;target<=this.lists.length;++target){
+          if(this.lists[target-1].type===type)
+            break;
         }
+        VueScrollTo.scrollTo('#dish-'+target,500,options)
         this.nowAt=index+1;
-         this.isScroll=false;   
-        //}
-        //this.listColor[index]={backgroundColor:'rgba(0,0,0,0.3)'};
-    },
-    scroll:function(position){
-      var container = this.$refs['block']
-      container.scrollTop=position
-      //if(container.scrollTop<position){
-         // container.scrollTop=container.scrollTop+100;
-          //setTimeout(this.scroll(position),1000)
-      //}
-      //else if(container.scrollTop>position){
-          //container.scrollTop=container.scrollTop-100;
-          //setTimeout(this.scroll(position),1000)
-      //}
-      //else
-        //this.isScroll=false;
+        resolve()
+      }))
+      changeView.then(()=>{this.isScroll=false;})
     },
     handleScroll:function () {
       if(this.isScroll==false){
       var index=0;
       var container = this.$refs['block']
-      //const setIndex=new Promise((resolve)=>{
-
         while(container.scrollTop>this.postionRecord[ index ]&& index <this.postionRecord.length)
           index++;
         this.nowAt=index;
-        //resolve();
-      //})
-     
-        for(let i=0;i<this.postionRecord.length;i++){
-            //this.listColor[i]={backgroundColor:'rgba(0,0,0,0)'};
-        }
-            
-        //}
-        console.log(this.nowAt)
-        //this.listColor[index-1]={backgroundColor:'rgba(0,0,0,0.3)'};
-        //setIndex.then(()=>{this.listColor[index-1]={backgroundColor:'rgba(0,0,0,0.3)'}})
       }
     },
   },
@@ -159,14 +151,11 @@ export default {
     for(let i=0;i<this.lists.length;++i){
       if(this.lists[i].type!=watchType){
         watchType=this.lists[i].type;
-        //this.listColor.push({backgroundColor:'rgba(0,0,0,0)'})
         this.postionRecord.push(this.$refs[watchType+'-'+this.lists[i].id][0].offsetTop-this.$refs['block'].offsetTop-150)
         if(this.lists.length>1 && this.postionRecord[this.postionRecord.length-1]==this.postionRecord[this.postionRecord.length-2])
           this.postionRecord[this.postionRecord.length-1]+=50;
       }
-    }
-    //this.listColor[0]={backgroundColor:'rgba(0,0,0,0.3)'}
-    
+    }  
   },
 
 }

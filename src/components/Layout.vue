@@ -93,10 +93,7 @@ export default {
       }
     },
     handleCartDelete:function(id){ //用商品id去尋找已經在購物車中的特定商品並做刪除
-      var index=this.cart.findIndex(function(item, index, array){ 
-        return item.id == id;
-      });
-      this.cart.splice(index, 1);
+      this.cart.splice(id, 1);
     },
     sendBill:function(data){
       this.bill=data;
@@ -217,6 +214,7 @@ export default {
   background-color: rgb(48, 48, 48);
   display: flex;
   overflow: hidden;
+  max-height: 84.5vh;
 }
 
 .nav-bar{

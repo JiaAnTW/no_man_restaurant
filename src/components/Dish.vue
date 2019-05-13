@@ -72,7 +72,6 @@ export default {
           this.btnStyle={ top:"0%",transform:"rotate(180deg)"}
         }
         setTimeout(changeStyle1,0);
-        //this.btnStyle={top:"-7%",transform:"rotate(180deg)"}
         const changeStyle=()=>{
           this.btnStyle={ top:"0",transform:"rotate(0deg)"}
         }
@@ -121,11 +120,12 @@ export default {
     }
 
     .open-btn div{
-        width: 0;
-        height: 0;
+        width: 50;
+        height: 50;
         border-style: solid;
         border-width: 7px 12.5px 0 12.5px;
-  
+        -webkit-filter: drop-shadow(1px 1px 1px rgba(0,0,0,.5));
+        filter: drop-shadow(1px 1px 1px rgba(0,0,0,.5));
         border-color: white rgba(243,243,243,0) rgba(243,243,243,0) rgba(243,243,243,0);
     }
     .background{
