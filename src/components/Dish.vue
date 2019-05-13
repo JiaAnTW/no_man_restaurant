@@ -120,8 +120,8 @@ export default {
     }
 
     .open-btn div{
-        width: 50;
-        height: 50;
+        width: 0;
+        height: 0;
         border-style: solid;
         border-width: 7px 12.5px 0 12.5px;
         -webkit-filter: drop-shadow(1px 1px 1px rgba(0,0,0,.5));
