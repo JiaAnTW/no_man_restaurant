@@ -183,7 +183,7 @@ export default {
   }
   .choice{
     border:1px solid gray;
-    border-radius:4%;
+    border-radius:13px;
     width:60vw;
     height:73.15vh;
     position:fixed;

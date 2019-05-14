@@ -133,11 +133,6 @@ computed:{
             amount: this.tot,
             guest_id: 0,
             time: Date.now()+1000*60*20
-          }).catch(error=>{
-            alert("求求你啦付我錢嘛QQ",()=>{
-              this.$emit('show-loading',false);
-              self.notPay=false;
-            })
           })
           this.$emit('direct-to-show','total');
           
