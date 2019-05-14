@@ -218,7 +218,7 @@ export default {
 }
 
 #order_time{
-    font-size:45px;
+    font-size:7rem;
     color: white;
     position: absolute;
     right:7%;
