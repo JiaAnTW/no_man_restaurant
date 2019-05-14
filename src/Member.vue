@@ -44,6 +44,7 @@ export default {
     this.$axios({
       method: 'post',
       url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/login',
+      //url: '/api/post/login',
       data: {
         username:self.email,
         password:self.password,

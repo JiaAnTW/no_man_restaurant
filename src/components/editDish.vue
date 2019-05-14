@@ -19,7 +19,7 @@
             <b-form-group id="fieldset-3" description="Let us know your name." label="餐點介紹" label-cols="3" label-cols-lg="1" label-size="lg"  label-align-sm="right" label-for="input-3" :invalid-feedback="invalidFeedback" :valid-feedback="validFeedback" :state="state">
                 <b-form-input id="input-3" v-model="detail" :state="state" trim></b-form-input>
             </b-form-group>
-            <b-form-group id="fieldset-4" description="Let us know your name." label="餐點介紹" label-cols="3" label-cols-lg="1" label-size="lg"  label-align-sm="right"  :invalid-feedback="invalidFeedback" :valid-feedback="validFeedback" :state="state">
+            <b-form-group id="fieldset-4" description="Let us know your name." label="餐點類別" label-cols="3" label-cols-lg="1" label-size="lg"  label-align-sm="right"  :invalid-feedback="invalidFeedback" :valid-feedback="validFeedback" :state="state">
                 <b-form-radio v-model="type" name="radios" value="burger">漢堡</b-form-radio>
                 <b-form-radio v-model="type" name="radios" value="drinks">飲料</b-form-radio>
                 <b-form-radio v-model="type" name="radios" value="salad">沙拉</b-form-radio>
@@ -120,7 +120,8 @@ export default {
         if(check==true){
           this.$axios({
           method: "delete",
-          url: '/api/post/menu',
+          url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/menu',
+          //url: '/api/post/menu',
           data:{
               id:self.id,
           }

@@ -37,7 +37,7 @@ import VueScrollTo from 'vue-scrollto';
 var options = {
      container: "#block",
      easing: "ease",
-     offset: 0,
+     offset: -10,
      force: true,
      cancelable: true,
      onStart: false,
@@ -110,6 +110,7 @@ export default {
         VueScrollTo.scrollTo('#dish-'+target,500,options)
         this.nowAt=index+1;
         resolve()
+        this.close();
       }))
       changeView.then(()=>{setTimeout(()=>{this.isScroll=false},500)})
     },

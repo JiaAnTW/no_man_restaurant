@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { error } from 'util';
 export default {
   name: 'Cart',
   props: ['data','token'],
@@ -89,6 +90,7 @@ computed:{
             {
               method: "post",
               url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/pay',
+              //url: '/api/post/pay',
               data:{
               productName: "SunBurger的餐點",
               amount: self.tot,
@@ -114,6 +116,7 @@ computed:{
         {
           method: "post",
           url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/pay/confirm',
+          //url: '/api/post/pay/confirm',
           data:{
             transactionId:self.transactionId,
             amount:this.tot,
@@ -130,6 +133,11 @@ computed:{
             amount: this.tot,
             guest_id: 0,
             time: Date.now()+1000*60*20
+          }).catch(error=>{
+            alert("求求你啦付我錢嘛QQ",()=>{
+              this.$emit('show-loading',false);
+              self.notPay=false;
+            })
           })
           this.$emit('direct-to-show','total');
           
