@@ -2,10 +2,13 @@
   <div class="Layout">
     <div class="slogan-container">
       <button class="top-btn" @click="changeNowAt(before)" :style="search[0]"><div class="back"></div></button>
-      <h1>Sun Burger</h1>      
-      <button class="top-btn" @click="search_food()" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
-      <div class="top-btn" v-show="search_f">
-        <input type="text" placeholder="What 2 eat? "> <!--搜尋框-->
+      <h1>Sun Burger</h1>
+      <div v-show="!search_f"><!-- true-->      
+        <button class="top-btn" @click="search_food(search_f)" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
+      </div>
+      <div v-show="search_f" class="search_area"><!-- true-->
+        <input type="text" placeholder="What 2 eat?" class="search_bar"> <!--搜尋框-->
+        <button class="top-btn" @click="search_food(search_f)" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
       </div>
     </div>
     <div class="step-container">
@@ -142,19 +145,6 @@ export default {
           break;
       }
     },
-    search_f: function(){
-        switch(this.search_f){
-          case false:
-          this.search=[{visibility:"hidden"},{visibility:"visible"}];
-          break;
-          case true:
-          this.search=[{visibility:"hidden"},{visibility:"hidden"}];
-          break;
-          default:
-          this.search=[{visibility:"hidden"},{visibility:"visible"}];
-          break;
-        }
-    }
   },
   computed:{
     isCart:function(){
@@ -188,7 +178,6 @@ export default {
 }
 .slogan-container{
   background-color: rgb(48, 48, 48);
-  
   border-bottom: 1px solid rgb(48, 48, 48);
   height: 8.5vh;
   display: flex;
@@ -196,7 +185,6 @@ export default {
   -webkit-justify-content:space-around; 
   align-items: center;
   -webkit-align-items: center;
-
 }
 
 .slogan-container h1{
@@ -204,7 +192,7 @@ export default {
   font-weight: 300;
   font-size: 3.5vh;
   color: white;
-
+   border:solid 1px red;
 }
 
 .top-btn{
@@ -220,8 +208,23 @@ export default {
   -webkit-justify-content:center; 
   align-items: center;
   -webkit-align-items: center;
+  border:solid 1px red;
 }
 
+.search_bar{
+  justify-content: flex-end;
+  -webkit-justify-content:flex-end; 
+  align-items: center;
+  -webkit-align-items: center;
+  display: flex;
+  flex-grow: 1;
+}
+
+.search_area{
+  display: flex;
+  width: 20rem;
+  border:solid 1px red;
+}
 
 .top-btn img{
   width: 2rem;
