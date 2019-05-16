@@ -25,7 +25,8 @@
     "line-pay": "^1.0.15",
     "mysql": "^2.17.1",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-scrollto": "^2.15.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

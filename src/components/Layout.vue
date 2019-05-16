@@ -2,8 +2,11 @@
   <div class="Layout">
     <div class="slogan-container">
       <button class="top-btn" @click="changeNowAt(before)" :style="search[0]"><div class="back"></div></button>
-      <h1>Sun Burger</h1>
-      <button :style="search[1]" class="top-btn"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
+      <h1>Sun Burger</h1>      
+      <button class="top-btn" @click="search_food()" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
+      <div class="top-btn" v-show="search_f">
+        <input type="text" placeholder="What 2 eat? "> <!--搜尋框-->
+      </div>
     </div>
     <div class="step-container">
       <!--注意，請把你.vue檔中最外層的div增加兩個css屬性: "flex-grow:1"和"-webkit-flex-grow:1" -->
@@ -56,6 +59,7 @@ export default {
       search: [{visibility: "hidden"},{visibility: "hidden"}], //右上角搜尋按鍵的css
       nowAt: "loading", //目前step的顯示元件，loading時不顯示任何元件,
       isLoading: true, //loading畫面是否顯示
+      search_f:false,//放大鏡是否顯示
       bill:{},//用來從cart.vue傳進total的訂單
       token:'',
       before: 'menu'
@@ -101,6 +105,9 @@ export default {
     gettoken:function(token){
       this.token=token;
       this.changeNowAt('cart')
+    },
+    search_food:function(){
+      this.search_f=!this.search_f;//改變狀態
     }
   },
     mounted: function(){ //當畫面已經渲染上DOM後，向後端請求資料
@@ -134,6 +141,19 @@ export default {
           this.search=[{visibility:"hidden"},{visibility:"hidden"}];
           break;
       }
+    },
+    search_f: function(){
+        switch(this.search_f){
+          case false:
+          this.search=[{visibility:"hidden"},{visibility:"visible"}];
+          break;
+          case true:
+          this.search=[{visibility:"hidden"},{visibility:"hidden"}];
+          break;
+          default:
+          this.search=[{visibility:"hidden"},{visibility:"visible"}];
+          break;
+        }
     }
   },
   computed:{
