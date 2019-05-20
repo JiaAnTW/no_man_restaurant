@@ -4,12 +4,13 @@
       <button class="top-btn" @click="changeNowAt(before)" :style="search[0]"><div class="back"></div></button>
       <h1>Sun Burger</h1>
       <div v-show="!search_f"><!-- true-->      
-        <button class="top-btn" @click="search_food(search_f)" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
+        <button class="top-btn" @click="changeState(search_f)" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
       </div>
       <div v-show="search_f" class="search_area"><!-- true-->
-        <input type="text" placeholder="What 2 eat?" class="search_bar"> <!--搜尋框-->
-        <button class="top-btn" @click="search_food(search_f)" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
-      </div>
+        <input v-model.trim="searchfood" placeholder="What 2 eat?" class="search_bar"> <!--搜尋框-->
+        <button class="top-btn" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
+        <h1>{{searchfood}}</h1> 
+     </div>
     </div>
     <div class="step-container">
       <!--注意，請把你.vue檔中最外層的div增加兩個css屬性: "flex-grow:1"和"-webkit-flex-grow:1" -->
@@ -65,6 +66,7 @@ export default {
       search_f:false,//放大鏡是否顯示
       bill:{},//用來從cart.vue傳進total的訂單
       token:'',
+      searchfood:'',
       before: 'menu'
     }
   },
@@ -109,7 +111,7 @@ export default {
       this.token=token;
       this.changeNowAt('cart')
     },
-    search_food:function(){
+    changeState:function(){
       this.search_f=!this.search_f;//改變狀態
     }
   },
@@ -117,7 +119,7 @@ export default {
       var self=this;
       this.$axios({
         methods: 'get',
-        url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/menu',
+        url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/menu',//DataBase的資料 
         //url: '/api/get/menu',
       })
       .then((res) => {
@@ -143,6 +145,20 @@ export default {
         default:
           this.search=[{visibility:"hidden"},{visibility:"hidden"}];
           break;
+      }
+    },
+
+    searchfood: function(){
+      var self=this;
+      for (name in self.menu){
+        if(name===self.searchfood){
+          alert("success");
+          self.search_f=!self.search_f;
+          break;
+        }
+       /* else 
+          alert(name);
+          break;*/
       }
     },
   },
@@ -192,7 +208,6 @@ export default {
   font-weight: 300;
   font-size: 3.5vh;
   color: white;
-   border:solid 1px red;
 }
 
 .top-btn{
@@ -208,8 +223,7 @@ export default {
   -webkit-justify-content:center; 
   align-items: center;
   -webkit-align-items: center;
-  border:solid 1px red;
-}
+  }
 
 .search_bar{
   justify-content: flex-end;
@@ -223,7 +237,6 @@ export default {
 .search_area{
   display: flex;
   width: 20rem;
-  border:solid 1px red;
 }
 
 .top-btn img{
