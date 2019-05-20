@@ -8,7 +8,7 @@
       </div>
       <div v-show="search_f" class="search_area"><!-- true-->
         <input v-model.trim="searchfood" placeholder="What 2 eat?" class="search_bar"> <!--搜尋框-->
-        <button class="top-btn" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
+        <button class="top-btn" @click="changeState(search_f)" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
         <h1>{{searchfood}}</h1> 
      </div>
     </div>
@@ -17,7 +17,7 @@
       <!--這兩個屬性會幫你自動把長寬貼齊step-container，詳情請搜尋css flexbox -->
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
 
-      <food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu"/>
+      <food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood"/>
       <order v-else-if="nowAt==='order'" @add-cart="addToCart"  :data="menu[viewDish]" :isCart="isCart"/>
       <member v-else-if="nowAt=== 'profile'" @get-token="gettoken"/>
       <cart v-else-if="nowAt=== 'cart'" :token="token" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
@@ -145,20 +145,6 @@ export default {
         default:
           this.search=[{visibility:"hidden"},{visibility:"hidden"}];
           break;
-      }
-    },
-
-    searchfood: function(){
-      var self=this;
-      for (name in self.menu){
-        if(name===self.searchfood){
-          alert("success");
-          self.search_f=!self.search_f;
-          break;
-        }
-       /* else 
-          alert(name);
-          break;*/
       }
     },
   },

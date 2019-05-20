@@ -16,7 +16,7 @@
         <div class="block" v-for="(pictures,index) in lists" :key="pictures.id" :ref="pictures.type+'-'+pictures.id" :id="'dish-'+pictures.id">
           <button class="btn3" @click="viewDish(pictures.id)"></button>
           <div class="img-container" :style="backgroundImage[index]"></div>
-          <h2>{{pictures.name}} |  ${{pictures.price}}</h2>
+          <h2>{{pictures.name}} |  $ {{pictures.price}}</h2>
         </div>
       </div>
       <div class="contact">
@@ -51,7 +51,7 @@ var options = {
 import { resolve } from 'url';
 export default {
   name: 'Food',
-  props:["data"],
+  props:["data","seafood"],
   data(){
     return{
       choices:[
@@ -70,15 +70,14 @@ export default {
       ig:'https://www.instagram.com/_yang1029/',
       out:false,
       lists:[],
+      seafoods:[],
+      norepeat:[20],
       backgroundImage:[],
       postionRecord:[],
       //listColor:[],
       nowAt:1,
       isScroll: false
     }
-  },
-  computed:{
-
   },
   methods:{
     open:function(){
@@ -139,7 +138,31 @@ export default {
   watch:{
     data: function(){
       this.lists= this.data;
-    }
+    },
+    seafood: function(){
+      var self=this;
+      self.norepeat.length=0;
+      self.seafoods.length=0;
+      for(let i=0;i<self.data.length;i++){
+        var str=self.data[i].name;
+        var s=str.search(self.seafood);
+        if(s!=-1){
+          var k=0;
+          for(let j=0;j<self.norepeat.length;j++){
+            if(i==self.norepeat[j]&&j!=0){
+              k=1;
+              break;
+            }
+          }
+          if(k==0){
+           self.seafoods.push(self.data[i]);
+           self.norepeat.push(i);
+           k=0;
+          }
+        }
+      }
+      self.lists=self.seafoods;
+      },
   },
   created:function(){
       this.lists= this.data;
