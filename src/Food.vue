@@ -70,8 +70,6 @@ export default {
       ig:'https://www.instagram.com/_yang1029/',
       out:false,
       lists:[],
-      seafoods:[],
-      norepeat:[20],
       backgroundImage:[],
       postionRecord:[],
       //listColor:[],
@@ -141,27 +139,15 @@ export default {
     },
     seafood: function(){
       var self=this;
-      self.norepeat.length=0;
-      self.seafoods.length=0;
+      var output=[]; //使用local variable去避免在第二次的搜尋條件改變前影響搜尋母體
       for(let i=0;i<self.data.length;i++){
         var str=self.data[i].name;
         var s=str.search(self.seafood);
         if(s!=-1){
-          var k=0;
-          for(let j=0;j<self.norepeat.length;j++){
-            if(i==self.norepeat[j]&&j!=0){
-              k=1;
-              break;
-            }
-          }
-          if(k==0){
-           self.seafoods.push(self.data[i]);
-           self.norepeat.push(i);
-           k=0;
-          }
+          output.push(self.data[i]);
         }
       }
-      self.lists=self.seafoods;
+      self.lists=output;
       },
   },
   created:function(){
