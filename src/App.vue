@@ -1,31 +1,47 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+      <router-view/> 
   </div>
 </template>
-
+<script>
+import Vue from 'vue'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+Vue.use(BootstrapVue)
+export default {
+  name: 'App'
+}
+</script>
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
+html {
+  font-size: 4px;
+  font-size: 1vw;
+  font-family: 'Segoe UI';
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+button,h1,h2,h3,div,span{
+  font-family: 'Segoe UI';
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+@media (min-width: 596px){
+  html {
+    font-size: 6px;
+    font-size: 1.0vw;
+  }
+}
+
+@media (min-width: 896px){
+  html {
+    font-size: 8px;
+    font-size: 1.0vw;
+  }
+}
+
+@media (min-width: 1024px){
+  html {
+    font-size: 10px;
+    font-size: 1.0vw;
+  }
 }
 </style>
