@@ -1,57 +1,61 @@
 <template>
     <div class="map">
+        <div class="header">
+        </div>
         <div class="container">
-            <!--<iframe 
-            src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyBjqFTlhHf0ukxuVOGIdAgqFMKcaVRI7S8&origin=成功大學&destination=赤崁樓" 
+            <iframe 
+            :src="user_loc" 
             allowfullscreen
             width="100%"
-            height="50%">
-            </iframe>-->
+            height="80%"
+            frameborder="0">
+            </iframe>
         </div>
-        <div class="list">
+        <div v-bind:key="index" v-for="(data,index) in store" class="list">
            <div class="storedata">
             <div  class="map_contain">
             <iframe class="iframe_style" 
-            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBjqFTlhHf0ukxuVOGIdAgqFMKcaVRI7S8&q=台南火車站"
+            :src="data.site"
             frameborder="0">
             </iframe>
             </div>
             <div class="info">
-                <span class="name">{{store[1].name}}</span><br>
-                <span class="location">{{store[1].location}}</span>
-                <span class="time">{{store[1].time}}</span>
+                <span class="name">{{data.name}}</span><br>
+                <span class="location">{{data.location}}</span>
+                <span class="time">{{data.time}}</span>
             </div>
-            <button class="con_btn">Confirm</button>
+            <button class="con_btn" @click="location()">Confirm</button>
             </div>
             <br>
-            <div class="storedata">
-            <div class="map_contain">
-             <iframe class="iframe_style"
-            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBjqFTlhHf0ukxuVOGIdAgqFMKcaVRI7S8&q=安平古堡"
-            frameborder="0">
-            </iframe>
-            </div>
-             <div class="info">
-                <span class="name">{{store[2].name}}</span><br>
-                <span class="location">{{store[2].location}}</span>
-                <span class="time">{{store[2].time}}</span>
-            </div>
-            <button class="con_btn">Confirm</button>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
+import Vue from 'vue';
+import VueGeolocation from 'vue-browser-geolocation';
+Vue.use(VueGeolocation);
 export default {
+    name:"Map",
     data(){
         return{
             store:[
-            {name:"成功大學電機系館",location:"大學路",time:"0000~2400",ps:"全年無休"},
-            {name:"台南火車站",location:"台南市前鋒路",time:"0500~2200",ps:""},
-            {name:"安平古堡保",location:"安平區",time:"0800~2200",ps:""},],
+            {site:"https://www.google.com/maps/embed/v1/place?key=AIzaSyBjqFTlhHf0ukxuVOGIdAgqFMKcaVRI7S8&q=成功大學電機系館",name:"成功大學電機系館",location:"大學路",time:"0000~2400",ps:"全年無休"},
+            {site:"https://www.google.com/maps/embed/v1/place?key=AIzaSyBjqFTlhHf0ukxuVOGIdAgqFMKcaVRI7S8&q=台南火車站",name:"台南火車站",location:"台南市前鋒路",time:"0500~2200",ps:""},
+            {site:"https://www.google.com/maps/embed/v1/place?key=AIzaSyBjqFTlhHf0ukxuVOGIdAgqFMKcaVRI7S8&q=安平古堡",name:"安平古堡",location:"安平區",time:"0800~2200",ps:""},],
+            user_loc:"",
         }
-    }
+    },
+    methods:{
+
+    },
+    beforeMount:function(){
+        var self=this;
+        navigator.geolocation.watchPosition((position) => {
+        console.log(position.coords);
+        self.user_loc= "https://www.google.com/maps/embed/v1/view?key=AIzaSyBjqFTlhHf0ukxuVOGIdAgqFMKcaVRI7S8&zoom=15&center="+position.coords.latitude+","+position.coords.longitude+""})
+    },
+    
 }
 </script>
 
@@ -61,6 +65,9 @@ export default {
         flex-grow:1;
         flex-direction:column;
         -webkit-flex-direction:column;    
+    }
+    .header{
+
     }
     .container{
         display: flex;
