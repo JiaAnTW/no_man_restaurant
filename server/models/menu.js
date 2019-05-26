@@ -2,7 +2,7 @@
 module.exports=class menu{
     constructor(){
         this.mysql=require("mysql");
-        this.con=this.mysql.createConnection({
+        this.con=this.mysql.createConnection({//宣告menu的member data叫做con 
             host: "localhost",
             //host: "http://luffy.ee.ncku.edu.tw",
             user: "uidd2019_groupb",
