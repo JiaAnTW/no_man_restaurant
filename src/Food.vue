@@ -11,6 +11,9 @@
               {{text.menu}}
             </div>
           </div>
+          <div class="cart_frame">
+            <cart :token="token" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
+          </div>
       </div>
       <div class="block-container" id="block" ref="block" @scroll="handleScroll">
         <div class="block" v-for="(pictures,index) in lists" :key="pictures.id" :ref="pictures.type+'-'+pictures.id" :id="'dish-'+pictures.id">
@@ -33,7 +36,7 @@
 <script>
 import Vue from 'vue';
 import VueScrollTo from 'vue-scrollto';
-
+import Cart from './Cart.vue';
 var options = {
      container: "#block",
      easing: "ease",
@@ -46,14 +49,13 @@ var options = {
      x: false,
      y: true
  }
-
-
 import { resolve } from 'url';
 export default {
   name: 'Food',
   props:["data","seafood"],
   data(){
     return{
+      cart: [],
       choices:[
         {menu:'burger'},
         {menu:'drinks'},
@@ -165,7 +167,7 @@ export default {
         if(this.lists.length>1 && this.postionRecord[this.postionRecord.length-1]==this.postionRecord[this.postionRecord.length-2])
           this.postionRecord[this.postionRecord.length-1]+=50;
       }
-    }  
+    }
   },
 
 }
@@ -245,7 +247,6 @@ export default {
 
   .list_frame{
     height: 28vh;
-    margin: 10vh 0vw 10vh 0vw;
   }
   .list{
     position: relative;
@@ -259,7 +260,12 @@ export default {
     padding:2vh 2vh 2vh 7vh;
     z-index:2;
   }
-
+  .cart_frame{
+    border:1px solid lightgray;
+    border-radius:5%;
+    height:40vh;
+    margin: 8vh 0vw 0vh 0vw;
+  }
   .mask{
     position: absolute;
     left: 0;

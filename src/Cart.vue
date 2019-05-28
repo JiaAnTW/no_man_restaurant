@@ -1,6 +1,5 @@
 <template>
     <div class="cart">
-      <div class = "title">Your Cart</div>
       <div class = "order">
       <table>
         <tbody>
@@ -9,32 +8,26 @@
               <img class="foodimg" :src="cartdatas.src" style="display:block; margin:auto;" alt="cartdatas.name" />
             </td>
             <td class="foodname">
-            <h1>{{cartdatas.name}}<br/>${{cartdatas.price}}</h1>
+              <h1>{{cartdatas.name}}<br/>${{cartdatas.price}}</h1>
             </td>
-            <td class="num">
+            <td class="num" :style="deleteDish(cartdatas.num,index)">
               <button class="minus_"  value="minus" v-on:click="handleNumberChange(-1,index)">-</button>
               <h3>{{ cartdatas.num }}</h3>
               <button class="plus_"  value="plus" v-on:click="handleNumberChange(1,index)">+</button>
            </td>
-            <td class="del">
-              <button class="can" value="zero" v-on:click="deleteDish(index)"></button>
-            </td>
           </tr>
         </tbody>
       </table>
       </div>
 
       <div class = "total">
-        <span class="l">Total:</span> 
-        <span class="r">  $  {{tot}} </span>
+        <span class="r">Total:  $  {{tot}} </span>
       </div>
       <div class = "send">
-        <button v-if="notPay" v-on:click="linePay">Place your order</button>
-        <button v-else v-on:click="linePayConfirm">Check your pay</button>
+        <button class = "place" v-if="notPay" v-on:click="linePay">Place your order</button>
+        <button class = "check" v-else v-on:click="linePayConfirm">Check your pay</button>
       </div>
-    </div>
-
-    
+    </div> 
 </template>
 
 <script>
@@ -62,8 +55,9 @@ computed:{
     handleNumberChange: function(value,index){
       this.$emit('handle-number-change',value,index)
     },
-    deleteDish:function(index){
-      this.$emit('delete-cart',index)
+    deleteDish:function(value,index){
+      if (value === 0)
+      {      this.$emit('delete-cart',index)      }
     },
     loginConfirm:function(){
       this.$axios(
@@ -149,20 +143,13 @@ computed:{
      this.lists=this.data;
    }
  }
-
 </script>
-<style scoped>
 
+<style scoped>
 
  button
 {
   outline: none;
-}
-
-.l
-{
-width:100%;
-float: left;
 }
 
 .r
@@ -182,11 +169,9 @@ float: left;
 .order td
 {
   height: 11vh;
-  border-bottom: 1px solid rgb(200, 200, 200);
+  border-bottom: 0.1vh solid rgb(200, 200, 200);
   color: rgb(45, 45, 45);
 }
-
-.crossline{  height:5%;  }
 
 .cart ,.order{  
   display: flex;  
@@ -209,72 +194,49 @@ float: left;
   cursor:pointer;
 }
 
-.can
-{
-  height:45%;
-  width: 100%;
-  background-image: url('./assets/icon/can.png');
-  background-position:50% 50%;
-  background-repeat: no-repeat;
-  background-size:  25% auto;
-  padding-left: 1%;
-  padding-right: 1%; 
-  background-color: rgba(100, 100, 100, 0.1);
-  border: none;
-}
-
-.title
-{
-  position: absolute;
-  top:13vh;
-  left:38%;
-  font-size: 5.5rem;
-  color:rgb(245, 245, 245);
-  text-decoration: underline;
-}
-
 .order
 {
 position: absolute;
-top: 20.7vh;
-left:6.1%;
-height: 40vh;
-width: 88%;
-border: 1px solid gray;
-border-radius: 15px;
-background-color: rgb(255, 255, 255);
+top: 10.7vh;
+left:6.1vw;
+height: 65vh;
+width: 88vw;
+border: 0vh solid gray;
+border-radius: 2vh;
+background-color: rgb(48,48,48);
 overflow-y: scroll;
-padding: 7% 1%;
+padding: 7vw 1vw;
 }
 
 .order h1{
   line-height: 160%;  
-  font-size: 3.5rem;  
-  color: rgb(45, 45, 45);
+  font-size: 3.5vw;  
+  color:rgb(245, 245, 245);
 }
 
-.order .foodname{  width:25vw;  }
 
-.image{  width:20vw;  }
+.order .image{  width:20vw;  }
 
-.foodimg
+.order .foodimg
 {
 vertical-align: middle;
-width:auto;
-height: 80%;
+width: auto;
+height: 90%;
 }
 
-.foodname
+.order .foodname
 {
+  width:20vw;
   vertical-align:middle;
   text-align: left;
-  font-size: 3.5rem;
+  font-size: 3.5vw;
   display: flex;
   align-items: center;
+  background-color: rgb(48,48,48)
 }
 
 .order .num{  
-  width:22vw;  
+  width:45vw;  
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -290,78 +252,75 @@ height: 80%;
 
 .total
 {
-top:67.92vh;
-left:8%;
-width:84%;
+top:78vh;
+left:0vw;
+width:84vw;
 position: absolute;
-border-bottom: 1.5px solid rgb(184, 184, 184);
-padding-bottom: 3%;
-padding-left: 4%;
-padding-right: 7%;
+padding-bottom: 3vw;
+padding-left: 4vw;
+padding-right: 7vw;
 color:rgb(245, 245, 245);
 
 }
 
 .total span
 {
-  font-size: 5rem;
-  text-align: left;
-  width: 50%;
-  font-size: 6rem;
+  width: 60%;
+  font-size: 7vw;
 }
 
 .total .r
-{
-  text-align: right;
-}
+{  text-align: right;  }
 
 .send
 {
-top:80.76vh;
-left:8%;
+top:85vh;
+left:8vw;
 position: absolute;
 }
 
 .send button
 {
-  margin-top:3%;
-  height: 40%;
-  width: 100%;
-  font-size: 5.5rem;
-  border-radius: 15px;
-  padding:1.6vw 21.5vw;
+  margin-top:3vw;
+  height: 10vw;
+  width: 84vw;
+  font-size: 5.5vw;
+  border-radius:5vw;
   background-color: rgb(255, 255, 255);
-  border: 1px solid rgb(189, 189, 189);
+  border: 0.1vw solid rgb(189, 189, 189);
   cursor:pointer;
 }
 
+.send .place
+{  padding:0 21.5vw;  }
 
+.send .check
+{  padding:0 22.5vw;  }
 
 .num button
 { 
-    padding:0 0 0.2rem 0.4rem;
-    border-radius: 1.8rem;
-    width: 1.8rem;
-    height: 1.8rem;
-    color: rgb(0, 0, 0);
-    font-size: 3.5rem;
-    font-weight: 600;
+    padding:1vh 1vh 2vh 1.1vh;
+    border-radius: 5vh;
+    width: 6vh;
+    height: 6vh;
+    color: rgb(240,240,240);
+    font-size: 6vh;
+    font-weight: 300;
     line-height: 0%;
-    background-color: rgb(255, 255, 255);
-    border: 0.1rem solid gray;
-    text-align: center;
-    vertical-align: middle;
+    background-color: rgb(48,48,48);
+    border: 2px solid gray;
   }
 
 .num button:hover{   background-color: rgb(240, 240, 240);  }
 
 .num h3
 { 
-    padding-left: 0.8rem;
-    padding-right: 0.8rem;
-    font-size: 5rem;
+    padding-left: 0.8vw;
+    padding-right: 0.8vw;
+    font-size: 5vh;
+    font-weight: 400;
     vertical-align: -webkit-baseline-middle;
     text-align: center;
-    color: rgb(45, 45, 45);
+    color:rgb(245, 245, 245);
 }
 </style>
