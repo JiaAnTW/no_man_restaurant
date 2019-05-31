@@ -4,7 +4,6 @@
         <button class="btn" @click="open"></button>
       </div>
       <div class="choice" :style="fly">
-        
           <div class="list_frame">
             <div class="list" v-for="(text,index) in choices" :key="index" :style="listColor[index]">
               <button class="listbtn" @click="scroll(text.menu,index)" :style="fly2"></button>
@@ -14,6 +13,7 @@
           <div class="cart_frame">
             <cart :token="token" @foodmethod="foodmethod" :data="cartData"/>
           </div>
+          <button class="btn2" @click="close"></button>
       </div>
       <div class="block-container" id="block" ref="block" @scroll="handleScroll">
         <div class="block" v-for="(pictures,index) in lists" :key="pictures.id" :ref="pictures.type+'-'+pictures.id" :id="'dish-'+pictures.id">
@@ -64,10 +64,10 @@ export default {
         {menu:'salad'},
       ],
       fly:{
-        left:'-80vw',
+        left:'-100vw',
       },
       fly2:{
-        left:'-100vw',
+        left:'-150vw',
       },
       fb:'https://www.facebook.com/JiaAnChang.Andy',
       ig:'https://www.instagram.com/_yang1029/',
@@ -90,9 +90,9 @@ export default {
     },
     close:function(){
       if(this.out===true){
-        this.fly={left:'-80vw'}
+        this.fly={left:'-100vw'}
         //this.fly={left:'-10.8vw'}
-        this.fly2={left:'-100vw'}
+        this.fly2={left:'-150vw'}
         this.out=false;
       }
     },
@@ -290,10 +290,11 @@ export default {
     z-index:2;
   }
   .btn2{
-    position:absolute;
+    position: absolute;
     height:73.15vh;
-    width:60vw;
+    width:100vw;
     float:right;
+    background-color: rgba(0,0,0,0.5);
     border-radius:8%;
     opacity:0;
   }

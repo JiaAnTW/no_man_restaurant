@@ -1,8 +1,8 @@
 <template>
     <div class="cart">
       <div class = "order">
-        <b-container v-for = "(cartdatas,index) in data"  :key="index">
-          <b-row class=cartdata>
+        <b-container >
+          <b-row class=cartdata v-for = "(cartdatas,index) in data"  :key="index">
             <b-col class="image">
               <img class="foodimg" :src="cartdatas.src" style="display:block; margin:auto;" alt="cartdatas.name" />
             </b-col>
@@ -157,6 +157,7 @@ float: left;
 }
 .container{
   padding: 0 0;
+  flex-wrap: wrap;
 }
 .cartdata
 {
