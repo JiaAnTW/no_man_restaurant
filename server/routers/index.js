@@ -63,7 +63,7 @@ var Pay = require( '../controllers/payController.js');
 Pay=new Pay();
 app.post('/api/post/pay', (...args)=> Pay.LinePay(...args));
 app.post('/api/post/pay/confirm', (...args)=> Pay.LinePayConfirm(...args));
-
+app.post('/api/post/pay/test', (...args)=> Pay.payTest(...args));
 
 const line_pay = require("line-pay");
 

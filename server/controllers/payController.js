@@ -54,16 +54,27 @@ module.exports=class payController{
         }
         pay.confirm(confirmation).then((response) => {
             res.send(response.returnMessage);
-            var User = require( '../models/user.js');
-            User=new User();
+            //var User = require( '../models/user.js');
+            //User=new User();
             var bill={
                 productName:this.lineInfo.productName,
                 amount: this.lineInfo.amount,
                 startTime: Date.now(),
                 getTime: -1
             }
-            User.addBill(req.body.id,bill)
+            //User.addBill(req.body.id,bill)
         })
 
+    }
+    payTest(){
+        var User = require( '../models/user.js');
+        User=new User();
+        var bill={
+            productName:"貢丸",
+            amount: 10,
+            startTime: Date.now(),
+            getTime: -1
+        }
+        User.addBill(0,bill)
     }
 }
