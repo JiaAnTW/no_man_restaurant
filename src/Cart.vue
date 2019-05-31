@@ -1,33 +1,27 @@
 <template>
     <div class="cart">
       <div class = "order">
-      <table>
-        <tbody>
-          <tr class=cartdata v-for = "(cartdatas,index) in data"  :key="index">
-            <td class="image">
+        <b-container v-for = "(cartdatas,index) in data"  :key="index">
+          <b-row class=cartdata>
+            <b-col class="image">
               <img class="foodimg" :src="cartdatas.src" style="display:block; margin:auto;" alt="cartdatas.name" />
-            </td>
-            <td class="foodname">
+            </b-col>
+            <b-col class="foodname">
               <h1>{{cartdatas.name}}<br/>${{cartdatas.price}}</h1>
-            </td>
-            <td class="num" :style="deleteDish(cartdatas.num,index)">
+            </b-col>
+            <b-col class="num">
               <button class="minus_"  value="minus" v-on:click="handleNumberChange(-1,index)">-</button>
               <h3>{{ cartdatas.num }}</h3>
               <button class="plus_"  value="plus" v-on:click="handleNumberChange(1,index)">+</button>
-           </td>
-          </tr>
-        </tbody>
-      </table>
-      </div>
-
-      <div class = "total">
-        <span class="r">Total:  $  {{tot}} </span>
+           </b-col>
+          </b-row>
+        </b-container>
       </div>
       <div class = "send">
-        <button class = "place" v-if="notPay" v-on:click="linePay">Place your order</button>
-        <button class = "check" v-else v-on:click="linePayConfirm">Check your pay</button>
+        <button v-if="notPay" v-on:click="linePay">Place your order</button>
+        <button v-else v-on:click="linePayConfirm">Check your pay</button>
       </div>
-    </div> 
+    </div>
 </template>
 
 <script>
@@ -53,11 +47,10 @@ computed:{
 },
  methods:{
     handleNumberChange: function(value,index){
-      this.$emit('handle-number-change',value,index)
+        this.$emit("foodmethod",'handle-number-change',value,index)
     },
-    deleteDish:function(value,index){
-      if (value === 0)
-      {      this.$emit('delete-cart',index)      }
+    deleteDish:function(index){
+      this.$emit("foodmethod",'delete-cart',index)
     },
     loginConfirm:function(){
       this.$axios(
@@ -79,7 +72,7 @@ computed:{
       if(this.tot>0){
         if(this.token!=''){
           const self=this;
-          this.$emit('show-loading',true);
+          this.$emit("foodmethod",'show-loading',true);
           this.$axios(
             {
               method: "post",
@@ -93,18 +86,18 @@ computed:{
           }
         ).then(response=>{
           window.open(response.data["url"], "_blank")
-          this.$emit('show-loading',false);
+          this.$emit("foodmethod",'show-loading',false);
           self.notPay=false;
           self.transactionId=response.data.transactionId;
           })
         }
         else{
-          alert("想要買這個餐點?哼哼哼，在沒有登入之前我是不會讓你通過這裡的",this.$emit('direct-to-show','profile'))
+          alert("想要買這個餐點?哼哼哼，在沒有登入之前我是不會讓你通過這裡的",this.$emit("foodmethod",'direct-to-show','profile'))
         }
       }
     },
     linePayConfirm: function(){
-      this.$emit('show-loading',true);
+      this.$emit("foodmethod",'show-loading',true);
       const self=this;
       this.$axios(
         {
@@ -120,15 +113,15 @@ computed:{
         }
       ).then(response=>{
         if(response.data==='Success.'){
-          this.$emit('show-loading',false);
+          this.$emit("foodmethod",'show-loading',false);
           self.notPay=true;
-          this.$emit('send-bill',{
+          this.$emit("foodmethod",'send-bill',{
             name:"吳銘世",
             amount: this.tot,
             guest_id: 0,
             time: Date.now()+1000*60*20
           })
-          this.$emit('direct-to-show','total');
+          this.$emit("foodmethod",'direct-to-show','total');
           
         }
       })
@@ -146,12 +139,15 @@ computed:{
 </script>
 
 <style scoped>
-
- button
+button
 {
   outline: none;
 }
-
+.l
+{
+width:100%;
+float: left;
+}
 .r
 {
   position: absolute;
@@ -159,89 +155,109 @@ computed:{
   left:65%;
   float: right;
 }
-
-.order tr
-{
-  position: relative;
-  width: 100%;
+.container{
+  padding: 0 0;
 }
-
-.order td
+.cartdata
 {
-  height: 11vh;
-  border-bottom: 0.1vh solid rgb(200, 200, 200);
+  width: 100%;
+  min-width: 100%;
+  height: 8vh;
+  border-bottom: 1px solid rgb(200, 200, 200);
   color: rgb(45, 45, 45);
 }
-
+.crossline{  height:5%;  }
 .cart ,.order{  
   display: flex;  
   flex-wrap: wrap;
   align-items: flex-start;
 }
-
 .cart
 {
-  display: flex;
-  flex-direction:column;
-  -webkit-flex-direction:column;
+  padding-top: 2vh;
+  background-color: rgba(0,0,0,0.1);
   flex-grow:1;
   -webkit-flex-grow:1;
 }
-
 .order button
 {
   margin-top:2%;
   cursor:pointer;
 }
-
+.can
+{
+  height:45%;
+  width: 100%;
+  background-image: url('./assets/icon/can.png');
+  background-position:50% 50%;
+  background-repeat: no-repeat;
+  background-size:  25% auto;
+  padding-left: 1%;
+  padding-right: 1%; 
+  background-color: rgba(100, 100, 100, 0.1);
+  border: none;
+}
+.title
+{
+  position: absolute;
+  top:13vh;
+  left:38%;
+  font-size: 5.5rem;
+  color:rgb(245, 245, 245);
+  text-decoration: underline;
+}
 .order
 {
-position: absolute;
-top: 10.7vh;
-left:6.1vw;
-height: 65vh;
-width: 88vw;
-border: 0vh solid gray;
-border-radius: 2vh;
-background-color: rgb(48,48,48);
+height: 70%;
+width: 100%;
 overflow-y: scroll;
-padding: 7vw 1vw;
+padding-top: 4% ;
 }
-
 .order h1{
   line-height: 160%;  
-  font-size: 3.5vw;  
-  color:rgb(245, 245, 245);
+  font-size: 3.5rem;  
+  color: rgb(45, 45, 45);
 }
 
+.cartdata .col{
+  height: 100%;
+  padding:  0 0;
+}
 
-.order .image{  width:20vw;  }
+.order{
+  position: relative;
+}
 
-.order .foodimg
+.image{
+  width: 20%;
+  display: flex;
+  align-items: center;
+}
+
+.foodimg
 {
-vertical-align: middle;
-width: auto;
-height: 90%;
+  display: flex;
+  vertical-align: middle;
+  width:auto;
+  height: 80%;
+  align-items: center;
 }
 
 .order .foodname
 {
-  width:20vw;
+  width: 40%;
   vertical-align:middle;
   text-align: left;
-  font-size: 3.5vw;
-  display: flex;
-  align-items: center;
-  background-color: rgb(48,48,48)
+  font-size: 3.5rem;
+  padding: 1.5% 0;
 }
 
 .order .num{  
-  width:45vw;  
+  width:40%;  
   display: flex;
   align-items: center;
   justify-content: space-around;
   }
-
 .order .del
 {
    width:18vw;
@@ -249,78 +265,67 @@ height: 90%;
    display: flex;
    align-items: center;
 }
-
 .total
 {
-top:78vh;
-left:0vw;
-width:84vw;
-position: absolute;
-padding-bottom: 3vw;
-padding-left: 4vw;
-padding-right: 7vw;
-color:rgb(245, 245, 245);
-
+width:84%;
+border-bottom: 1.5px solid rgb(184, 184, 184);
+padding-bottom: 3%;
+padding-left: 4%;
+padding-right: 7%;
+color:rgb(45,45,45);
 }
-
 .total span
 {
-  width: 60%;
-  font-size: 7vw;
+  font-size: 5rem;
+  text-align: left;
+  width: 50%;
+  font-size: 6rem;
 }
-
 .total .r
-{  text-align: right;  }
-
+{
+  text-align: right;
+}
 .send
 {
-top:85vh;
-left:8vw;
-position: absolute;
+  margin-bottom: 0vh;
+  margin-left:20%;
+  width: 60%;
 }
-
 .send button
 {
-  margin-top:3vw;
-  height: 10vw;
-  width: 84vw;
-  font-size: 5.5vw;
-  border-radius:5vw;
-  background-color: rgb(255, 255, 255);
-  border: 0.1vw solid rgb(189, 189, 189);
+  margin-top:3%;
+  height: 40%;
+  width: 100%;
+  font-size: 2vh;
+  border-radius: 15px;
+  padding:0.5vh 0vw;
+  background-color: rgb(45,45,45);
+  border: 1px solid rgb(189, 189, 189);
+  color: white;
   cursor:pointer;
 }
-
-.send .place
-{  padding:0 21.5vw;  }
-
-.send .check
-{  padding:0 22.5vw;  }
-
 .num button
 { 
-    padding:1vh 1vh 2vh 1.1vh;
-    border-radius: 5vh;
-    width: 6vh;
-    height: 6vh;
-    color: rgb(240,240,240);
-    font-size: 6vh;
-    font-weight: 300;
+    padding:0 0.5vh 0rem 0rem;
+    border-radius: 100%;
+    width: 4vh;
+    height: 4vh;
+    color: rgb(0, 0, 0);
+    font-size: 3vh;
+    font-weight: 600;
     line-height: 0%;
-    background-color: rgb(48,48,48);
-    border: 2px solid gray;
+    border: 0.1rem solid gray;
+    text-align: center;
+    vertical-align: middle;
   }
-
-.num button:hover{   background-color: rgb(240, 240, 240);  }
 
 .num h3
 { 
-    padding-left: 0.8vw;
-    padding-right: 0.8vw;
-    font-size: 5vh;
-    font-weight: 400;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+    font-size: 5rem;
     vertical-align: -webkit-baseline-middle;
     text-align: center;
-    color:rgb(245, 245, 245);
+    color: rgb(45, 45, 45);
 }
 </style>

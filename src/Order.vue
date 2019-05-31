@@ -137,7 +137,7 @@ export default {
   }
 
   .title h1{
-    font-size: 5rem;
+    font-size: 3vh;
     text-decoration: underline;
   }
 
@@ -161,19 +161,19 @@ export default {
 
   .number button{
     border-radius: 50px;
-    width: 3rem;
-    height: 3rem;
+    width: 4.5vh;
+    height: 4.5vh;
     color: rgb(45, 45, 45);
-    font-size: 6rem;
+    font-size: 3.0vh;
     font-weight: 600;
-    line-height: 0.1rem;
+    line-height: 0.01vh;
     background-color: rgba(243,243,243,1);
     border: 0px solid gray;
   }
 
   .number span{
     width: 35%;
-    font-size: 6rem;
+    font-size: 4.0vh;
     text-align: center;
     color: white;
   }
@@ -189,15 +189,16 @@ export default {
     margin-top: 6%;
     height: 40%;
     width: 90%;
-    font-size: 6rem;
+    font-size: 3.5vh;
     border-radius: 10px;
     background-color: rgba(243,243,243,1);
     border: 1px solid rgb(45, 45, 45);
+    color: transparent;
     position: relative;
   }
   .cart div{
-    font-size: 6rem;
-    color: 1px solid black;
+    font-size: 3.5vh;
+    color: black;
   }
 </style>
 

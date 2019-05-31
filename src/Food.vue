@@ -4,7 +4,7 @@
         <button class="btn" @click="open"></button>
       </div>
       <div class="choice" :style="fly">
-        <button class="btn2" @click="close"></button>
+        
           <div class="list_frame">
             <div class="list" v-for="(text,index) in choices" :key="index" :style="listColor[index]">
               <button class="listbtn" @click="scroll(text.menu,index)" :style="fly2"></button>
@@ -12,7 +12,7 @@
             </div>
           </div>
           <div class="cart_frame">
-            <cart :token="token" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
+            <cart :token="token" @foodmethod="foodmethod" :data="cartData"/>
           </div>
       </div>
       <div class="block-container" id="block" ref="block" @scroll="handleScroll">
@@ -52,7 +52,8 @@ var options = {
 import { resolve } from 'url';
 export default {
   name: 'Food',
-  props:["data","seafood"],
+  props:["data","seafood","cartData","token"],
+  components:{Cart},
   data(){
     return{
       cart: [],
@@ -63,7 +64,7 @@ export default {
         {menu:'salad'},
       ],
       fly:{
-        left:'-70vw',
+        left:'-80vw',
       },
       fly2:{
         left:'-100vw',
@@ -82,14 +83,14 @@ export default {
   methods:{
     open:function(){
       if(this.out===false){
-        this.fly={left:'-10.8vw'}
+        this.fly={left:'0vw'}
         this.fly2={left:'0vw'}
         this.out=true;
       }
     },
     close:function(){
       if(this.out===true){
-        this.fly={left:'-70vw'}
+        this.fly={left:'-80vw'}
         //this.fly={left:'-10.8vw'}
         this.fly2={left:'-100vw'}
         this.out=false;
@@ -122,13 +123,16 @@ export default {
         this.nowAt=index;
       }
     },
+    foodmethod(way,...args){
+      this.$emit(way,...args);
+    }
   },
   computed:{
     listColor(){
       var output=[];
       for(let i=0;i<this.postionRecord.length;++i){
         if(i==this.nowAt-1)
-          output.push({backgroundColor:'rgba(0,0,0,0.3)'})
+          output.push({backgroundColor:'rgba(0,0,0,0.1)'})
         else
           output.push({backgroundColor:'rgba(0,0,0,0)'})
       }
@@ -194,12 +198,13 @@ export default {
   }
   .choice{
     border:1px solid gray;
-    border-radius:13px;
-    width:60vw;
+    border-top-right-radius: 13px;
+    border-bottom-right-radius: 13px;
+    width:78vw;
     height:73.15vh;
     position:fixed;
     margin-top:3vh;
-    background-color:rgb(94, 90, 90);
+    background-color:white;
     z-index:1;
     display: flex;
     flex-direction: column;
@@ -252,19 +257,21 @@ export default {
     position: relative;
     font-family:'Segoe UI';
     font-size: 15px;
-    color: rgb(231, 224, 224);
+    color: rgb(48, 48, 48);
     text-align:center;
     border-bottom:1px solid lightgray;
     width: 100%;
     height:7vh;
-    padding:2vh 2vh 2vh 7vh;
+    padding:2vh 2vh 2vh 2vh;
     z-index:2;
   }
   .cart_frame{
     border:1px solid lightgray;
-    border-radius:5%;
+    border-top-right-radius: 5%;
+    border-bottom-right-radius: 5%;
     height:40vh;
     margin: 8vh 0vw 0vh 0vw;
+    display: flex;
   }
   .mask{
     position: absolute;

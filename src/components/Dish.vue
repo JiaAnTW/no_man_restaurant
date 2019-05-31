@@ -148,7 +148,7 @@ export default {
       overflow-y: auto;
       overflow-x: hidden;
       background-color: rgba(243,243,243,0);
-      padding: 4rem 2rem;
+      padding: 5vh 3vh;
       -webkit-transition: margin-top 1s ease-in-out;
       -moz-transition: margin-top 1s ease-in-out;
       -o-transition: margin-top 1s ease-in-out;
@@ -158,16 +158,16 @@ export default {
     .detail ul{
       font-family: 'Microsoft JhengHei';
       list-style: none;
-      font-size: 3.5rem;
-      letter-spacing: 0.2rem;
-      line-height: 1.4rem;
+      font-size: 2.0vh;
+      letter-spacing: 0.1vh;
+      line-height: 2.0vh;
     }
     .detail li{
       font-family: 'Microsoft JhengHei';
       list-style: none;
-      font-size: 3.5rem;
-      letter-spacing: 0.2rem;
-      line-height: 2.5rem;
+      font-size: 2.0vh;
+      letter-spacing: 0.1vh;
+      line-height: 3.5vh;
     }
 </style>
 

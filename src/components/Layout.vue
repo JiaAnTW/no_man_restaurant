@@ -16,7 +16,7 @@
       <!--注意，請把你.vue檔中最外層的div增加兩個css屬性: "flex-grow:1"和"-webkit-flex-grow:1" -->
       <!--這兩個屬性會幫你自動把長寬貼齊step-container，詳情請搜尋css flexbox -->
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
-      <food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood"/>
+      <food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :cartData="cart" :token="token"/>
       <order v-else-if="nowAt==='order'" @add-cart="addToCart"  :data="menu[viewDish]" :isCart="isCart"/>
       <member v-else-if="nowAt=== 'profile'" @get-token="gettoken"/>
       <cart v-else-if="nowAt=== 'cart'" :token="token" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
@@ -97,9 +97,11 @@ export default {
       this.isLoading=show;
     },
     handleCartChange: function(value,index){ //對已經在購物車中的商品作數量改變，value為1或-1
-      if(this.cart[index].num+value>=0){
+      if(this.cart[index].num+value>0){
         this.cart[index].num+=value;
       }
+      else if(this.cart[index].num+value===0)
+        this.handleCartDelete(index);
     },
     handleCartDelete:function(id){ //用商品id去尋找已經在購物車中的特定商品並做刪除
       this.cart.splice(id, 1);
