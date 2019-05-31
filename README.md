@@ -50,7 +50,7 @@
 
 * 如果你想開發 **前端** ，請:
     1. 開啟命令列(cmd/terminal)後，cd到這份專案的路徑下。
-    2. 在termial直接執行`  npm start  `就可以開始開發。
+    2. 在termial直接執行`  npm run serve  `就可以開始開發。
     3. 開啟瀏覽器，在網址輸入`localhost:8080`可以看到結果。
 
 * 如果你想開發 **後端** 或是想要 **測試前端串接後端後的結果** ，請:
@@ -61,12 +61,20 @@
     5. **每次修改**`server` **資料夾內的檔案(也就是後端)** 後，都要先執行ctrl+c中斷伺服器，再回到第3步。
 
 ## 完成/暫存開發並上傳至Github
+
+* 如果你是clone我的repo
+1. 執行` git pull `確認有沒有更新版本。如果有更新到`package.json`，就要執行<code>  npm i  </code>或是<code>  yarn  </code>。
+2. 開啟命令列(cmd/terminal)後，cd到這份專案的路徑下。
+3. 如果你**修改過前端，請務必先執行**`  npm run build  `**後**，確認沒有錯誤訊息再繼續。
+4. ` git push `
+
+* 如果你是clone你fork的repo
 1. 執行` git fetch upstream `確認有沒有更新版本。如果有更新到`package.json`，就要執行<code>  npm i  </code>或是<code>  yarn  </code>。
 2. 開啟命令列(cmd/terminal)後，cd到這份專案的路徑下。
 3. 如果你**修改過前端，請務必先執行**`  npm run build  `**後**，確認沒有錯誤訊息再繼續。
 4. 不要add那該死的 node_module = = ( 原因見下圖 )
 5. Push到你的Github之後，到[這裡](https://github.com/JiaAnTW/no_man_restaurant/pulls)來發個Pull Request。
-![](https://1.bp.blogspot.com/-ioAjKF2q2OY/XDK3qrApmvI/AAAAAAAABv8/U21gT-8HyE0lCAlnolGc30aWMM1RbNjJQCLcBGAs/s1600/02.jpg)
+![](https://imgur.com/a/lSuEJVe)
 
 
 
