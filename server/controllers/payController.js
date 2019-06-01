@@ -54,15 +54,15 @@ module.exports=class payController{
         }
         pay.confirm(confirmation).then((response) => {
             res.send(response.returnMessage);
-            //var User = require( '../models/user.js');
-            //User=new User();
+            var User = require( '../models/user.js');
+            User=new User();
             var bill={
                 productName:this.lineInfo.productName,
                 amount: this.lineInfo.amount,
                 startTime: Date.now(),
                 getTime: -1
             }
-            //User.addBill(req.body.id,bill)
+            User.UpdateHistory(req.body.id,bill)
         })
 
     }
@@ -70,11 +70,13 @@ module.exports=class payController{
         var User = require( '../models/user.js');
         User=new User();
         var bill={
-            productName:"貢丸",
-            amount: 10,
+            product:[
+                {name:"雪碧",amount: 10},
+                {name:"美味蟹堡",amount: 1},
+            ],
             startTime: Date.now(),
             getTime: -1
         }
-        User.addBill(0,bill)
+        User.AddBill(0,bill)
     }
 }

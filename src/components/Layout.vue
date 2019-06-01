@@ -18,7 +18,7 @@
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
       <food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :cartData="cart" :token="token"/>
       <order v-else-if="nowAt==='order'" @add-cart="addToCart"  :data="menu[viewDish]" :isCart="isCart"/>
-      <member v-else-if="nowAt=== 'profile'" @get-token="gettoken"/>
+      <member v-else-if="nowAt=== 'profile'" @get-token="gettoken" :onPay="false"/>
       <cart v-else-if="nowAt=== 'cart'" :token="token" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
       <total v-else-if="nowAt=== 'total' || nowAt=== 'favorite'" :bill-data="bill"/>
       <!--把你做的component放在上面。(你可以試試看把order放進來)-->
@@ -30,6 +30,7 @@
       </button>
     </div>
     <loading v-if="isLoading"/>
+    <!--pay-center/-->
   </div>
 </template>
 
@@ -38,17 +39,17 @@ import Order from '../Order.vue';//記得include你做的Component
 import Total from '../Total.vue';
 import Cart from '../Cart.vue';
 import Member from '../Member.vue';
-import LinePay from './linepay.vue';
 import Loading from './Loading.vue';
 import Food from '../Food.vue';
 import Map from './Map.vue';
+import PayCenter from "./PayCenter.vue";
 import axios from "axios";
 import Vue from "vue";
 import { defaultCipherList } from 'constants';
 Vue.prototype.$axios = axios;
 export default {
   name: 'Layout',
-  components: {Order,Total,Member,LinePay,Loading,Food,Cart,Map},//也要把你做的Component在這註冊
+  components: {Order,Total,Member,Loading,Food,Cart,Map,PayCenter},//也要把你做的Component在這註冊
   data () {
     return {
       menu:[],//菜單

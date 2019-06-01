@@ -39,7 +39,9 @@ User=new User();
 app.post('/api/post/login', (...args)=> User.Login(...args));
 app.post('/api/post/index',(...args)=> User.Index(...args));
 app.post('/api/post/user/edit',(...args)=> User.Edit(...args));
-
+app.post('/api/post/user/regist',(...args)=> User.Regist(...args));
+app.get('/api/get/user/history',(...args)=> User.History(...args));
+app.get('/api/get/user/wait',(...args)=> User.Wait(...args));
 
 //var req={
     //body:{
@@ -51,9 +53,11 @@ app.post('/api/post/user/edit',(...args)=> User.Edit(...args));
 
 const dt=new Date();
 var bill={
-    productName:"三小",
-    amount: 10,
-    startTime: Date.now(),
+    product:[
+        {name:"雪碧",amount: 10},
+        {name:"美味蟹堡",amount: 1}
+    ],
+    startTime: dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes()+"/"+dt.getSeconds(),
     getTime: -1
 }
 

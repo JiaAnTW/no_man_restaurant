@@ -6,7 +6,7 @@
     </div>
 </template>
 
-<style scope>
+<style scoped>
 .loading{
     position: absolute;
     top:0;

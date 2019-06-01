@@ -57,6 +57,7 @@ computed:{
           {
             method: "post",
             url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/index',
+            //url: '/api/post/index',
             data:{
               token:this.token
           }
@@ -158,6 +159,7 @@ float: left;
 .container{
   padding: 0 0;
   flex-wrap: wrap;
+  overflow-y: auto;
 }
 .cartdata
 {
@@ -209,10 +211,11 @@ float: left;
 }
 .order
 {
-height: 70%;
+height: 25vh;
 width: 100%;
 overflow-y: scroll;
 padding-top: 4% ;
+
 }
 .order h1{
   line-height: 160%;  

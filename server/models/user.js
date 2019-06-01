@@ -12,12 +12,15 @@ module.exports=class user{
         this.UpdateHistory=this.UpdateHistory.bind(this)
     }
     Login(req,res){
+        try{
         this.con.connect(function(err) {
             if (err) {
                 return('connecting error');
             }
         });
-
+        }catch(err){
+            
+        }
         var da=req.body['username'];
         this.con.query('SELECT * FROM user WHERE username =?',da, function(err, rows) {
             if (err) {
@@ -82,9 +85,10 @@ module.exports=class user{
         const startAdd=(new_id)=>{
             const data={
                 id: new_id,
-                username: req.body["username"],
+                username: (req.body["username"])?req.body["username"]:null,
                 //image: (req.body["image"]==null)?null:this.Image(req.body["image"],"dish_"+new_id),
-                password: req.body["password"]
+                password: (req.body["password"])?req.body["password"]:null,
+                phone: (req.body["phone"])?req.body["phone"]:null
             };
             this.con.query('INSERT INTO user SET ?', data, function(err, rows) {
                 if (err) {
@@ -125,22 +129,60 @@ module.exports=class user{
         startAdd();
     }
 
+    History(req,res){
+        this.con.connect(function(err) {
+            if (err) {
+                return('connecting error');
+            }
+        });
+        const id=req.body.id
+        this.con.query('SELECT history FROM user WHERE id =?',id, function(err, rows) {
+            if (err) {
+                res.send({state:"fail",data:null});
+                console.log(err);
+                return;
+            }
+            var data = JSON.parse(rows[0].history);
+            //console.log(data.record);
+            res.send({state:"success",data: data.record});
+        });
+    }
+
+    Wait(req,res){
+        this.con.connect(function(err) {
+            if (err) {
+                return('connecting error');
+            }
+        });
+        const id=req.body.id
+        this.con.query('SELECT history FROM user WHERE id =?',id, function(err, rows) {
+            if (err) {
+                res.send({state:"fail",data:null});
+                console.log(err);
+                return;
+            }
+            var data = JSON.parse(rows[0].history);
+            //console.log(data.record);
+            res.send({state:"success",data: data.record[data.record.length-1]});
+        });
+    }
+
     UpdateHistory(id,data){
+        var history={};
         const set=new Promise((resolve,reject)=>{
             this.con.query('SELECT history FROM user WHERE id =?',id, function(err, rows) {
                 if (err) {
                     return(err);
                 }
-                var history=rows;
                 //console.log(history[0].history)
-                //if(history[0].history==''){
+                if(rows[0]===null){
                     history={
                         record:[]
                     };
-                //}
-                //else{
-                   //history=JSON.parse(history[0].history);
-                //}
+                }
+                else{
+                   history=JSON.parse(rows[0].history);
+                }
                 history.record.push(data);
                 history=JSON.stringify(history)
                 resolve(history)
@@ -170,7 +212,7 @@ module.exports=class user{
                 return(err);
             }
         })
-        //this.UpdateHistory(id,data);
+
     }
 
 }

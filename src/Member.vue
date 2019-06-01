@@ -5,31 +5,32 @@
         <div id="inner"></div>
         <br><br>
             <div  style="width:100%;text-align:center">
-            <h1 style="color:white;font-size:22px" >S | B</h1>
+            <h1 style="color:white;font-size:6.5em" v-if="!onPay" >S | B</h1>
         </div>
     </div>
     </div>
 
 <div id="second">
         <form>
-        <input type="text" v-model="email" placeholder="Email address" style="text-align: center" class="login-area">
+        <input type="text" v-model="email" placeholder="Email address" :style="background"/>
         <br><br>
-        <input type="password" v-model="password" placeholder="Password" style="text-align: center" class="login-area">
+        <input type="password" id="password" v-model="password" placeholder="Enter your password" style="backgroundColor:rgb(75,75,75);color:white;" class="login-area">
         <br><br><br><br>
         </form>
-        <button id="log" @click="login">Log in</button> 
+        <button id="log" @click="login" :style="color">Log in</button> 
 </div>
 
 <div id="third">
-    <span style="color:white"> New to Sun Burger? 
-        <a href="https://www.facebook.com/Scratchburgertw/" style="color:white;font-size:15px">Sign up</a>
+    <span :style="color"> New to Sun Burger? 
+        <a href="https://www.facebook.com/Scratchburgertw/" :style="color">Sign up</a>
      </span>
-   <button id="forget_pass">I forgot my password</button>
+   <button id="forget_pass" :style="color">I forgot my password</button>
 </div>
     </div>
 </template>
 <<script>
 export default {
+  props:["onPay"],
   data(){
     return{
     email:'',
@@ -37,6 +38,14 @@ export default {
     token:'',
     name:'',
   }
+  },
+  computed: {
+    color:function(){
+      return (this.onPay)?{color:"rgb(48, 48, 48)"}:{color:"rgb(255, 255, 255)"};
+    },
+    backgroundColor:function(){
+      return (this.onPay)?{backgroundColor:"white"}:{backgroundColor:"rgb(48, 48, 48)"};
+    }
   },
   methods: {
     login:function(){
@@ -62,7 +71,6 @@ export default {
 
 .Member{
   display:flex;
-  background-color: rgb(48, 48, 48);
   flex-grow:1;
   -webkit-flex-grow:1;
   justify-content: center;/*置中*/
@@ -105,8 +113,8 @@ export default {
 
 #userpic{
     display: inline-block;
-    width: 100px;
-    height:100px;
+    width: 10.5em;
+    height:10.5em;
     border-radius: 50%;
     padding: 5px;
     background:#fff;
@@ -120,17 +128,24 @@ export default {
     border-radius:50%;
 }
 
-.login-area{
+form{
+  width: 64%;
+}
+
+#second input{
+    padding-left: 6%; 
     background-color:white;
-    border-radius: 5px;
+    border-radius: 10px;
     height: 25px; 
-    width: 240px;
+    width: 100%;
+    box-shadow: none;
+    border: none;
 }
 
 #log {
   display: flex;
   justify-content: center;
-  background-color:rgb(48, 48, 48);
+  background-color:rgba(0, 0, 0, 0);
   font-size: 15px;
   border: 0px;
   margin: 0px;
@@ -138,13 +153,20 @@ export default {
   color:white;
 }
 
+.login-area::placeholder{
+  color: white;
+}
+
+span a{
+  font-size:15px;
+}
+
 #forget_pass{
-  background-color:rgb(48, 48, 48);
   border: 0px;
   margin-top: 5px;
   margin-bottom: 10px;
   padding:0px;
-  color:white;
+  background-color: rgba(0, 0, 0, 0);
   font-size:10px;
 }
 </style>
