@@ -1,15 +1,18 @@
 <template>
   <div class="Layout">
     <div class="slogan-container">
-      <button class="top-btn" @click="changeNowAt(before)" :style="search[0]"><div class="back"></div></button>
-      <h1>Sun Burger</h1>
-      <div v-show="!search_f"><!-- true-->      
+      <button v-show="!search_f" class="top-btn" @click="changeNowAt(before)" :style="search[0]"><div class="back"></div></button>
+      <h1 v-show="!search_f">Sun Burger</h1>
+      <div v-show="!search_f"><!-- true-->
         <button class="top-btn" @click="changeState(search_f)" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
       </div>
-      <div v-show="search_f" class="search_area"><!-- true-->
-        <input v-model.trim="searchfood" placeholder="What 2 eat?" class="search_bar"> <!--搜尋框-->
-        <button class="top-btn" @click="changeState(search_f)" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
-        <h1>{{searchfood}}</h1> 
+      <div v-show="search_f" class="search_container">
+        <div v-show="search_f" class="search_area"><!-- true-->
+          <input v-model.trim="searchfood" placeholder="     Search" class="search_bar"> <!--搜尋框-->
+          <button  class="top-btn" @click="changeState(search_f)" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
+          <!-- <h1>{{searchfood}}</h1> -->
+          <div class="searchresult"></div>
+        </div>
      </div>
     </div>
     <div class="step-container">
@@ -61,14 +64,15 @@ export default {
         {name:"cart",icon:require('../assets/icon/cart.png')},
         {name:"profile",icon:require('../assets/icon/member.png')}
       ],
-      search: [{visibility: "hidden"},{visibility: "hidden"}], //右上角搜尋按鍵的css
+      search: [{visibility: "hidden"},{marginTop: "0vh"}], //右上角搜尋按鍵的css
       nowAt: "loading", //目前step的顯示元件，loading時不顯示任何元件,
       isLoading: true, //loading畫面是否顯示
       search_f:false,//放大鏡是否顯示
       bill:{},//用來從cart.vue傳進total的訂單
       token:'',
       searchfood:'',
-      before: 'menu'
+      before: 'menu',
+      searched:[],
     }
   },
   methods:{
@@ -150,6 +154,18 @@ export default {
           break;
       }
     },
+    searchfood: function(){
+      var self=this;
+      var output=[]; //使用local variable去避免在第二次的搜尋條件改變前影響搜尋母體
+      for(let i=0;i<self.menu.length;i++){
+        var str=self.menu[i].name;
+        var s=str.search(self.searchfood);
+        if(s!=-1){
+          output.push(self.menu[i]);
+        }
+      }
+      self.searched=output;
+     },
   },
   computed:{
     isCart:function(){
@@ -213,7 +229,19 @@ export default {
   align-items: center;
   -webkit-align-items: center;
   }
-
+.search_container{
+  display: flex;
+  justify-content: flex-end;
+  -webkit-justify-content:flex-end;
+  flex-flow: row wrap;
+  position:absolute;
+  top:0;
+  height:85vh;
+  width: 85vw;
+  background-color: rgba(243, 243, 243, 0.9);
+  z-index:2;
+  border-radius:3%;
+}
 .search_bar{
   justify-content: flex-end;
   -webkit-justify-content:flex-end; 
@@ -221,13 +249,37 @@ export default {
   -webkit-align-items: center;
   display: flex;
   flex-grow: 1;
+  border-radius: 50px;
+  font-size:16px;
+  z-index:3;
+  margin-top:2vh;
+  /* margin:10vh 5vw 40vh 5svw; */
+  /* border-radius: 5%;
+  width: 80vw;
+  padding:2vh 2vw 2vh 2vw;
+  margin-top:5vh;
+  background-color: white; */
 }
-
 .search_area{
   display: flex;
-  width: 20rem;
+  justify-content: flex-end;
+  width: 70vw;
+  height: 7vh;
+  z-index:3;
+  /* background-color: white;
+  height: 165vh;
+  z-index:3;
+  opacity:0.9;
+  border-radius:2.5%; */
 }
-
+.searchresult{
+  position: absolute;
+  display: flex;
+  height:10vh;
+  width: 70vw;
+  border:1px solid black;
+  margin-top:50vh;
+}
 .top-btn img{
   width: 2rem;
   margin: 0 0;

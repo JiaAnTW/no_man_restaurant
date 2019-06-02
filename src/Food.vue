@@ -13,8 +13,8 @@
           <div class="cart_frame">
             <cart :token="token" @foodmethod="foodmethod" :data="cartData"/>
           </div>
+          <button class="btn2" @click="close"></button>
       </div>
-      <button class="btn2" @click="close" :style="btnStyle"></button>
       <div class="block-container" id="block" ref="block" @scroll="handleScroll">
         <div class="block" v-for="(pictures,index) in lists" :key="pictures.id" :ref="pictures.type+'-'+pictures.id" :id="'dish-'+pictures.id">
           <button class="btn3" @click="viewDish(pictures.id)"></button>
@@ -77,8 +77,7 @@ export default {
       postionRecord:[],
       //listColor:[],
       nowAt:1,
-      isScroll: false,
-      btnStyle:{display:"none"}
+      isScroll: false
     }
   },
   methods:{
@@ -87,7 +86,6 @@ export default {
         this.fly={left:'0vw'}
         this.fly2={left:'0vw'}
         this.out=true;
-        this.btnStyle={display:"block"}
       }
     },
     close:function(){
@@ -96,7 +94,6 @@ export default {
         //this.fly={left:'-10.8vw'}
         this.fly2={left:'-150vw'}
         this.out=false;
-        this.btnStyle={display:"none"}
       }
     },
     viewDish:function(id){
@@ -140,7 +137,7 @@ export default {
           output.push({backgroundColor:'rgba(0,0,0,0)'})
       }
       return output;
-    },
+    }
   },
   watch:{
     data: function(){
@@ -208,7 +205,7 @@ export default {
     position:fixed;
     margin-top:3vh;
     background-color:white;
-    z-index:2;
+    z-index:1;
     display: flex;
     flex-direction: column;
   }
@@ -275,7 +272,6 @@ export default {
     height:40vh;
     margin: 8vh 0vw 0vh 0vw;
     display: flex;
-    z-index: 1;
   }
   .mask{
     position: absolute;
@@ -295,15 +291,12 @@ export default {
   }
   .btn2{
     position: absolute;
-    height:100vh;
+    height:73.15vh;
     width:100vw;
     float:right;
     background-color: rgba(0,0,0,0.5);
-    z-index: 1;
-    border: none;
-    top: 0;
-    left: 0;
-    outline: none;
+    border-radius:8%;
+    opacity:0;
   }
   .btn3{
     position:absolute;
