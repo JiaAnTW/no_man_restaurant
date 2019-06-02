@@ -16,7 +16,8 @@
       <!--注意，請把你.vue檔中最外層的div增加兩個css屬性: "flex-grow:1"和"-webkit-flex-grow:1" -->
       <!--這兩個屬性會幫你自動把長寬貼齊step-container，詳情請搜尋css flexbox -->
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
-      <food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :cartData="cart" :token="token"/>
+      <past-order v-if="nowAt==='menu'"/>
+      <!--<food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :cartData="cart" :token="token"/>-->
       <order v-else-if="nowAt==='order'" @add-cart="addToCart"  :data="menu[viewDish]" :isCart="isCart"/>
       <member v-else-if="nowAt=== 'profile'" @get-token="gettoken" :onPay="false"/>
       <cart v-else-if="nowAt=== 'cart'" :token="token" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
@@ -30,7 +31,7 @@
       </button>
     </div>
     <loading v-if="isLoading"/>
-    <!--pay-center/-->
+    <!--<pay-center/>-->
   </div>
 </template>
 
@@ -43,13 +44,14 @@ import Loading from './Loading.vue';
 import Food from '../Food.vue';
 import Map from './Map.vue';
 import PayCenter from "./PayCenter.vue";
+import PastOrder from "../PastOrder.vue";
 import axios from "axios";
 import Vue from "vue";
 import { defaultCipherList } from 'constants';
 Vue.prototype.$axios = axios;
 export default {
   name: 'Layout',
-  components: {Order,Total,Member,Loading,Food,Cart,Map,PayCenter},//也要把你做的Component在這註冊
+  components: {Order,Total,Member,Loading,Food,Cart,Map,PayCenter,PastOrder},//也要把你做的Component在這註冊
   data () {
     return {
       menu:[],//菜單

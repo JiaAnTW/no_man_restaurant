@@ -2,7 +2,8 @@
     <div class="PayCenter">
         <modal width="47vh" height="65vh">
             <div class="content-container">
-                <member :onPay="true"/>
+            <!-- <member :onPay="true"/-->
+             <Map @change-page="changeProgress"/>
             </div>
             <div class="progress">
                 <div class="bar" :style="progress"></div>
@@ -14,10 +15,11 @@
 
 <script>
 import Modal from "./Modal";
-import Member from "../Member"
+import Member from "../Member";
+import Map from "./Map.vue";
 export default {
   name: 'PayCenter',
-  components:{Modal,Member},
+  components:{Modal,Member,Map},
   data () {
   return{
       progress: {width:"10%"},
