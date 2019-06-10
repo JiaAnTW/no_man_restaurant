@@ -4,7 +4,7 @@
             <span style="color:white">Past Order</span>
         </div>
         <div class="order_container">
-          <PastOrderList/>  
+          <PastOrderList  @change-nowat="changeNowAt" />  
         </div>
     </div>
 </template>
@@ -17,6 +17,11 @@ export default {
     data(){
         return{
            
+        }
+    },
+    methods:{
+        changeNowAt:function(){
+            this.$emit('change-nowat','cart');
         }
     }
 }
@@ -45,17 +50,4 @@ export default {
         -webkit-flex-direction:column;  
         flex-grow: 1;
     }
-    /*.order_box{
-        display: flex;
-        flex-direction:column;
-        -webkit-flex-direction:column;  
-        flex-grow: 1;
-        background: rgb(48,48,48);
-        border-radius:5%;
-    }
-    .order_data{
-        border:0.5px solid red;
-        display: flex;
-        background: white;
-    }*/
 </style>
