@@ -1,9 +1,7 @@
 <template>
     <div class="test">
         這裡是首頁 
-        <modal>
-          <member/>
-        </modal>
+          <Start/>
     </div>
 </template>
 
@@ -11,10 +9,10 @@
 import axios from "axios";
 import Vue from "vue";
 import Modal from "./components/Modal";
-import Member from "./Member"
+import Start from "./components/Start"
 Vue.prototype.$axios = axios
 export default {
-  components:{Modal,Member},
+  components:{Start},
   name: 'Home'
 }
 </script>

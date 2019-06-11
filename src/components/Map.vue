@@ -1,7 +1,7 @@
 <template>
     <div class="map">
        <div class="header">
-            <img class="sbpic" src="../assets/icon/no_user.png" alt="vue">
+            <img class="sbpic" src="../assets/icon/icon.png" alt="vue">
             <span class="topic">Select Your location</span>
         </div>
         <div class="container">
@@ -52,7 +52,7 @@ export default {
     },
     methods:{
         changePage:function(){
-            this.$emit('change-page');
+            this.$emit('change-page',75);
         }
     },
     beforeMount:function(){

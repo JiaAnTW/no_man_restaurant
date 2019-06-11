@@ -1,28 +1,28 @@
 <template>
     <div class="Member">
-    <div id="first">  
-      <div id="userpic">
-        <div id="inner"></div>
-        <br><br>
-            <div  style="width:100%;text-align:center">
-            <h1 style="color:white;font-size:6.5em" v-if="!onPay" >S | B</h1>
+      <div id="first">  
+        <div id="userpic">
+          <div id="inner"></div>
+            <br><br>
+              <div  style="width:100%;text-align:center">
+              <h1 style="color:white;font-size:6.5em" v-if="!onPay" >S | B</h1>
+          </div>
         </div>
-    </div>
-    </div>
+      </div>
 
-<div id="second">
-        <form>
-        <input type="text" v-model="email" placeholder="Email address" :style="background"/>
-        <br><br>
-        <input type="password" id="password" v-model="password" placeholder="Enter your password" style="backgroundColor:rgb(75,75,75);color:white;" class="login-area">
-        <br><br><br><br>
-        </form>
-        <button id="log" @click="login" :style="color">Log in</button> 
-</div>
+      <div id="second">
+          <form>
+          <input type="text" v-model="email" placeholder="Email address"/>
+          <br><br>
+          <input type="password" id="password" v-model="password" placeholder="Enter your password" style="backgroundColor:rgb(75,75,75);color:white;" class="login-area">
+          <br><br><br><br>
+          </form>
+          <button id="log" @click="login" :style="color">Log in</button> 
+      </div>
 
-<div id="third">
-    <span :style="color"> New to Sun Burger? 
-        <a href="https://www.facebook.com/Scratchburgertw/" :style="color">Sign up</a>
+      <div id="third">
+        <span :style="color"> New to Sun Burger? 
+          <button :style="color" @click="signUp">Sign up</button>
      </span>
    <button id="forget_pass" :style="color">I forgot my password</button>
 </div>
@@ -35,6 +35,7 @@ export default {
     return{
     email:'',
     password:'',
+    phone:'',
     token:'',
     name:'',
   }
@@ -61,9 +62,14 @@ export default {
     }).then((res) => {
         this.token=res.data["token"];
         this.$emit('get-token',self.token);/*傳送代碼*/ 
+        if(this.onPay)
+          this.$emit('change-page',50);
 
       });
   },
+    signUp:function () {
+        this.$emit('change-now-at',"signUp");
+      }
     }
 }
 </script>>
@@ -116,12 +122,11 @@ export default {
     width: 10.5em;
     height:10.5em;
     border-radius: 50%;
-    padding: 5px;
     background:#fff;
 }
 
 #inner {
-    background-image:url("./assets/icon/no_user.png");
+    background-image:url("./assets/icon/icon.png");
     background-size:cover;
     background-position:center center;
     height: 100%;
@@ -157,7 +162,9 @@ form{
   color: white;
 }
 
-span a{
+span button{
+  border: none;
+  background-color: transparent;
   font-size:15px;
 }
 

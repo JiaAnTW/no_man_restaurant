@@ -29,9 +29,15 @@ app.get('/api/get/menu', (...args)=> Menu.Index(...args));
 app.post('/api/post/add', (...args)=> Menu.Add(...args));
 app.put('/api/post/edit', (...args)=> Menu.Edit(...args));
 app.delete('/api/post/menu', (...args)=> Menu.Delete(...args));
-//app.post('/api/post/add', function(req,res){
-    //console.log(req.body["name"])
-//});
+
+
+var feedback = require( '../controllers/feedbackController.js');
+feedback =new feedback();
+app.get('/api/get/feedback', (...args)=> feedback.Feedback(...args));
+app.post('/api/post/comment', (...args)=> feedback.Comment(...args));
+app.post('/api/post/reply', (...args)=> feedback.Reply(...args));
+
+
 
 
 var User = require( '../models/user.js');
@@ -43,62 +49,12 @@ app.post('/api/post/user/regist',(...args)=> User.Regist(...args));
 app.get('/api/get/user/history',(...args)=> User.History(...args));
 app.get('/api/get/user/wait',(...args)=> User.Wait(...args));
 
-//var req={
-    //body:{
-        //id:0,
-        //name:"張家銨",
-        //image: null
-    //}
-//}
-
-const dt=new Date();
-var bill={
-    product:[
-        {name:"雪碧",amount: 10},
-        {name:"美味蟹堡",amount: 1}
-    ],
-    startTime: dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes()+"/"+dt.getSeconds(),
-    getTime: -1
-}
-
-
 
 var Pay = require( '../controllers/payController.js');
 Pay=new Pay();
 app.post('/api/post/pay', (...args)=> Pay.LinePay(...args));
 app.post('/api/post/pay/confirm', (...args)=> Pay.LinePayConfirm(...args));
 app.post('/api/post/pay/test', (...args)=> Pay.payTest(...args));
-
-const line_pay = require("line-pay");
-
-const pay = new line_pay({
-    channelId: "1567873613",
-    channelSecret: "7121812b7e2a57010730d79eedc3aa01",
-    isSandbox: true
-});
- 
-
-app.use("/pay", pay.middleware({
-    productName: "媽祖託夢器",
-    amount: 1,
-    confirmUrl: "loacalhost:8081/#/Home",
-    currency: "TWD",
-    orderId: "5720",
-}), (req, res, next) => {
-    // Now payment should have been completed.
-    res.send("Payment has been completed.");
-});
-
-app.use("/pay", pay.middleware({
-    productName: "媽祖託夢器",
-    amount: 1,
-    confirmUrl: "loacalhost:8081/#/Home",
-    currency: "TWD",
-    orderId: "5720",
-}), (req, res, next) => {
-    // Now payment should have been completed.
-    res.send("Payment has been completed.");
-});
 
 
 

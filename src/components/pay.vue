@@ -3,7 +3,7 @@
         <b-container>
             <b-row class="title">
                 <b-col class="head">
-                    <img class="memberhead" src= "../assets/burger.jpg" />
+                    <img class="memberhead" src= "../assets/icon/icon.png" />
                                     <h1>Payment</h1>
                 </b-col>
 
@@ -57,12 +57,17 @@ export default {
 {
     flex-direction: row;
     flex-wrap: wrap;
+    background-color: transparent;
 
 }
 
 .title{
   width:100%;
   height: 18vh;
+}
+
+h1{
+  color: #2c2c2c;
 }
 
 .head
@@ -76,10 +81,8 @@ export default {
 
 .memberhead
 {
-height: 8vh;
-width: 8vh;
-border-radius: 100%;
-box-shadow: 0px 4px 6px 0px #b3b3b3;
+height: 10vh;
+width: 10vh;
 }
 
 .title h1

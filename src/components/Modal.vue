@@ -18,7 +18,7 @@ export default {
 },
  methods:{
     close:function(){
-        
+        this.$emit("change-now-at");
     }
  },
  watch:{

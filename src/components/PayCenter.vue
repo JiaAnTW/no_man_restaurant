@@ -1,9 +1,10 @@
 <template>
     <div class="PayCenter">
-        <modal width="47vh" height="65vh">
+        <modal width="47vh" height="65vh" @change-now-at="close">
             <div class="content-container">
-            <!-- <member :onPay="true"/-->
-             <Map @change-page="changeProgress"/>
+                <member v-if="progress.width==='25%'" :onPay="true" @change-page="changeProgress"/>
+                <Map v-else-if="progress.width==='50%'" @change-page="changeProgress"/>
+                <pay v-else-if="progress.width==='75%'"/>
             </div>
             <div class="progress">
                 <div class="bar" :style="progress"></div>
@@ -16,13 +17,14 @@
 <script>
 import Modal from "./Modal";
 import Member from "../Member";
+import Pay from "./pay";
 import Map from "./Map.vue";
 export default {
   name: 'PayCenter',
-  components:{Modal,Member,Map},
+  components:{Modal,Member,Map,Pay},
   data () {
   return{
-      progress: {width:"10%"},
+      progress: {width:"25%"},
   }
 },
  methods:{
@@ -31,10 +33,12 @@ export default {
             this.progress.width=percent+"%";
         else
             this.progress.width="100%";
+     },
+     close:function(){
+         this.$emit("close");
      }
  },
  watch:{
-
  },
  mounted(){
  

@@ -10,6 +10,7 @@ module.exports=class menu{
             database: "uidd2019_groupB"
         });
         this.Image=this.Image.bind(this);
+        this.GetFeedBack=this.GetFeedback.bind(this)
     }
 
     Index(req, res){ //show all the data
@@ -20,7 +21,7 @@ module.exports=class menu{
             }
         });
         }catch(err){
-            dt=new Date();
+            var dt=new Date();
             const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
             console.log("Menu/Index: database connect error at "+time);
         }
@@ -33,7 +34,7 @@ module.exports=class menu{
                 res.send(data);
             });
         }catch(err){
-            dt=new Date();
+            var dt=new Date();
             const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
             console.log("Menu/Index: Get data from database error at "+time); 
         }
@@ -47,7 +48,7 @@ module.exports=class menu{
             }
         });
         }catch(err){
-            dt=new Date();
+            var dt=new Date();
             const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
             console.log("Menu/Add: database connect error at "+time);
         }
@@ -61,7 +62,7 @@ module.exports=class menu{
                 try{
                     startAdd(number+1);//因為js的非同步特性，我們必須要這樣呼叫
                 }catch(err){
-                    dt=new Date();
+                    var dt=new Date();
                     const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
                     console.log("Menu/Add: Add data to database fail at "+time);
                 }
@@ -86,7 +87,7 @@ module.exports=class menu{
         try{
             getMaxId();//前面只是定義函式，我們還是要呼叫一次。
         }catch(error){
-            dt=new Date();
+            var dt=new Date();
             const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
             console.log("Menu/Add: Get max id from database fail at "+time);
         }
@@ -100,7 +101,7 @@ module.exports=class menu{
                 }
             });
         }catch(err){
-                dt=new Date();
+                var dt=new Date();
                 const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
                 console.log("Menu/Edit: database connect error at "+time);
         }
@@ -123,7 +124,7 @@ module.exports=class menu{
         try{
             startAdd();
         }catch(error){
-            dt=new Date();
+            var dt=new Date();
             const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
             console.log("Menu/Edit: Update data to database fail at "+time);
         }
@@ -139,7 +140,7 @@ module.exports=class menu{
                 }
             });
         }catch(err){
-                dt=new Date();
+                var dt=new Date();
                 const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
                 console.log("Menu/Delete: database connect error at "+time);
         }
@@ -150,7 +151,7 @@ module.exports=class menu{
                 }
             });
         }catch(err){
-            dt=new Date();
+            var dt=new Date();
             const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
             console.log("Menu/Delete: delete data fail at "+time);
         }
@@ -163,6 +164,129 @@ module.exports=class menu{
         var optionalObj = {'fileName': filename, 'type':'png'};
         base64ToImage(base64Str,path,optionalObj);
         return(filename);  
+    }
+
+    Comment(id,content){
+        try{
+            this.con.connect(function(err) {
+                if (err) {
+                    return('connecting error');
+                }
+            });
+        }catch(err){
+                var dt=new Date();
+                const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
+                console.log("Menu/Comment: database connect error at "+time);
+        }
+        console.log("get "+content)
+        const startAdd=()=>{
+            var dt=new Date();
+            const data={
+                feedback:{
+                    comment:{
+                        date:dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate(),
+                        content: content
+                    },
+                    reply:{
+                        date:null,
+                        content: null                    
+                    }
+                }
+            };
+            data.feedback=JSON.stringify(data.feedback)
+            this.con.query('UPDATE menu SET ? WHERE id = ?', [data,id], function(err, rows) {
+                if (err) {
+                    console.log(err)
+                    return(err);
+                }
+            });
+        }
+        try{
+            startAdd();
+        }catch(error){
+            var dt=new Date();
+            const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
+            console.log("Menu/Comment: Update data to database fail at "+time);
+            console.log(error)
+        }
+    }
+
+    GetFeedback(id){
+        try{
+            this.con.connect(function(err) {
+                if (err) {
+                    return('connecting error');
+                }
+            });
+        }catch(err){
+                var dt=new Date();
+                const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
+                console.log("Menu/GetFeedback: database connect error at "+time);
+                console.log(error)
+        }
+        try{
+            var output;
+            console.log("id is "+id)
+            this.con.query('SELECT feedback FROM menu WHERE id =?',id, function(err, rows) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                if(rows[0].feedback){
+                    var data = JSON.parse(rows[0].feedback);
+                    console.log(data)
+                    output=data;
+                }
+                else
+                    return null;
+            });
+            return output;
+        }catch(error){
+            var dt=new Date();
+            const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
+            console.log("Menu/GetFeedback: get data error at "+time);
+            console.log(error)
+        }
+    }
+
+
+    Reply(id,content){
+        try{
+            this.con.connect(function(err) {
+                if (err) {
+                    return('connecting error');
+                }
+            });
+        }catch(err){
+                var dt=new Date();
+                const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
+                console.log("Menu/Reply: database connect error at "+time);
+        }
+        console.log("get "+content)
+        const getData=new Promise((resolve)=>{
+            const data=this.GetFeedBack(id);
+            resolve;
+        }) 
+        const startAdd=()=>{
+            var dt=new Date();
+            data.feedback.reply.date=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate();
+            data.feedback.reply.content=content;
+            data.feedback=JSON.stringify(data.feedback)
+            this.con.query('UPDATE menu SET ? WHERE id = ?', [data,id], function(err, rows) {
+                if (err) {
+                    console.log(err)
+                    return(err);
+                }
+            });
+        }
+        try{
+            getData.then(()=>{startAdd();})
+        }catch(error){
+            var dt=new Date();
+            const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
+            console.log("Menu/Reply: Update data to database fail at "+time);
+            console.log(error)
+        }
     }
 }
 
