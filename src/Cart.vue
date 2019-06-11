@@ -1,40 +1,27 @@
 <template>
     <div class="cart">
-      <div class = "title">Your Cart</div>
       <div class = "order">
-      <table>
-        <tbody>
-          <tr class=cartdata v-for = "(cartdatas,index) in data"  :key="index">
-            <td class="image">
+        <b-container >
+          <b-row class=cartdata v-for = "(cartdatas,index) in data"  :key="index">
+            <b-col class="image">
               <img class="foodimg" :src="cartdatas.src" style="display:block; margin:auto;" alt="cartdatas.name" />
-            </td>
-            <td class="foodname">
-            <h1>{{cartdatas.name}}<br/>${{cartdatas.price}}</h1>
-            </td>
-            <td class="num">
+            </b-col>
+            <b-col class="foodname">
+              <h1>{{cartdatas.name}}<br/>${{cartdatas.price}}</h1>
+            </b-col>
+            <b-col class="num">
               <button class="minus_"  value="minus" v-on:click="handleNumberChange(-1,index)">-</button>
               <h3>{{ cartdatas.num }}</h3>
               <button class="plus_"  value="plus" v-on:click="handleNumberChange(1,index)">+</button>
-           </td>
-            <td class="del">
-              <button class="can" value="zero" v-on:click="deleteDish(index)"></button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      </div>
-
-      <div class = "total">
-        <span class="l">Total:</span> 
-        <span class="r">  $  {{tot}} </span>
+           </b-col>
+          </b-row>
+        </b-container>
       </div>
       <div class = "send">
         <button v-if="notPay" v-on:click="linePay">Place your order</button>
         <button v-else v-on:click="linePayConfirm">Check your pay</button>
       </div>
     </div>
-
-    
 </template>
 
 <script>
@@ -60,16 +47,17 @@ computed:{
 },
  methods:{
     handleNumberChange: function(value,index){
-      this.$emit('handle-number-change',value,index)
+        this.$emit("foodmethod",'handle-number-change',value,index)
     },
     deleteDish:function(index){
-      this.$emit('delete-cart',index)
+      this.$emit("foodmethod",'delete-cart',index)
     },
     loginConfirm:function(){
       this.$axios(
           {
             method: "post",
             url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/index',
+            //url: '/api/post/index',
             data:{
               token:this.token
           }
@@ -85,7 +73,7 @@ computed:{
       if(this.tot>0){
         if(this.token!=''){
           const self=this;
-          this.$emit('show-loading',true);
+          this.$emit("foodmethod",'show-loading',true);
           this.$axios(
             {
               method: "post",
@@ -99,18 +87,18 @@ computed:{
           }
         ).then(response=>{
           window.open(response.data["url"], "_blank")
-          this.$emit('show-loading',false);
+          this.$emit("foodmethod",'show-loading',false);
           self.notPay=false;
           self.transactionId=response.data.transactionId;
           })
         }
         else{
-          alert("想要買這個餐點?哼哼哼，在沒有登入之前我是不會讓你通過這裡的",this.$emit('direct-to-show','profile'))
+          alert("想要買這個餐點?哼哼哼，在沒有登入之前我是不會讓你通過這裡的",this.$emit("foodmethod",'direct-to-show','profile'))
         }
       }
     },
     linePayConfirm: function(){
-      this.$emit('show-loading',true);
+      this.$emit("foodmethod",'show-loading',true);
       const self=this;
       this.$axios(
         {
@@ -126,15 +114,15 @@ computed:{
         }
       ).then(response=>{
         if(response.data==='Success.'){
-          this.$emit('show-loading',false);
+          this.$emit("foodmethod",'show-loading',false);
           self.notPay=true;
-          this.$emit('send-bill',{
+          this.$emit("foodmethod",'send-bill',{
             name:"吳銘世",
             amount: this.tot,
             guest_id: 0,
             time: Date.now()+1000*60*20
           })
-          this.$emit('direct-to-show','total');
+          this.$emit("foodmethod",'direct-to-show','total');
           
         }
       })
@@ -149,22 +137,18 @@ computed:{
      this.lists=this.data;
    }
  }
-
 </script>
+
 <style scoped>
-
-
- button
+button
 {
   outline: none;
 }
-
 .l
 {
 width:100%;
 float: left;
 }
-
 .r
 {
   position: absolute;
@@ -172,43 +156,37 @@ float: left;
   left:65%;
   float: right;
 }
-
-.order tr
-{
-  position: relative;
-  width: 100%;
+.container{
+  padding: 0 0;
+  flex-wrap: wrap;
+  overflow-y: auto;
 }
-
-.order td
+.cartdata
 {
-  height: 11vh;
+  width: 100%;
+  min-width: 100%;
+  height: 8vh;
   border-bottom: 1px solid rgb(200, 200, 200);
   color: rgb(45, 45, 45);
 }
-
 .crossline{  height:5%;  }
-
 .cart ,.order{  
   display: flex;  
   flex-wrap: wrap;
   align-items: flex-start;
 }
-
 .cart
 {
-  display: flex;
-  flex-direction:column;
-  -webkit-flex-direction:column;
+  padding-top: 2vh;
+  background-color: rgba(0,0,0,0.1);
   flex-grow:1;
   -webkit-flex-grow:1;
 }
-
 .order button
 {
   margin-top:2%;
   cursor:pointer;
 }
-
 .can
 {
   height:45%;
@@ -222,7 +200,6 @@ float: left;
   background-color: rgba(100, 100, 100, 0.1);
   border: none;
 }
-
 .title
 {
   position: absolute;
@@ -232,54 +209,59 @@ float: left;
   color:rgb(245, 245, 245);
   text-decoration: underline;
 }
-
 .order
 {
-position: absolute;
-top: 20.7vh;
-left:6.1%;
-height: 40vh;
-width: 88%;
-border: 1px solid gray;
-border-radius: 15px;
-background-color: rgb(255, 255, 255);
+height: 25vh;
+width: 100%;
 overflow-y: scroll;
-padding: 7% 1%;
-}
+padding-top: 4% ;
 
+}
 .order h1{
   line-height: 160%;  
   font-size: 3.5rem;  
   color: rgb(45, 45, 45);
 }
 
-.order .foodname{  width:25vw;  }
-
-.image{  width:20vw;  }
-
-.foodimg
-{
-vertical-align: middle;
-width:auto;
-height: 80%;
+.cartdata .col{
+  height: 100%;
+  padding:  0 0;
 }
 
-.foodname
-{
-  vertical-align:middle;
-  text-align: left;
-  font-size: 3.5rem;
+.order{
+  position: relative;
+}
+
+.image{
+  width: 20%;
   display: flex;
   align-items: center;
 }
 
+.foodimg
+{
+  display: flex;
+  vertical-align: middle;
+  width:auto;
+  height: 80%;
+  align-items: center;
+}
+
+.order .foodname
+{
+  width: 40%;
+  vertical-align:middle;
+  text-align: left;
+  font-size: 3.5rem;
+  padding: 1.5% 0;
+}
+
 .order .num{  
-  width:22vw;  
+  width:40%;  
   display: flex;
   align-items: center;
   justify-content: space-around;
   }
-
 .order .del
 {
    width:18vw;
@@ -287,21 +269,15 @@ height: 80%;
    display: flex;
    align-items: center;
 }
-
 .total
 {
-top:67.92vh;
-left:8%;
 width:84%;
-position: absolute;
 border-bottom: 1.5px solid rgb(184, 184, 184);
 padding-bottom: 3%;
 padding-left: 4%;
 padding-right: 7%;
-color:rgb(245, 245, 245);
-
+color:rgb(45,45,45);
 }
-
 .total span
 {
   font-size: 5rem;
@@ -309,51 +285,43 @@ color:rgb(245, 245, 245);
   width: 50%;
   font-size: 6rem;
 }
-
 .total .r
 {
   text-align: right;
 }
-
 .send
 {
-top:80.76vh;
-left:8%;
-position: absolute;
+  margin-bottom: 0vh;
+  margin-left:20%;
+  width: 60%;
 }
-
 .send button
 {
   margin-top:3%;
   height: 40%;
   width: 100%;
-  font-size: 5.5rem;
+  font-size: 2vh;
   border-radius: 15px;
-  padding:1.6vw 21.5vw;
-  background-color: rgb(255, 255, 255);
+  padding:0.5vh 0vw;
+  background-color: rgb(45,45,45);
   border: 1px solid rgb(189, 189, 189);
+  color: white;
   cursor:pointer;
 }
-
-
-
 .num button
 { 
-    padding:0 0 0.2rem 0.4rem;
-    border-radius: 1.8rem;
-    width: 1.8rem;
-    height: 1.8rem;
+    padding:0 0.5vh 0rem 0rem;
+    border-radius: 100%;
+    width: 4vh;
+    height: 4vh;
     color: rgb(0, 0, 0);
-    font-size: 3.5rem;
+    font-size: 3vh;
     font-weight: 600;
     line-height: 0%;
-    background-color: rgb(255, 255, 255);
     border: 0.1rem solid gray;
     text-align: center;
     vertical-align: middle;
   }
-
-.num button:hover{   background-color: rgb(240, 240, 240);  }
 
 .num h3
 { 

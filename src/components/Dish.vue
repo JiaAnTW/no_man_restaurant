@@ -4,13 +4,19 @@
       <button class="open-btn" @click="changeOpen" :style="btnStyle"><div></div></button>
       <div class="background" :style="backgroundStyle"></div>
       <div class="detail" :style="detailStyle">
-        <ul>
-          {{bornStar}}<br/><br/>
-          {{whatItMade}}<br/><br/>
-          <li v-for="(item,index) in nut" :key="index">
-            | {{item.name}} : {{item.value}}
-          </li>
-        </ul>
+        <div class="score">{{4.7 + bornStar}}</div>
+          <div class="patch">
+            <h2>What's new</h2>
+            <div class="info">我真的很好吃，我超級好吃。我真的真的很好吃。</div>
+            <div class="info_btn"><button>History</button></div>
+          </div>
+          <div class="interact" v-for="(element,index) in interact" :key="index">
+              <div id="comment">
+                <h3 class="date">{{element.date}}</h3>
+                {{element.comment}}</div>
+                <h3 class="res">Responese</h3>
+              <div id="comment">{{element.reply}}</div>
+          </div>
       </div>
     </div>
 </template>
@@ -28,12 +34,10 @@ export default {
       detailStyle:{ marginTop:"0"},
       btnStyle:{top:0},
       madeof:["小麥麵包","法式香草醬"],
-      nut:[
-          { name:"熱量", value:87},
-          { name:"蛋白質", value:87},
-          { name:"脂肪", value:87},
-          { name:"碳水化合物", value:87},
-          { name:"納", value:87}
+      interact:[
+          { date:"2019-06-09", comment:"不知道有沒有提供兒童餐?", reply:"您好!請問您的兒童餐要快樂的嗎?"},
+          { date:"2019-06-09", comment:"東西很好吃，希望有快樂分享餐，可以給多人一起吃", reply:"您好!請問您的分享餐要快樂的嗎?"},
+          { date:"2019-06-09", comment:"ˇ店員很正，服務很親切!", reply:"您好，感謝您的讚賞，只是我們這間店沒有店員耶......你看到的是?"},
       ]
     }
   },
@@ -118,7 +122,19 @@ export default {
         -o-transition: top 1s ease-in-out;
         transition: top 1s ease-in-out; 
     }
-
+    .score{
+      color: white;
+      background-color: rgba(255,255,255,0.5);
+      font-size: 2.7vh;
+      border-radius: 10px;
+      width: 45%;
+      padding: 0.5vh 2%;
+      text-align: center;
+    }
+    h2{
+      font-size: 3vh;
+      font-weight: 400;
+    }
     .open-btn div{
         width: 0;
         height: 0;
@@ -148,7 +164,7 @@ export default {
       overflow-y: auto;
       overflow-x: hidden;
       background-color: rgba(243,243,243,0);
-      padding: 5vh 3vh;
+      padding-top: 2vh;
       -webkit-transition: margin-top 1s ease-in-out;
       -moz-transition: margin-top 1s ease-in-out;
       -o-transition: margin-top 1s ease-in-out;
@@ -168,6 +184,48 @@ export default {
       font-size: 2.0vh;
       letter-spacing: 0.1vh;
       line-height: 3.5vh;
+    }
+    .patch{
+      padding-top: 3vh;
+      padding-left: 2vh ;
+      margin-bottom: 2vh;
+    }
+    .info{
+      height: 22vh;
+    }
+    .info_btn {
+      padding-top: 2vh;
+      padding-right: 2vh ;
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .info_btn button{
+      background-color: transparent;
+      font-size: 2.3vh;
+      color: white;
+      border: none;
+    }
+    .interact{
+      padding-right: 2vh;
+      background-color: rgb(255,255,255,0.3);
+      margin-bottom: 2vh;
+      max-width: 97%;
+      border-radius: 10px;
+      padding: 2vh 4vh;
+    }
+    .interact .date{
+      font-size: 1.9vh;
+      font-weight: 300;
+    }
+    .interact #comment{
+      font-family: 'Microsoft JhengHei';
+      font-size: 2vh;
+      margin-bottom: 1vh;
+    }
+    .interact .res{
+      font-size: 2.3vh;
+      color: rgb(45,45,45)
     }
 </style>
 

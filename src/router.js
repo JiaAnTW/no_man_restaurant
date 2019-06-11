@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import Home from './Home.vue'
 import Layout from './components/Layout'
 import Admin from './Admin'
+import BackStage from './BackStage'
+import Anaylsis from './components/Anaylsis'
 
 Vue.use(Router)
 
@@ -25,7 +27,19 @@ export default new Router({
     {
       path: '/admin',
       name: 'Admin',
-      component: Admin
+      component: BackStage,
+      children:[
+        {
+          path: 'menu',
+          name: 'Menu',
+          component: Admin
+        },
+        {
+          path: '',
+          name: 'Anaylsis',
+          component: Anaylsis
+        }
+      ]
     }
   ]
 })
