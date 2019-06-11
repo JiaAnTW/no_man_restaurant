@@ -1,25 +1,30 @@
 <template>
     <div class="pastorderlist">
         <div class="order" v-bind:key="index" v-for="(data,index) in order">
-            <div class="data_con" v-on:mousedown="go()" v-on:mousemove="coord()">
+            <v-touch v-on:swipeleft="move()" class="data_con">
                 <img :src="data.pic" alt="No_pic" style="height:15vh;width:15vw;display:flex;flex-grow:2.5;">
                 <div class="data">
                 <span>{{data.name}}</span>
                 <span>$ {{data.price}}</span>
                 <span>x:{{x}} y:{{y}}</span>
                 </div>
-            </div>
+                <img class="can" src="../assets/icon/can.png" style="height:7vh;width:6.5vw;display:flex;flex-grow:2;">
+            </v-touch>
             <button class="add_cart_btn" v-on:click="changeNowAt()">Add to Cart</button>
         </div>
     </div>
 </template>
 
 <script>
+import VueTouch from 'vue-touch'
+import Vue from 'vue';
+Vue.use(VueTouch, {name: 'v-touch'})
 export default {
     name:"PastOrderList",
     data(){
         return{
             x:0,y:0,
+            canz:-1,
             order:[{pic:[require("../assets/beef.png")],name:"測試一號",price:[100]},{pic:require("../assets/8.png"),name:"測試二號",price:150},],
         }
     },
@@ -27,19 +32,19 @@ export default {
         changeNowAt:function(){
             this.$emit('change-nowat','cart');
         },
-        coord:function(){
+        move:function(){
             var e =window.event;
-            var offset=e.clientX-this.x;
-            console.log(offset);
+            var offset=0;
+            console.log("move");
+            this.x=e.clientX;
             this.y=e.clientY;
-            if(offset<0){
-                //往左移
+            //data_con = document.getElementById("data_con");
+            if(self.isdown==true){
+                offset=e.clientX-self.x;
+                //console.log(offset);
+                //data_con.style.left=offset;
             }
         },
-        go:function(){
-            var e =window.event;
-            this.coord(e)
-        }
   },
     
 }
@@ -92,5 +97,8 @@ export default {
     color: white;
     border: 0px;
     border-radius:20%; 
+}
+.can{
+    z-index: -1;
 }
 </style>
