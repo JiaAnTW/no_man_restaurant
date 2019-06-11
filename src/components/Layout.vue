@@ -4,14 +4,21 @@
       <button v-show="!search_f" class="top-btn" @click="changeNowAt(before)" :style="search[0]"><div class="back"></div></button>
       <h1 v-show="!search_f">Sun Burger</h1>
       <div v-show="!search_f"><!-- true-->
-        <button class="top-btn" @click="changeState(search_f)" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
+        <button class="top-btn" @click="changeState(search_f)"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
       </div>
       <div v-show="search_f" class="search_container">
         <div v-show="search_f" class="search_area"><!-- true-->
           <input v-model.trim="searchfood" placeholder="     Search" class="search_bar"> <!--搜尋框-->
-          <button  class="top-btn" @click="changeState(search_f)" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
+          <button class="top-btn" @click="changeState(search_f)" :style="topDist"><img src="../assets/icon/search-b.png" alt="search"/></button>
           <!-- <h1>{{searchfood}}</h1> -->
-          <div class="searchresult"></div>
+        </div>
+        <div class="result_frame">
+          <div class="searchresult" v-for="(result,index) in searched" :key="index">
+            <img v-show="search_f" src="../assets/icon/search-b.png" alt="search"/>
+            <button @click="viewSingleDish(result.id)">
+            {{result.name}}
+            </button>
+          </div>
         </div>
      </div>
     </div>
@@ -19,13 +26,12 @@
       <!--注意，請把你.vue檔中最外層的div增加兩個css屬性: "flex-grow:1"和"-webkit-flex-grow:1" -->
       <!--這兩個屬性會幫你自動把長寬貼齊step-container，詳情請搜尋css flexbox -->
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
-      <!--past-order v-if="nowAt==='menu'"/-->
+      <!-- <past-order v-if="nowAt==='menu'"/> -->
       <food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :cartData="cart" :token="token"/>
       <order v-else-if="nowAt==='order'" @add-cart="addToCart"  :data="menu[viewDish]" :isCart="isCart"/>
-      <member v-else-if="nowAt=== 'profile'" @get-token="gettoken" @change-now-at="changeNowAt" :onPay="false"/>
+      <member v-else-if="nowAt=== 'profile'" @get-token="gettoken" :onPay="false"/>
       <cart v-else-if="nowAt=== 'cart'" :token="token" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
       <total v-else-if="nowAt=== 'total' || nowAt=== 'favorite'" :bill-data="bill"/>
-      <sign-up v-else-if="nowAt=== 'signUp'"/>
       <!--把你做的component放在上面。(你可以試試看把order放進來)-->
     </div>
     <div class="nav-bar">
@@ -35,8 +41,7 @@
       </button>
     </div>
     <loading v-if="isLoading"/>
-    <!--alert content="我想睡覺" v-if="alert"/-->
-    <pay-center v-if="pay" @close="handlePay" :token="token" />
+    <!--<pay-center/>-->
   </div>
 </template>
 
@@ -48,17 +53,15 @@ import Member from '../Member.vue';
 import Loading from './Loading.vue';
 import Food from '../Food.vue';
 import Map from './Map.vue';
-import Alert from './Alert.vue';
 import PayCenter from "./PayCenter.vue";
 import PastOrder from "../PastOrder.vue";
-import SignUp from "../SignUp.vue";
 import axios from "axios";
 import Vue from "vue";
 import { defaultCipherList } from 'constants';
 Vue.prototype.$axios = axios;
 export default {
   name: 'Layout',
-  components: {Order,Total,Member,Loading,Food,Cart,Map,PayCenter,PastOrder,Alert,SignUp},//也要把你做的Component在這註冊
+  components: {Order,Total,Member,Loading,Food,Cart,Map,PayCenter,PastOrder},//也要把你做的Component在這註冊
   data () {
     return {
       menu:[],//菜單
@@ -70,7 +73,7 @@ export default {
         {name:"cart",icon:require('../assets/icon/cart.png')},
         {name:"profile",icon:require('../assets/icon/member.png')}
       ],
-      search: [{visibility: "hidden"},{marginTop: "0vh"}], //右上角搜尋按鍵的css
+      search: [{visibility: "hidden"}], //右上角搜尋按鍵的css
       nowAt: "loading", //目前step的顯示元件，loading時不顯示任何元件,
       isLoading: true, //loading畫面是否顯示
       search_f:false,//放大鏡是否顯示
@@ -79,8 +82,9 @@ export default {
       searchfood:'',
       before: 'menu',
       searched:[],
-      alert:true,
-      pay: true,
+      topDist:{
+        marginTop:'0vh',
+      }
     }
   },
   methods:{
@@ -90,6 +94,7 @@ export default {
       });
       this.viewDish=index;
       this.changeNowAt('order');
+      this.search_f=false;
     },
     addToCart: function(items){ //用來增加商品至購物車，輸入參數為一物件，格式見Dish.vue
       var index=this.cart.findIndex(function(item, index, array){
@@ -127,11 +132,11 @@ export default {
       this.changeNowAt('cart')
     },
     changeState:function(){
+      if(!this.search_f)
+        this.searchfood=""
       this.search_f=!this.search_f;//改變狀態
+      this.topDist={marginTop:'2vh'};
     },
-    handlePay:function(){
-      this.pay=!this.pay;
-    }
   },
     mounted: function(){ //當畫面已經渲染上DOM後，向後端請求資料
       var self=this;
@@ -160,10 +165,6 @@ export default {
           this.search=[{visibility:"visible"},{visibility:"hidden"}];
           this.before='menu'
         break;
-        case 'signUp':
-          this.search=[{visibility:"visible"},{visibility:"hidden"}];
-          this.before='profile'
-        break;
         default:
           this.search=[{visibility:"hidden"},{visibility:"hidden"}];
           break;
@@ -172,11 +173,14 @@ export default {
     searchfood: function(){
       var self=this;
       var output=[]; //使用local variable去避免在第二次的搜尋條件改變前影響搜尋母體
-      for(let i=0;i<self.menu.length;i++){
-        var str=self.menu[i].name;
-        var s=str.search(self.searchfood);
-        if(s!=-1){
-          output.push(self.menu[i]);
+      if(self.searchfood!==""){
+        console.log("hello")
+        for(let i=0;i<self.menu.length;i++){
+          var str=self.menu[i].name;
+          var s=str.search(self.searchfood);
+          if(s!=-1){
+            output.push({name:self.menu[i].name,id:self.menu[i].id});
+          }
         }
       }
       self.searched=output;
@@ -287,14 +291,38 @@ export default {
   opacity:0.9;
   border-radius:2.5%; */
 }
-.searchresult{
-  position: absolute;
-  display: flex;
-  height:10vh;
-  width: 70vw;
-  border:1px solid black;
-  margin-top:50vh;
+.result_frame{
+  display:flex;
+  flex-flow:column;
+  height:75vh;
+  width:70vw;
+  /* border: 1px solid black; */
+  margin-top:1vh;
 }
+.result_frame img{
+  height:2.5vh;
+  width: 2.5vh;
+  position: relative;
+  margin: 0.5rem;
+}
+.searchresult{
+  display: flex;
+  height:5vh;
+  width: 70vw;
+  /* border:1px solid black; */
+  padding: 3px 3px;
+  ;
+}
+.searchresult button{
+  background-color: transparent;
+  border:none;
+  text-align: left;
+  outline: none;
+  font-family: 'Microsoft JhengHei';
+  font-size: 2vh;
+  height: 100%;
+  width: 100%;
+} 
 .top-btn img{
   width: 2rem;
   margin: 0 0;
