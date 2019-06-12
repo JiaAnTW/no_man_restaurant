@@ -109,7 +109,7 @@ module.exports=class menu{
             const data={
                 id: req.body["id"],
                 name: req.body["name"],
-                //image: (req.body["image"]==null)?null:this.Image(req.body["image"],"dish_"+req.body["id"]),
+                image: (req.body["image"]==null)?null:this.Image(req.body["image"],"dish_"+req.body["id"]),
                 image: req.body["image"],
                 price: req.body["price"],
                 detail: req.body["detail"],
@@ -166,7 +166,7 @@ module.exports=class menu{
         return(filename);  
     }
 
-    Comment(id,content){
+    Comment(id,score,content){
         try{
             this.con.connect(function(err) {
                 if (err) {
@@ -185,6 +185,7 @@ module.exports=class menu{
                 feedback:{
                     comment:{
                         date:dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate(),
+                        score: score,
                         content: content
                     },
                     reply:{
@@ -225,22 +226,23 @@ module.exports=class menu{
                 console.log(error)
         }
         try{
-            var output;
-            console.log("id is "+id)
-            this.con.query('SELECT feedback FROM menu WHERE id =?',id, function(err, rows) {
-                if (err) {
-                    console.log(err);
-                    return;
-                }
-                if(rows[0].feedback){
-                    var data = JSON.parse(rows[0].feedback);
-                    console.log(data)
-                    output=data;
-                }
-                else
-                    return null;
-            });
-            return output;
+            //console.log("id is "+id)
+            const getData=new Promise((resolve)=>{
+                var output;
+                this.con.query('SELECT feedback FROM menu WHERE id =?',id, function(err, rows) {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+                    if(rows[0].feedback){
+                        var data = JSON.parse(rows[0].feedback);
+                        resolve(data);
+                    }
+                    else
+                        resolve(null);
+                });
+            })
+            return getData;
         }catch(error){
             var dt=new Date();
             const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
@@ -263,11 +265,7 @@ module.exports=class menu{
                 console.log("Menu/Reply: database connect error at "+time);
         }
         console.log("get "+content)
-        const getData=new Promise((resolve)=>{
-            const data=this.GetFeedBack(id);
-            resolve;
-        }) 
-        const startAdd=()=>{
+        const startAdd=(data)=>{
             var dt=new Date();
             data.feedback.reply.date=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate();
             data.feedback.reply.content=content;
@@ -280,7 +278,7 @@ module.exports=class menu{
             });
         }
         try{
-            getData.then(()=>{startAdd();})
+            this.getData.then((value)=>{startAdd(value);})
         }catch(error){
             var dt=new Date();
             const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
