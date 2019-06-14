@@ -2,7 +2,7 @@
   <div class="Layout">
     <div class="slogan-container">
       <button v-show="!search_f" class="top-btn" @click="changeNowAt(before)" :style="search[0]"><div class="back"></div></button>
-      <h1 v-show="!search_f">Sun Burger</h1>
+      <img class="logo" src="../assets/icon/logo.png" v-show="!search_f"/>
       <div v-show="!search_f"><!-- true-->
         <button class="top-btn" @click="changeState(search_f)" :style="search[1]"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
       </div>
@@ -35,8 +35,8 @@
       </button>
     </div>
     <loading v-if="isLoading"/>
-    <!--alert content="我想睡覺" v-if="alert"/-->
-    <pay-center v-if="pay" @close="handlePay" :token="token" />
+    <alert content="我想睡覺" v-if="alert"/>
+    <!--pay-center v-if="pay" @close="handlePay" :token="token" /-->
   </div>
 </template>
 
@@ -79,7 +79,7 @@ export default {
       searchfood:'',
       before: 'menu',
       searched:[],
-      alert:true,
+      alert:false,
       pay: true,
     }
   },

@@ -43,6 +43,11 @@ computed:{
       sum+=Element.num*Element.price;
     })
     return sum;
+  },
+  product:function(){
+    return this.data.map(Element=>{
+      return {name:Element.name,amount:Element.num}
+    })
   }
 },
  methods:{
@@ -108,6 +113,7 @@ computed:{
           data:{
             transactionId:self.transactionId,
             amount:this.tot,
+            product:this.product,
             id:0,
            
           }

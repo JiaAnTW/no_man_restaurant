@@ -63,7 +63,7 @@ module.exports=class payController{
                 var User = require( '../models/user.js');
                 User=new User();
                 var bill={
-                    productName:this.req.product,
+                    productName:req.body.product,
                     startTime: Date.now(),
                     getTime: -1
                 }

@@ -272,6 +272,7 @@ export default {
     height:40vh;
     margin: 8vh 0vw 0vh 0vw;
     display: flex;
+    z-index: 2;
   }
   .mask{
     position: absolute;
@@ -297,6 +298,7 @@ export default {
     background-color: rgba(0,0,0,0.5);
     border-radius:8%;
     opacity:0;
+    z-index: 1;
   }
   .btn3{
     position:absolute;
