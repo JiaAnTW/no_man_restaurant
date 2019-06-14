@@ -7,6 +7,7 @@
                 <span>{{data.name}}</span>
                 <span>$ {{data.price}}</span>
                 <span>x:{{x}} y:{{y}}</span>
+                <span>his {{history.state}}</span>
                 </div>
                 <img class="can" src="../assets/icon/can.png" style="height:7vh;width:6.5vw;display:flex;flex-grow:2;">
             </v-touch>
@@ -16,7 +17,8 @@
 </template>
 
 <script>
-import VueTouch from 'vue-touch'
+import VueTouch from 'vue-touch';
+import axios from "axios";
 import Vue from 'vue';
 Vue.use(VueTouch, {name: 'v-touch'})
 export default {
@@ -25,6 +27,7 @@ export default {
         return{
             x:0,y:0,
             canz:-1,
+            history:[],
             order:[{pic:[require("../assets/beef.png")],name:"測試一號",price:[100]},{pic:require("../assets/8.png"),name:"測試二號",price:150},],
         }
     },
@@ -45,7 +48,17 @@ export default {
                 //data_con.style.left=offset;
             }
         },
-  },
+    },
+    mounted:function(){
+        var self=this;
+        this.$axios({
+            methods:'get',//用get向後端請求資料
+            url:'http://luffy.ee.ncku.edu.tw:10152/api/get/user/history'//網址
+        })//等到get後才執行接下來的code
+        .then((res)=>{
+            self.history=res.data;
+        })
+    }
     
 }
 </script>
