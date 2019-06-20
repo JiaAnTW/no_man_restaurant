@@ -168,7 +168,7 @@ module.exports=class user{
             this.con.query('SELECT history FROM user WHERE id =?',id, function(err, rows) {
                 if (err) {
                     res.send({state:"fail",data:null});
-                    console.log(err);
+                    //console.log(err);
                     return;
                 }
                 var data = JSON.parse(rows[0].history);

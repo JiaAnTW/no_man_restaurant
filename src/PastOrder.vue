@@ -4,7 +4,7 @@
             <span style="color:white">Past Order</span>
         </div>
         <div class="order_container">
-          <PastOrderList  @change-nowat="changeNowAt" />  
+          <PastOrderList  @change-nowat="changeNowAt" :find="find" @get-food="getFood" />  
         </div>
     </div>
 </template>
@@ -13,6 +13,7 @@
 import PastOrderList from './components/PastOrderList.vue';
 export default {
     name:'PastOrder',
+    props: ["find"],
     components:{PastOrderList},
     data(){
         return{
@@ -22,6 +23,9 @@ export default {
     methods:{
         changeNowAt:function(){
             this.$emit('change-nowat','cart');
+        },
+        getFood:function(target){
+            this.$emit("get-food",target)
         }
     }
 }
@@ -49,5 +53,6 @@ export default {
         flex-direction:column;
         -webkit-flex-direction:column;  
         flex-grow: 1;
+        overflow-y: auto;
     }
 </style>

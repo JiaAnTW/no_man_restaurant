@@ -2,7 +2,7 @@
   <div class="Layout">
     <div class="slogan-container">
       <button v-show="!search_f" class="top-btn" @click="changeNowAt(before)" :style="search[0]"><div class="back"></div></button>
-      <h1 v-show="!search_f">Sun Burger</h1>
+      <img v-show="!search_f" src="../assets/icon/logo.png" alt="logo"/>
       <div v-show="!search_f"><!-- true-->
         <button class="top-btn" @click="changeState(search_f)"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
       </div>
@@ -30,8 +30,9 @@
       <food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :cartData="cart" :token="token"/>
       <order v-else-if="nowAt==='order'" @add-cart="addToCart"  :data="menu[viewDish]" :isCart="isCart"/>
       <member v-else-if="nowAt=== 'profile'" @get-token="gettoken" :onPay="false"/>
-      <cart v-else-if="nowAt=== 'cart'" :token="token" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/>
-      <total v-else-if="nowAt=== 'total' || nowAt=== 'favorite'" :bill-data="bill"/>
+      <!--cart v-else-if="nowAt=== 'cart'" :token="token" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/-->
+      <total v-else-if="nowAt=== 'cart'" @get-food="searchCertainFood" :find="find" :bill-data="bill"/>
+      <past-order v-else-if="nowAt=== 'favorite'" @get-food="searchCertainFood" :find="find"/>
       <!--把你做的component放在上面。(你可以試試看把order放進來)-->
     </div>
     <div class="nav-bar">
@@ -82,6 +83,7 @@ export default {
       searchfood:'',
       before: 'menu',
       searched:[],
+      find:[],
       topDist:{
         marginTop:'0vh',
       }
@@ -137,6 +139,18 @@ export default {
       this.search_f=!this.search_f;//改變狀態
       this.topDist={marginTop:'2vh'};
     },
+    searchCertainFood:function(target){
+      console.log(target)
+      this.find.push(target.map(Element=>{
+        for(let i=0;i<this.menu.length;i++){
+          if(this.menu[i].name==Element){
+            return this.menu[i];
+          }
+        }
+      }))
+      console.log(find)
+
+    }
   },
     mounted: function(){ //當畫面已經渲染上DOM後，向後端請求資料
       var self=this;
@@ -164,11 +178,19 @@ export default {
         case 'cart':
           this.search=[{visibility:"visible"},{visibility:"hidden"}];
           this.before='menu'
+          this.find=[]
+        break;
+        case 'favorite':
+          this.search=[{visibility:"visible"},{visibility:"hidden"}];
+          this.before='menu'
+          this.find=[]
         break;
         default:
           this.search=[{visibility:"hidden"},{visibility:"hidden"}];
           break;
       }
+      if (this.nowAt!="favorite")
+        this.find=[];
     },
     searchfood: function(){
       var self=this;

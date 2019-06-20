@@ -3,26 +3,19 @@
       <div class = "title">Your order</div>
       <div class="order-container">
         <div class = "order">
-        <table>
-            <tbody>
-            <tr class=cartdata v-for = "(cartdatas,index) in data"  :key="index">
-                <td class="image">
-                <img class="foodimg" :src="cartdatas.src" style="display:block; margin:auto;" alt="cartdatas.name" />
-                </td>
-                <td class="foodname">
-                    <h1>{{cartdatas.name}}<br/>${{cartdatas.price}}</h1>
-                </td>
-                <td class="num">
-                    <button class="minus_"  value="minus" v-on:click="handleNumberChange(-1,index)">-</button>
-                        <h3>{{ cartdatas.num }}</h3>
-                    <button class="plus_"  value="plus" v-on:click="handleNumberChange(1,index)">+</button>
-                </td>
-                <td class="del">
-                    <button class="can" value="zero" v-on:click="deleteDish(index)"></button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <b-container >
+          <b-row class=cartdata v-for = "(cartdatas,index) in order"  :key="index">
+            <b-col class="image">
+              <img class="foodimg" :src="cartdatas.src" style="display:block; margin:auto;" alt="cartdatas.name" />
+            </b-col>
+            <b-col class="foodname">
+              <h1>{{cartdatas.name}}<br/>${{cartdatas.price}}</h1>
+            </b-col>
+            <b-col class="num">
+
+           </b-col>
+          </b-row>
+        </b-container>
         </div>
       </div>
       <div class = "send">
@@ -40,13 +33,11 @@
 import { error } from 'util';
 export default {
   name: 'Total',
-  props: ['data','token'],
+  props: ['data','token','find'],
   data () {
   return{
     time: null,
-    name:this.billData.name,
-    money:this.billData.amount,
-    guest_number:this.billData.guest_id
+    order: []
   }
 },
 computed:{
@@ -80,9 +71,36 @@ computed:{
      
    }
  },
- mounted:function(){
-     
-   }
+    mounted:function(){
+        this.$axios({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'post',
+            url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/user/history',
+            //url: '/api/post/login',
+            data: {
+                id: 0
+            },
+        })//等到get後才執行接下來的code
+        .then((res)=>{
+            const test=res.data.data[1]
+            console.log(test.productName[0].name)
+            var nameArray=[]
+            test.productName.forEach(items=>{
+                nameArray.push(items.name)
+            });
+            this.$emit("get-food",nameArray)
+            this.order=test.productName.map((items,id)=>{ 
+                    return {
+                        src:this.find[0][id].image,
+                        name:this.find[0][id].name,
+                        price:this.find[0][id].price,
+                        amout: items.amount
+                    }
+                })
+        })
+    }
  }
 </script>
 <style scoped>
@@ -288,5 +306,33 @@ color:rgb(245, 245, 245);
     justify-content: center;
     flex-grow: 2;
     font-size: 2.5vh;
+}
+.container{
+  flex-wrap: wrap;
+}
+
+.cartdata .col{
+  height: 100%;
+  padding:  0 0;
+}
+
+.row{
+  height: 8vh;
+
+}
+
+.image{
+  width: 15%;
+  display: flex;
+  align-items: center;
+}
+
+.foodimg
+{
+  display: flex;
+  vertical-align: middle;
+  width:auto;
+  height: 80%;
+  align-items: center;
 }
 </style>
