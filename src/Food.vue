@@ -23,12 +23,9 @@
         </div>
       </div>
       <div class="contact">
-        <div class="line"></div>
         <div class="icons">
-          <a :href="fb"><img class="fbicon" src="./assets/icon/fb icon.png"></a>
-          <a :href="ig"><img class="igicon" src="./assets/icon/ig icon.png"></a>
+
         </div>
-        <div class="line"></div>
       </div>
     </div>
 </template>
@@ -204,7 +201,7 @@ export default {
     height:73.15vh;
     position:fixed;
     margin-top:3vh;
-    background-color:white;
+    background-color:rgb(240,240,240);
     z-index:1;
     display: flex;
     flex-direction: column;

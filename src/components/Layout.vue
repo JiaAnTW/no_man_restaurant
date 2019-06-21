@@ -397,4 +397,10 @@ export default {
   font-size: 2rem;
 }
 
+input{
+  border: none;
+  outline: none;
+  padding-left: 10%;
+}
+
 </style>

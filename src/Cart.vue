@@ -166,6 +166,7 @@ float: left;
   padding: 0 0;
   flex-wrap: wrap;
   overflow-y: auto;
+  background-color: transparent;
 }
 .cartdata
 {

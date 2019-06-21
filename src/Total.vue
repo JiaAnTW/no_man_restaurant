@@ -1,6 +1,6 @@
 <template>
 <div class="cart">
-      <div class = "title">Your order</div>
+      <div class = "title">Your Order</div>
       <div class="order-container">
         <div class = "order">
         <b-container >
@@ -12,10 +12,11 @@
               <h1>{{cartdatas.name}}<br/>${{cartdatas.price}}</h1>
             </b-col>
             <b-col class="num">
-
+              <img src="./assets/icon/love.png" alt="love"/>
            </b-col>
           </b-row>
         </b-container>
+        <div class="sum">Total: $320</div>
         </div>
       </div>
       <div class = "send">
@@ -84,9 +85,14 @@ computed:{
             },
         })//等到get後才執行接下來的code
         .then((res)=>{
-            const test=res.data.data[1]
+            var size=0;
+            res.data.data.forEach(Element=>{
+              size++;
+            })
+            const test=res.data.data[size-1]
             console.log(test.productName[0].name)
             var nameArray=[]
+            
             test.productName.forEach(items=>{
                 nameArray.push(items.name)
             });
@@ -181,9 +187,11 @@ float: left;
   flex-grow: 0.5;
   font-size: 5.5rem;
   color:rgb(245, 245, 245);
-  text-decoration: underline;
   display: flex;
   align-items: center;
+  height: 7vh;
+  font-size: 3vh;
+  font-weight: 600;
 }
 .order
 {
@@ -191,17 +199,16 @@ height: 40vh;
 width: 88%;
 border: 1px solid gray;
 border-radius: 15px;
-background-color: rgb(255, 255, 255);
+background-color: rgb(240, 240, 240);
 overflow-y: scroll;
 padding: 7% 1%;
+padding-bottom: 0;
 }
 .order h1{
   line-height: 160%;  
   font-size: 3.5rem;  
   color: rgb(45, 45, 45);
 }
-.order .foodname{  width:25vw;  }
-.image{  width:20vw;  }
 .foodimg
 {
 vertical-align: middle;
@@ -269,6 +276,7 @@ color:rgb(245, 245, 245);
   background-image: linear-gradient(270deg, rgb(155,51,84) 0%, rgb(58,44,105) 80%);
   border: none;
   cursor:pointer;
+  overflow-y:scroll; 
 }
 .num button
 { 
@@ -286,14 +294,9 @@ color:rgb(245, 245, 245);
     vertical-align: middle;
   }
 .num button:hover{   background-color: rgb(240, 240, 240);  }
-.num h3
+.num img
 { 
-    padding-left: 0.8rem;
-    padding-right: 0.8rem;
-    font-size: 5rem;
-    vertical-align: -webkit-baseline-middle;
-    text-align: center;
-    color: rgb(45, 45, 45);
+  height: 60%;
 }
 .total-end{
     flex-grow: 1;
@@ -309,16 +312,23 @@ color:rgb(245, 245, 245);
 }
 .container{
   flex-wrap: wrap;
+  background-color: transparent;
+  height: 25vh;
+  overflow-y: scroll;
+  
 }
 
 .cartdata .col{
   height: 100%;
   padding:  0 0;
+  border-bottom: 0.5px solid rgba(0,0,0,0.3);
 }
 
 .row{
   height: 8vh;
-
+  margin-right: 0;
+  margin-left: 0;
+  width: 100%;
 }
 
 .image{
@@ -334,5 +344,15 @@ color:rgb(245, 245, 245);
   width:auto;
   height: 80%;
   align-items: center;
+}
+
+.sum{
+  margin-top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 3.5vh;
+  padding-right: 10%;
+  color: rgb(79,79,79)
 }
 </style>

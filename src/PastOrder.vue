@@ -43,9 +43,11 @@ export default {
     .head{
         /*border:0.5px solid red;*/
         display: flex;
-        height: 8vh;
-        font-size: 3.5vh;
+        height: 7vh;
+        font-size: 3vh;
+        font-weight: 600;
         justify-content:center;
+        align-items: flex-end;
     }
     .order_container{
         /*border:0.5px solid red;*/
@@ -54,5 +56,6 @@ export default {
         -webkit-flex-direction:column;  
         flex-grow: 1;
         overflow-y: auto;
+        padding-top: 2vh;
     }
 </style>

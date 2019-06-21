@@ -141,11 +141,12 @@ export default {
 .add_cart_btn{
     margin-top: 1vh;
     margin-bottom: 1vh;
-    background:rgb(48,48,48);
+    height: 4vh;
+    background-image: linear-gradient(270deg, rgb(155,51,84) 0%, rgb(58,44,105) 80%);
     color: white;
     border: 0px;
     width: 30%;
-    border-radius:10px; 
+    border-radius:15px; 
     font-size: 2vh;
 }
 .can{
