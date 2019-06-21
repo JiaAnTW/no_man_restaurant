@@ -11,7 +11,7 @@
             </div>
           </div>
           <div class="cart_frame">
-            <cart :token="token" @foodmethod="foodmethod" :data="cartData"/>
+            <cart :token="token" @foodmethod="foodmethod" :data="cartData" :place="place" />
           </div>
           <button class="btn2" @click="close"></button>
       </div>
@@ -49,7 +49,7 @@ var options = {
 import { resolve } from 'url';
 export default {
   name: 'Food',
-  props:["data","seafood","cartData","token"],
+  props:["data","seafood","cartData","token","addOrder"],
   components:{Cart},
   data(){
     return{
@@ -95,6 +95,11 @@ export default {
     },
     viewDish:function(id){
       this.$emit('view-dish',id);
+    },
+    place:function(place){
+      var self=this;
+      this.$emit('place',self.place);
+      console.log("food"+self.place);
     },
     scroll:function(type,index){
       const changeView=new Promise((resolve=>{
@@ -160,7 +165,7 @@ export default {
       })
   },
   mounted:function(){
-    var watchType='';
+    var watchType='',self=this;
     for(let i=0;i<this.lists.length;++i){
       if(this.lists[i].type!=watchType){
         watchType=this.lists[i].type;
@@ -168,6 +173,9 @@ export default {
         if(this.lists.length>1 && this.postionRecord[this.postionRecord.length-1]==this.postionRecord[this.postionRecord.length-2])
           this.postionRecord[this.postionRecord.length-1]+=50;
       }
+    }
+    if(self.addOrder==true){//若將產品放入cart則跳出sidebar
+      self.open();
     }
   },
 

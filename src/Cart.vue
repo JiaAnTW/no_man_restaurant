@@ -33,7 +33,8 @@ export default {
   return{
     cont:0,
     notPay: true,
-    transactionId:0
+    transactionId:0,
+    place:false,
   }
 },
 computed:{
@@ -75,7 +76,13 @@ computed:{
       })
     },
     linePay: function(){
+      var self=this;
       if(this.tot>0){
+      self.place=true;
+      this.$emit('place',self.place)//以一個變數名叫做'place'傳送place出去
+      console.log("cart"+self.place);
+      }
+     /* if(this.tot>0){
         if(this.token!=''){
           const self=this;
           this.$emit("foodmethod",'show-loading',true);
@@ -100,7 +107,7 @@ computed:{
         else{
           alert("想要買這個餐點?哼哼哼，在沒有登入之前我是不會讓你通過這裡的",this.$emit("foodmethod",'direct-to-show','profile'))
         }
-      }
+      }*/
     },
     linePayConfirm: function(){
       this.$emit("foodmethod",'show-loading',true);

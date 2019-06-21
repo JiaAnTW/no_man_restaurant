@@ -3,14 +3,13 @@
     <div class="slogan-container">
       <button v-show="!search_f" class="top-btn" @click="changeNowAt(before)" :style="search[0]"><div class="back"></div></button>
       <img v-show="!search_f" src="../assets/icon/logo.png" alt="logo"/>
-      <div v-show="!search_f"><!-- true-->
+      <div v-show="!search_f">
         <button class="top-btn" @click="changeState(search_f)"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
       </div>
       <div v-show="search_f" class="search_container">
-        <div v-show="search_f" class="search_area"><!-- true-->
-          <input v-model.trim="searchfood" placeholder="     Search" class="search_bar"> <!--搜尋框-->
+        <div v-show="search_f" class="search_area">
+          <input v-model.trim="searchfood" placeholder="     Search" class="search_bar">
           <button class="top-btn" @click="changeState(search_f)" :style="topDist"><img src="../assets/icon/search-b.png" alt="search"/></button>
-          <!-- <h1>{{searchfood}}</h1> -->
         </div>
         <div class="result_frame">
           <div class="searchresult" v-for="(result,index) in searched" :key="index">
@@ -26,9 +25,8 @@
       <!--注意，請把你.vue檔中最外層的div增加兩個css屬性: "flex-grow:1"和"-webkit-flex-grow:1" -->
       <!--這兩個屬性會幫你自動把長寬貼齊step-container，詳情請搜尋css flexbox -->
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
-      <!-- <past-order v-if="nowAt==='menu'"/> -->
-      <food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :cartData="cart" :token="token"/>
-      <order v-else-if="nowAt==='order'" @add-cart="addToCart"  :data="menu[viewDish]" :isCart="isCart"/>
+      <food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :cartData="cart" :addOrder="addOrder" :token="token" />
+      <order v-else-if="nowAt==='order'" @add-cart="addToCart" @add="add" :data="menu[viewDish]" :isCart="isCart"/>
       <member v-else-if="nowAt=== 'profile'" @get-token="gettoken" :onPay="false"/>
       <!--cart v-else-if="nowAt=== 'cart'" :token="token" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/-->
       <total v-else-if="nowAt=== 'cart'" @get-food="searchCertainFood" :find="find" :bill-data="bill"/>
@@ -42,7 +40,7 @@
       </button>
     </div>
     <loading v-if="isLoading"/>
-    <!--<pay-center/>-->
+    <!--pay-center/-->
   </div>
 </template>
 
@@ -78,6 +76,8 @@ export default {
       nowAt: "loading", //目前step的顯示元件，loading時不顯示任何元件,
       isLoading: true, //loading畫面是否顯示
       search_f:false,//放大鏡是否顯示
+      addOrder:false,//確認是否addToCart
+     //placeOrder:false,
       bill:{},//用來從cart.vue傳進total的訂單
       token:'',
       searchfood:'',
@@ -85,7 +85,7 @@ export default {
       searched:[],
       find:[],
       topDist:{
-        marginTop:'0vh',
+      marginTop:'0vh',
       }
     }
   },
@@ -101,14 +101,16 @@ export default {
     addToCart: function(items){ //用來增加商品至購物車，輸入參數為一物件，格式見Dish.vue
       var index=this.cart.findIndex(function(item, index, array){
         return item.id == items.id;
-      });
-      
+      }); 
       if(index!=-1){
         this.cart[index].num+=items.num;
       }
       else
-        this.cart.push(items);
-      this.changeNowAt('cart');
+      this.cart.push(items);
+    },
+    add:function(add){
+      this.addOrder=add;//addTocart後
+      this.changeNowAt("menu");
     },
     changeNowAt: function(next){ //改變step-container的顯示元件
       this.nowAt=next;
@@ -129,6 +131,10 @@ export default {
     sendBill:function(data){
       this.bill=data;
     },
+    /*getPlace:function(place){
+      this.placeOrder=place;
+      console.log("layout"+this.placeOrder);
+    },*/
     gettoken:function(token){
       this.token=token;
       this.changeNowAt('cart')

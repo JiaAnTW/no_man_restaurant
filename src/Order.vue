@@ -29,6 +29,7 @@ export default {
       name: "無資料",
       image: '',
       isOpen: false,
+      add:true,
       colorSet:[
         "linear-gradient(180deg, #f11ca0 0%, #2013f6 100%)",
         "linear-gradient(180deg, #f19b3d 0%, #2013f6 100%)",
@@ -70,6 +71,7 @@ export default {
       }
     },
     addToCart: function(){
+      this.$emit('add',this.add)
       this.$emit('add-cart',{
         name:this.name,
         num:this.number,
