@@ -1,17 +1,31 @@
 <template>
     <div class="pastorderlist">
-        <div class="order" v-bind:key="index" v-for="(data,index) in order">
-            <div class="data-container" v-for="(elemnt,i) in data">
-            <v-touch v-on:swipeleft="move()" class="data_con" >
-                <img :src="elemnt.pic" alt="No_pic" style="height:80%;display:flex;">
-                <div class="data">
-                <span>{{elemnt.name}}</span>
-                <span>$ {{elemnt.price}}</span>
+        <div class="order">
+        <div class="data-container" v-for="(elemnt,index) in order" :key="index">
+            <v-touch v-on:swipeleft="move()"  class="data_con">
+                <div style="height: 11vh; width:100%;display:flex;padding: 5% 5%;position:relative;">
+                    <button class="openComment" @click="isComment=!isComment"></button>
+                    <img :src="elemnt.src" alt="No_pic" style="width:20%;display:flex;">
+                    <div class="data">
+                        <span>{{elemnt.name}}</span>
+                        <span>${{elemnt.price}} (x{{elemnt.num}})</span>
+                    </div>
+                    <div class="star-container">
+                        <star-rating @rating-selected="elemnt.rating = $event" :rating="elemnt.rating" v-bind:star-size="15"></star-rating>
+                    </div>
                 </div>
-                <img class="can" src="../assets/icon/can.png" style="height:7vh;width:6.5vw;display:flex;flex-grow:2;">
+                <!--img class="can" src="../assets/icon/can.png" style="height:7vh;width:6.5vw;display:flex;flex-grow:2;"-->
+                <div class="input-container" v-if="isComment">
+                    <input type="text" v-model="elemnt.comment"/>
+                </div>
             </v-touch>
+
             </div>
-            <button class="add_cart_btn" v-on:click="changeNowAt()">Add to Cart</button>
+            <button class="add_cart_btn" v-on:click="addToCart" v-if="!isComment">Add to Cart</button>
+            <div class="btn-container" v-if="isComment && !isPay">
+                <button class="add_cart_btn" v-on:click="isComment=!isComment" >Close</button>
+                <button class="add_cart_btn" v-on:click="handleComment" >Send</button>
+            </div>
         </div>
     </div>
 </template>
@@ -20,21 +34,29 @@
 import VueTouch from 'vue-touch';
 import axios from "axios";
 import Vue from 'vue';
+import StarRating from 'vue-star-rating'
 Vue.use(VueTouch, {name: 'v-touch'})
 Vue.prototype.$axios = axios;
 export default {
+    components:{StarRating},
     name:"PastOrderList",
-    props: ["find"],
+    props: ["data","isPay"],
     data(){
         return{
             x:0,y:0,
             canz:-1,
             order:[],
+            isComment:false
         }
     },
     methods:{
-        changeNowAt:function(){
-            this.$emit('change-nowat','cart');
+        open:function(index){
+
+        },
+        addToCart:function(){
+            this.order.forEach(Element=>{
+                this.$emit('list-method','add-cart',Element);
+            })
         },
         move:function(){
             var e =window.event;
@@ -49,37 +71,29 @@ export default {
                 //data_con.style.left=offset;
             }
         },
+        handleComment:function(index){
+            this.order.forEach(Element=>{
+                this.$axios({
+                    method: "post",
+                    url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/comment',
+                    //url: '/api/post/pay/confirm',
+                    data:{
+                        id:Element.id,
+                        score: Element.rating,
+                        content: Element.comment
+                    }
+                }).then(response=>{
+                })
+            })
+        }
+    },
+    watch:{
+        data:function(){
+            this.order=this.data;
+        }
     },
     mounted:function(){
-        this.$axios({
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: 'post',
-            url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/user/history',
-            //url: '/api/post/login',
-            data: {
-                id: 0
-            },
-        })//等到get後才執行接下來的code
-        .then((res)=>{
-            res.data.data.forEach(Element => {
-                var target=Element.productName.map(items=>{
-                    return items.name
-                })
-                this.$emit("get-food",target)
-            });
-            this.order=res.data.data.map((Element,Index)=>{
-                return Element.productName.map((items,id)=>{ 
-                    return {
-                        pic:this.find[Index][id].image,
-                        name:items.name,
-                        price:this.find[Index][id].price,
-                        amout: items.amount
-                    }
-                })
-            });
-        })
+        this.order=this.data;
     }
     
 }
@@ -89,6 +103,7 @@ export default {
 .data-container{
     width:90%;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content:center;
     -webkit-filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
@@ -110,7 +125,7 @@ export default {
     -webkit-flex-direction:column; 
     align-items: center;  
     width: 80%;
-    border: solid;
+    border: none;
     border-radius:20px; 
     background-color:rgb(242,239,237);
     margin-bottom: 1vh;  
@@ -119,8 +134,8 @@ export default {
     /*border: solid 1px red;*/
     margin-top:1vh;
     margin-bottom: 1vh; 
-    height: 13vh;
     display: flex;
+    flex-wrap: wrap;
     background: white;
     flex-grow: 1;
     width:80%;
@@ -128,19 +143,18 @@ export default {
     justify-content: space-evenly;
     border: solid 0px;
     border-radius:10px;
-    padding: 5% 5%;
 }
 .data{
     /*border: solid 1px red;*/
     display: flex;
-    flex-grow:8;
+    width: 40%;
     flex-direction:column;
     -webkit-flex-direction:column; 
     margin-left:5vw;
 }
 .add_cart_btn{
-    margin-top: 1vh;
-    margin-bottom: 1vh;
+    margin-top: 3%;
+    margin-bottom: 3%;
     height: 4vh;
     background-image: linear-gradient(270deg, rgb(155,51,84) 0%, rgb(58,44,105) 80%);
     color: white;
@@ -148,6 +162,7 @@ export default {
     width: 30%;
     border-radius:15px; 
     font-size: 2vh;
+    margin-right: 4%;
 }
 .can{
     z-index: -1;
@@ -156,5 +171,46 @@ span{
     font-size: 2.5vh;
     color: rgb(45,45,45);
     font-family: 'Microsoft JhengHei';
+}
+
+.star-container{
+    width: 40%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+}
+
+.input-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 10vh;
+}
+
+input{
+    width: 90%;
+    height: 70%;
+    background-color: rgb(219,218,218);
+    border: none;
+    border-radius: 10px;
+}
+
+.openComment{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.btn-container{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
 }
 </style>

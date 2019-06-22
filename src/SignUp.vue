@@ -148,6 +148,8 @@ export default {
     }
     .input-area input, .other-area input{
         border-radius: 15px;
+    }
+    .input-area input{
         -webkit-filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
         filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
     }
@@ -173,7 +175,7 @@ export default {
     }
 
     .btn-area button{
-        background-image: linear-gradient(90deg,rgb(64,44,138), rgb(221,56,103));
+        background-image: linear-gradient(270deg, rgb(155,51,84) 0%, rgb(58,44,105) 80%);
         font-size: 3vh;
         width: 42.5%;
         border-radius: 25px;

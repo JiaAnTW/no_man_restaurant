@@ -35,6 +35,7 @@ export default {
     notPay: true,
     transactionId:0,
     place:false,
+    
   }
 },
 computed:{
@@ -82,7 +83,7 @@ computed:{
       this.$emit('place',self.place)//以一個變數名叫做'place'傳送place出去
       console.log("cart"+self.place);
       }
-     /* if(this.tot>0){
+     /*if(this.tot>0){
         if(this.token!=''){
           const self=this;
           this.$emit("foodmethod",'show-loading',true);
@@ -192,7 +193,7 @@ float: left;
 .cart
 {
   padding-top: 2vh;
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(219,218,218,0.45);
   flex-grow:1;
   -webkit-flex-grow:1;
 }
@@ -306,8 +307,8 @@ color:rgb(45,45,45);
 .send
 {
   margin-bottom: 0vh;
-  margin-left:20%;
-  width: 60%;
+  margin-left:24%;
+  width: 52%;
 }
 .send button
 {
@@ -317,7 +318,7 @@ color:rgb(45,45,45);
   font-size: 2vh;
   border-radius: 15px;
   padding:0.5vh 0vw;
-  background-color: rgb(45,45,45);
+  background-image: linear-gradient(270deg, rgb(155,51,84) 0%, rgb(58,44,105) 80%);
   border: 1px solid rgb(189, 189, 189);
   color: white;
   cursor:pointer;
@@ -326,10 +327,11 @@ color:rgb(45,45,45);
 { 
     padding:0 0.5vh 0rem 0rem;
     border-radius: 100%;
-    width: 4vh;
-    height: 4vh;
-    color: rgb(0, 0, 0);
-    font-size: 3vh;
+    width: 5vh;
+    height: 5vh;
+    color: rgb(45, 45, 45);
+    background-color: transparent;
+    font-size: 4.5vh;
     font-weight: 600;
     line-height: 0%;
     border: 0.1rem solid gray;

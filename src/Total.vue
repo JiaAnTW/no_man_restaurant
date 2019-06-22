@@ -16,14 +16,15 @@
            </b-col>
           </b-row>
         </b-container>
-        <div class="sum">Total: $320</div>
+        <div class="sum">Total: ${{total}}</div>
         </div>
       </div>
       <div class = "send">
         <button>Guest number: 9487945</button>
       </div>
         <div class = "total">
-            <div class="total-start">Order can be pick in</div><div class="total-end">{{timeshow}}</div>
+            <div v-if="time>0" class="total-start">Order can be pick in</div><div v-if="time>0" class="total-end">{{timeshow}}</div>
+            <div v-else class="total-finish">{{timeshow}}</div>
       </div>
     </div>
 
@@ -38,17 +39,25 @@ export default {
   data () {
   return{
     time: null,
-    order: []
+    order: [],
+    startTime: 0,
   }
 },
 computed:{
     timeshow:function(){
         if(this.time>0)
             return this.time+" min";
-        else if( this.time===0)
+        else if( this.time<=0)
             return "餐點已完成";
         else
-            return "-1min";
+            return "讀取中";
+    },
+    total:function(){
+      var sum=0;
+      this.order.forEach(Element=>{
+        sum+=Element.price*Element.amout
+      })
+      return sum;
     }
 },
  methods:{
@@ -60,7 +69,7 @@ computed:{
     },
     esttime:function(){
     if(this.time>0)
-      this.time=Math.floor((this.billData.time-Date.now())/(1000*60));
+      this.time=Math.floor(20-(Date.now()-this.startTime)/(1000*60));
     else if(this.time==null)
         this.time=this.time; 
     else
@@ -90,9 +99,13 @@ computed:{
               size++;
             })
             const test=res.data.data[size-1]
-            console.log(test.productName[0].name)
             var nameArray=[]
-            
+            this.time=1;
+            this.startTime=test.startTime;
+            console.log("now is "+Date.now());
+            console.log("start is "+test.startTime);
+            this.esttime();
+            setInterval(this.esttime.bind(this) , 1000)    
             test.productName.forEach(items=>{
                 nameArray.push(items.name)
             });
@@ -354,5 +367,14 @@ color:rgb(245, 245, 245);
   font-size: 3.5vh;
   padding-right: 10%;
   color: rgb(79,79,79)
+}
+
+.total-finish{
+  width: 100%;
+  display:flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 3.5vh;
+  font-family: 'Microsoft JhengHei';
 }
 </style>

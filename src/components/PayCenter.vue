@@ -18,13 +18,15 @@
 import Modal from "./Modal";
 import Member from "../Member";
 import Pay from "./pay";
+//import Comment from "./Comment";
 import Map from "./Map.vue";
 export default {
+  props: ['find'],
   name: 'PayCenter',
   components:{Modal,Member,Map,Pay},
   data () {
   return{
-      progress: {width:"25%"},
+      progress: {width:"100%"},
   }
 },
  methods:{
@@ -36,6 +38,9 @@ export default {
      },
      close:function(){
          this.$emit("close");
+     },
+     getFood(data){
+         this.$emit("get-food",data)
      }
  },
  watch:{

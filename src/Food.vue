@@ -134,7 +134,7 @@ export default {
       var output=[];
       for(let i=0;i<this.postionRecord.length;++i){
         if(i==this.nowAt-1)
-          output.push({backgroundColor:'rgba(0,0,0,0.1)'})
+          output.push({backgroundColor:'rgba(219,218,218,0.45)'})
         else
           output.push({backgroundColor:'rgba(0,0,0,0)'})
       }
@@ -198,7 +198,7 @@ export default {
     position:fixed;
     margin-top:28vh;
     left:-15vw;
-    background-color:rgb(94, 90, 90);
+    background-color:rgb(80, 80, 80);
     z-index:1;
   }
   .choice{
@@ -221,7 +221,7 @@ export default {
     width:40vw;
     height:40vw;
     margin: 1rem 0.7rem;
-    background-color:rgb(94, 90, 90);
+    background-color:rgb(255, 255, 255,0.17);
     z-index:0;
   }
   .block-container{
@@ -264,7 +264,7 @@ export default {
     font-size: 15px;
     color: rgb(48, 48, 48);
     text-align:center;
-    border-bottom:1px solid lightgray;
+    border-bottom:1px solid white;
     width: 100%;
     height:7vh;
     padding:2vh 2vh 2vh 2vh;

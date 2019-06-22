@@ -10,6 +10,7 @@
         <div v-show="search_f" class="search_area">
           <input v-model.trim="searchfood" placeholder="     Search" class="search_bar">
           <button class="top-btn" @click="changeState(search_f)" :style="topDist"><img src="../assets/icon/search-b.png" alt="search"/></button>
+          <!-- <h1>{{searchfood}}</h1> -->
         </div>
         <div class="result_frame">
           <div class="searchresult" v-for="(result,index) in searched" :key="index">
@@ -25,12 +26,14 @@
       <!--注意，請把你.vue檔中最外層的div增加兩個css屬性: "flex-grow:1"和"-webkit-flex-grow:1" -->
       <!--這兩個屬性會幫你自動把長寬貼齊step-container，詳情請搜尋css flexbox -->
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
+      <!-- <past-order v-if="nowAt==='menu'"/> -->
       <food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :cartData="cart" :addOrder="addOrder" :token="token" />
       <order v-else-if="nowAt==='order'" @add-cart="addToCart" @add="add" :data="menu[viewDish]" :isCart="isCart"/>
-      <member v-else-if="nowAt=== 'profile'" @get-token="gettoken" :onPay="false"/>
+      <member v-else-if="nowAt=== 'login'" @get-token="gettoken" :onPay="false" @change-now-at="changeNowAt"/>
       <!--cart v-else-if="nowAt=== 'cart'" :token="token" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/-->
-      <total v-else-if="nowAt=== 'cart'" @get-food="searchCertainFood" :find="find" :bill-data="bill"/>
-      <past-order v-else-if="nowAt=== 'favorite'" @get-food="searchCertainFood" :find="find"/>
+      <total v-else-if="nowAt=== 'bill'" @get-food="searchCertainFood" :find="find" :bill-data="bill"/>
+      <past-order v-else-if="nowAt=== 'past'" @get-food="searchCertainFood" :find="find" @add-cart="addToCart"/>
+      <SignUp v-else-if="nowAt=== 'signUp'"/>
       <!--把你做的component放在上面。(你可以試試看把order放進來)-->
     </div>
     <div class="nav-bar">
@@ -40,7 +43,7 @@
       </button>
     </div>
     <loading v-if="isLoading"/>
-    <!--pay-center/-->
+    <pay-center @get-food="searchCertainFood" :find="find"/>
   </div>
 </template>
 
@@ -54,13 +57,14 @@ import Food from '../Food.vue';
 import Map from './Map.vue';
 import PayCenter from "./PayCenter.vue";
 import PastOrder from "../PastOrder.vue";
+import SignUp from "../SignUp.vue";
 import axios from "axios";
 import Vue from "vue";
 import { defaultCipherList } from 'constants';
 Vue.prototype.$axios = axios;
 export default {
   name: 'Layout',
-  components: {Order,Total,Member,Loading,Food,Cart,Map,PayCenter,PastOrder},//也要把你做的Component在這註冊
+  components: {Order,Total,Member,Loading,Food,Cart,Map,PayCenter,PastOrder,SignUp},//也要把你做的Component在這註冊
   data () {
     return {
       menu:[],//菜單
@@ -68,9 +72,9 @@ export default {
       viewDish: 0,
       steps:[ //用來建立最下面的導覽列
         {name:"menu",icon:require('../assets/icon/burger.png')},
-        {name:"favorite",icon:require('../assets/icon/love.png')},
-        {name:"cart",icon:require('../assets/icon/cart.png')},
-        {name:"profile",icon:require('../assets/icon/member.png')}
+        {name:"past",icon:require('../assets/icon/love.png')},
+        {name:"bill",icon:require('../assets/icon/cart.png')},
+        {name:"login",icon:require('../assets/icon/member.png')}
       ],
       search: [{visibility: "hidden"}], //右上角搜尋按鍵的css
       nowAt: "loading", //目前step的顯示元件，loading時不顯示任何元件,
@@ -85,7 +89,7 @@ export default {
       searched:[],
       find:[],
       topDist:{
-      marginTop:'0vh',
+        marginTop:'0vh',
       }
     }
   },
@@ -101,22 +105,23 @@ export default {
     addToCart: function(items){ //用來增加商品至購物車，輸入參數為一物件，格式見Dish.vue
       var index=this.cart.findIndex(function(item, index, array){
         return item.id == items.id;
-      }); 
+      });
+      
       if(index!=-1){
         this.cart[index].num+=items.num;
+        
       }
       else
-      this.cart.push(items);
-    },
-    add:function(add){
-      this.addOrder=add;//addTocart後
+        this.cart.push(items);
       this.changeNowAt("menu");
+      this.addOrder=true;
     },
     changeNowAt: function(next){ //改變step-container的顯示元件
       this.nowAt=next;
     },
     shouldShowLoading: function(show){ //用來顯示/隱藏loading畫面
       this.isLoading=show;
+      this.addOrder=false;
     },
     handleCartChange: function(value,index){ //對已經在購物車中的商品作數量改變，value為1或-1
       if(this.cart[index].num+value>0){
@@ -146,7 +151,6 @@ export default {
       this.topDist={marginTop:'2vh'};
     },
     searchCertainFood:function(target){
-      console.log(target)
       this.find.push(target.map(Element=>{
         for(let i=0;i<this.menu.length;i++){
           if(this.menu[i].name==Element){
@@ -154,8 +158,6 @@ export default {
           }
         }
       }))
-      console.log(find)
-
     }
   },
     mounted: function(){ //當畫面已經渲染上DOM後，向後端請求資料
@@ -173,6 +175,7 @@ export default {
   },
   watch:{
     nowAt: function(){
+      this.find=[]
       switch(this.nowAt){
         case 'menu':
           this.search=[{visibility:"hidden"},{visibility:"visible"}];
@@ -181,22 +184,22 @@ export default {
           this.search=[{visibility:"visible"},{visibility:"hidden"}];
           this.before='menu'
           break;
-        case 'cart':
+        case 'bill':
           this.search=[{visibility:"visible"},{visibility:"hidden"}];
           this.before='menu'
-          this.find=[]
         break;
-        case 'favorite':
+        case 'past':
           this.search=[{visibility:"visible"},{visibility:"hidden"}];
           this.before='menu'
-          this.find=[]
         break;
+        case 'signUp':
+          this.search=[{visibility:"visible"},{visibility:"hidden"}];
+          this.before='profile'
+        break;        
         default:
           this.search=[{visibility:"hidden"},{visibility:"hidden"}];
           break;
       }
-      if (this.nowAt!="favorite")
-        this.find=[];
     },
     searchfood: function(){
       var self=this;
@@ -366,7 +369,7 @@ export default {
 }
 
 .nav-bar{
-  border-top: 1px solid gray;
+  border-top: 0px solid gray;
   height: 8.0vh;
   display: flex;
   justify-content: center;

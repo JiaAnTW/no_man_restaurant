@@ -4,7 +4,7 @@
             <span style="color:white">Past Order</span>
         </div>
         <div class="order_container">
-          <PastOrderList  @change-nowat="changeNowAt" :find="find" @get-food="getFood" />  
+            <past-order-list v-for="(data,index) in order" :key="index" :data="data"  @list-method="listMethod" :isPay="false"/>
         </div>
     </div>
 </template>
@@ -17,16 +17,50 @@ export default {
     components:{PastOrderList},
     data(){
         return{
-           
+            order:[],
         }
     },
     methods:{
-        changeNowAt:function(){
-            this.$emit('change-nowat','cart');
+        listMethod(way,...args){
+            this.$emit(way,...args);
         },
         getFood:function(target){
             this.$emit("get-food",target)
         }
+    },
+    mounted:function(){
+        this.$axios({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'post',
+            url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/user/history',
+            //url: '/api/post/login',
+            data: {
+                id: 0
+            },
+        })//等到get後才執行接下來的code
+        .then((res)=>{
+            res.data.data.forEach(Element => {
+                var target=Element.productName.map(items=>{
+                    return items.name
+                })
+                this.$emit("get-food",target)
+            });
+            this.order=res.data.data.map((Element,Index)=>{
+                return Element.productName.map((items,id)=>{ 
+                    return {
+                        src:this.find[Index][id].image,
+                        rating:0,
+                        name:items.name,
+                        price:this.find[Index][id].price,
+                        num: items.amount,
+                        comment: '',
+                        id:this.find[Index][id].id
+                    }
+                })
+            });
+        })
     }
 }
 </script>
@@ -43,19 +77,19 @@ export default {
     .head{
         /*border:0.5px solid red;*/
         display: flex;
-        height: 7vh;
+        height: 15%;
         font-size: 3vh;
         font-weight: 600;
         justify-content:center;
-        align-items: flex-end;
+        align-items: center;
     }
     .order_container{
         /*border:0.5px solid red;*/
         display: flex;
-        flex-direction:column;
-        -webkit-flex-direction:column;  
         flex-grow: 1;
+        flex-direction:column;
+        -webkit-flex-direction:column; 
         overflow-y: auto;
-        padding-top: 2vh;
+        max-height: 100%;
     }
 </style>
