@@ -47,6 +47,7 @@ export default {
                 })
                 this.$emit("get-food",target)
             });
+            console.log("Center "+this.find)
             this.order=res.data.data.map((Element,Index)=>{
                 return Element.productName.map((items,id)=>{ 
                     return {

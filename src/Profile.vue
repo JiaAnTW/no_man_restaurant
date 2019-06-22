@@ -44,7 +44,7 @@ export default {
 
     },
      mounted: function(){ //當畫面已經渲染上DOM後，向後端請求資料
-      var self=this;
+      /*var self=this;
       this.$axios({
         methods: 'post',
         url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/index',//DataBase的資料 
@@ -54,8 +54,8 @@ export default {
         console.log(data);
         /*self.menu = res.data;
         self.isLoading=false;//在資料抓到之前會顯示讀取畫面，抓到之後讓讀取畫面消失
-        self.nowAt="menu";*/
-      });
+        self.nowAt="menu";
+      });*/
   },
 }
 </script>

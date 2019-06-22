@@ -106,14 +106,16 @@ export default {
         font-size: 3vh;
         font-weight: 300;
     }
-    .btn-area{
-        flex-grow: 1;
-    }
-    .photo-area,.upload,.input-area,.title{
+
+    .photo-area,.upload,.input-area,.title,.btn-area{
         display: flex;
         position: relative;
         justify-content: center;
         align-items: center;
+    }
+    .btn-area{
+        flex-grow: 2;
+        align-items: flex-start;
     }
     .photo-area{
         position: relative;
@@ -178,8 +180,11 @@ export default {
         background-image: linear-gradient(270deg, rgb(155,51,84) 0%, rgb(58,44,105) 80%);
         font-size: 3vh;
         width: 42.5%;
+        height: 60%;
         border-radius: 25px;
         font-weight: 600;
+        border: none;
+        color: white;
     }
 
 </style>

@@ -5,6 +5,7 @@
                 <member v-if="progress.width==='25%'" :onPay="true" @change-page="changeProgress"/>
                 <Map v-else-if="progress.width==='50%'" @change-page="changeProgress"/>
                 <pay v-else-if="progress.width==='75%'"/>
+                <comment v-else-if="progress.width==='100%'" :find="find" @get-food="getFood"/>
             </div>
             <div class="progress">
                 <div class="bar" :style="progress"></div>
@@ -18,12 +19,12 @@
 import Modal from "./Modal";
 import Member from "../Member";
 import Pay from "./pay";
-//import Comment from "./Comment";
+import Comment from "./Comment";
 import Map from "./Map.vue";
 export default {
   props: ['find'],
   name: 'PayCenter',
-  components:{Modal,Member,Map,Pay},
+  components:{Modal,Member,Map,Pay,Comment},
   data () {
   return{
       progress: {width:"100%"},
@@ -40,6 +41,7 @@ export default {
          this.$emit("close");
      },
      getFood(data){
+         console.log("center type get ",Array.isArray(data))
          this.$emit("get-food",data)
      }
  },

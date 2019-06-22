@@ -22,11 +22,6 @@
           <h2>{{pictures.name}} |  $ {{pictures.price}}</h2>
         </div>
       </div>
-      <div class="contact">
-        <div class="icons">
-
-        </div>
-      </div>
     </div>
 </template>
 

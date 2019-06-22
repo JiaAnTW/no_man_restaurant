@@ -122,7 +122,7 @@ export default {
     width: 10.5em;
     height:10.5em;
     border-radius: 50%;
-    background:#fff;
+    
 }
 
 #inner {

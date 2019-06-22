@@ -3,10 +3,10 @@
     <div class="slogan-container">
       <button v-show="!search_f" class="top-btn" @click="changeNowAt(before)" :style="search[0]"><div class="back"></div></button>
       <img v-show="!search_f" src="../assets/icon/logo.png" alt="logo"/>
-      <div v-show="!search_f">
+      <div v-show="!search_f" :style="search[1]">
         <button class="top-btn" @click="changeState(search_f)"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
       </div>
-      <div v-show="search_f" class="search_container">
+      <div v-show="search_f &&nowAt=='menu'" class="search_container">
         <div v-show="search_f" class="search_area">
           <input v-model.trim="searchfood" placeholder="     Search" class="search_bar">
           <button class="top-btn" @click="changeState(search_f)" :style="topDist"><img src="../assets/icon/search-b.png" alt="search"/></button>
@@ -34,6 +34,7 @@
       <total v-else-if="nowAt=== 'bill'" @get-food="searchCertainFood" :find="find" :bill-data="bill"/>
       <past-order v-else-if="nowAt=== 'past'" @get-food="searchCertainFood" :find="find" @add-cart="addToCart"/>
       <SignUp v-else-if="nowAt=== 'signUp'"/>
+      <profile v-else-if="nowAt=== 'profile'"/>
       <!--把你做的component放在上面。(你可以試試看把order放進來)-->
     </div>
     <div class="nav-bar">
@@ -43,7 +44,7 @@
       </button>
     </div>
     <loading v-if="isLoading"/>
-    <pay-center @get-food="searchCertainFood" :find="find"/>
+    <!--pay-center @get-food="searchCertainFood" :find="find"/-->
   </div>
 </template>
 
@@ -56,6 +57,7 @@ import Loading from './Loading.vue';
 import Food from '../Food.vue';
 import Map from './Map.vue';
 import PayCenter from "./PayCenter.vue";
+import Profile from "../Profile.vue";
 import PastOrder from "../PastOrder.vue";
 import SignUp from "../SignUp.vue";
 import axios from "axios";
@@ -64,7 +66,7 @@ import { defaultCipherList } from 'constants';
 Vue.prototype.$axios = axios;
 export default {
   name: 'Layout',
-  components: {Order,Total,Member,Loading,Food,Cart,Map,PayCenter,PastOrder,SignUp},//也要把你做的Component在這註冊
+  components: {Order,Total,Member,Loading,Food,Cart,Map,PayCenter,PastOrder,SignUp,Profile},//也要把你做的Component在這註冊
   data () {
     return {
       menu:[],//菜單
@@ -74,7 +76,7 @@ export default {
         {name:"menu",icon:require('../assets/icon/burger.png')},
         {name:"past",icon:require('../assets/icon/love.png')},
         {name:"bill",icon:require('../assets/icon/cart.png')},
-        {name:"login",icon:require('../assets/icon/member.png')}
+        {name:"profile",icon:require('../assets/icon/member.png')}
       ],
       search: [{visibility: "hidden"}], //右上角搜尋按鍵的css
       nowAt: "loading", //目前step的顯示元件，loading時不顯示任何元件,
@@ -87,10 +89,10 @@ export default {
       searchfood:'',
       before: 'menu',
       searched:[],
-      find:[],
       topDist:{
         marginTop:'0vh',
-      }
+      },
+      find:[]
     }
   },
   methods:{
@@ -142,7 +144,7 @@ export default {
     },*/
     gettoken:function(token){
       this.token=token;
-      this.changeNowAt('cart')
+      this.changeNowAt('profile')
     },
     changeState:function(){
       if(!this.search_f)
@@ -151,13 +153,17 @@ export default {
       this.topDist={marginTop:'2vh'};
     },
     searchCertainFood:function(target){
+      console.log(target)
       this.find.push(target.map(Element=>{
-        for(let i=0;i<this.menu.length;i++){
-          if(this.menu[i].name==Element){
+        //console.log("check "+Element)
+        for(var i=0;i<this.menu.length;i++){
+          if(this.menu[i].name===Element){
+            //console.log("get "+this.menu[i].name)
             return this.menu[i];
           }
         }
       }))
+      console.log(this.find)
     }
   },
     mounted: function(){ //當畫面已經渲染上DOM後，向後端請求資料
@@ -171,6 +177,7 @@ export default {
         self.menu = res.data;
         self.isLoading=false;//在資料抓到之前會顯示讀取畫面，抓到之後讓讀取畫面消失
         self.nowAt="menu";
+        this.find=[]
       });
   },
   watch:{
@@ -195,7 +202,12 @@ export default {
         case 'signUp':
           this.search=[{visibility:"visible"},{visibility:"hidden"}];
           this.before='profile'
-        break;        
+        break;
+        case 'profile':
+          this.search=[{visibility:"hidden"},{visibility:"hidden"}];
+          if(this.token=='')
+            this.nowAt='login'
+        break;          
         default:
           this.search=[{visibility:"hidden"},{visibility:"hidden"}];
           break;
@@ -216,6 +228,10 @@ export default {
       }
       self.searched=output;
      },
+     token:function(){
+       if(token!="")
+        this.steps[3].name="profile"
+     }
   },
   computed:{
     isCart:function(){

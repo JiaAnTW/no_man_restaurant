@@ -1,7 +1,7 @@
 <template>
     <div class="cart">
       <div class = "order">
-        <b-container >
+        <b-container v-if="data.length!=0">
           <b-row class=cartdata v-for = "(cartdatas,index) in data"  :key="index">
             <b-col class="image">
               <img class="foodimg" :src="cartdatas.src" style="display:block; margin:auto;" alt="cartdatas.name" />
@@ -16,6 +16,7 @@
            </b-col>
           </b-row>
         </b-container>
+        <div class="none-message" v-else>選了餐點<br/>才能看到我歐</div>
       </div>
       <div class = "send">
         <button v-if="notPay" v-on:click="linePay">Place your order</button>
@@ -347,5 +348,17 @@ color:rgb(45,45,45);
     vertical-align: -webkit-baseline-middle;
     text-align: center;
     color: rgb(45, 45, 45);
+}
+
+.none-message{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  height: 100%;
+  font-size: 4vh;
+  text-align: center;
+  padding: 10% 10%;
+  font-family: 'Microsoft JhengHei';
 }
 </style>

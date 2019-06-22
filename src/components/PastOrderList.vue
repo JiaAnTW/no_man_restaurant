@@ -1,6 +1,6 @@
 <template>
     <div class="pastorderlist">
-        <div class="order">
+        <div class="order" :style="width">
         <div class="data-container" v-for="(elemnt,index) in order" :key="index">
             <v-touch v-on:swipeleft="move()"  class="data_con">
                 <div style="height: 11vh; width:100%;display:flex;padding: 5% 5%;position:relative;">
@@ -15,13 +15,13 @@
                     </div>
                 </div>
                 <!--img class="can" src="../assets/icon/can.png" style="height:7vh;width:6.5vw;display:flex;flex-grow:2;"-->
-                <div class="input-container" v-if="isComment">
+                <div class="input-container" v-if="isComment||isPay">
                     <input type="text" v-model="elemnt.comment"/>
                 </div>
             </v-touch>
 
             </div>
-            <button class="add_cart_btn" v-on:click="addToCart" v-if="!isComment">Add to Cart</button>
+            <button class="add_cart_btn" v-on:click="addToCart" v-if="!isComment && !isPay">Add to Cart</button>
             <div class="btn-container" v-if="isComment && !isPay">
                 <button class="add_cart_btn" v-on:click="isComment=!isComment" >Close</button>
                 <button class="add_cart_btn" v-on:click="handleComment" >Send</button>
@@ -40,12 +40,13 @@ Vue.prototype.$axios = axios;
 export default {
     components:{StarRating},
     name:"PastOrderList",
-    props: ["data","isPay"],
+    props: ["data","isPay","sendData"],
     data(){
         return{
             x:0,y:0,
             canz:-1,
             order:[],
+            width:(this.isPay)?{width:"90%"}:{width:"80%"},
             isComment:false
         }
     },
@@ -90,6 +91,9 @@ export default {
     watch:{
         data:function(){
             this.order=this.data;
+        },
+        sendData:function(){
+            this.handleComment();
         }
     },
     mounted:function(){
