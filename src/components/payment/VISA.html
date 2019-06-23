@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PaymentRequest </title>
+  <script src="https://storage.googleapis.com/prshim/v1/payment-shim.js"></script>
+  <style type="text/css">
+   
+  </style>
+  </head>
+  <body>
+    <div id="notice"></div>
+    <button id="buy">購買</button>
+  </body>
+  <script>     
+    var $res = document.querySelector('#res');
+    var $notice = document.querySelector('#notice');
+    var $buyBtn = document.querySelector('#buy');
+    init();
+    function init () {
+      if (!window.PaymentRequest) {
+        $notice.innerHTML = '不支援PaymentRequest';
+        $notice.style.background = 'rgba(200, 0, 0, 0.2)';
+        return;
+      }
+      $notice.innerHTML = '支援 PaymentRequest';
+      $buyBtn.addEventListener('click', onClick);
+    }
+    function onClick () {
+      var request = createPaymentRequest();
+      request.show().then(function(PaymentResponse) {
+        handleResponse(PaymentResponse);
+      }).catch(function(err) {
+        console.log(err);
+      });
+    }
+    function showResponse (response) {
+      $res.innerHTML = JSON.stringify(response, undefined, 2);
+    }
+    function handleResponse (paymentResponse) {
+      // 結果回傳至 server
+      showResponse(paymentResponse);
+  
+      // 模擬API延遲
+      setTimeout(function () {
+        paymentResponse.complete("success");
+      }, 2000);
+    }
+    function createPaymentRequest () {
+      var methodData = [{
+        supportedMethods: ['basic-card'],
+        data: {
+          supportedNetworks: ['jcb', 'mastercard','visa'], 
+          supportedTypes: ['debit', 'credit', 'prepaid']
+        },
+      }];
+      var details = {
+        displayItems: [
+          {
+            label: "餐點",
+            amount: { currency: "TWD", value : "999.00" }
+          },
+          {
+            label: "餐點",
+            amount: { currency: "TWD", value : "999.00" },
+            pending: true
+          }
+        ],
+        total:  {
+          label: "Total",
+          amount: { currency: "TWD", value : "1998.00" }
+        }
+      };
+      return new PaymentRequest(methodData, details);
+    }
+  </script>
+</html>
