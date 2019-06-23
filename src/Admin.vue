@@ -1,21 +1,29 @@
 <template>
-    <div>
-        <edit-Dish v-for="(dish,index) in menu" :key="index" :data="dish" @delete-dish="deleteDish"/>
-        <b-button variant="dark" class="new" v-on:click="addDish">+新增餐點</b-button>
+    <div class="admin">
+        <div class="choose-area">
+            <food :isAdmin="true" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood"/>
+        </div>
+        <div class="edit-area">
+          <edit-Dish :data="menu[viewDish]" @delete-dish="deleteDish"/>
+          <!--b-button variant="dark" class="new" v-on:click="addDish">+新增餐點</b-button-->
+        </div>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import Food from "./Food"
 import Vue from "vue";
 import editDish from "./components/editDish";
 Vue.prototype.$axios = axios
 export default {
   name: 'Admin',
-  components: {editDish},
+  components: {editDish,Food},
   data(){
       return{
           menu: [],
+          searchfood: "",
+          viewDish: 0,
       }
   },
   methods:{
@@ -33,7 +41,14 @@ export default {
          return item.id == id;           // 取得大於五歲的
         });
         this.menu.splice(index, 1);
-      }
+        this.viewDish=(this.viewDish!=0)?this.viewDish-1:this.viewDish+1;
+      },
+      viewSingleDish: function(id){//當點擊Food.vue的其中一個block後，用這個function把選擇的餐點傳入order.vue
+        var index=this.menu.findIndex(function(item, index, array){
+          return item.id == id;
+        });
+        this.viewDish=index;
+      },
   },
   mounted: function(){
     var self=this;
@@ -44,12 +59,26 @@ export default {
       })
       .then((res) => {
         self.menu = res.data;
+        self.menu.push({
+          detail:"",
+          feedback:null,
+          id:self.menu.length+1,
+          image: null,
+          name:"新增餐點",
+          price:0,
+          type:"burger",
+        })
     });
   },
 }
 </script>
 
 <style scoped>
+.admin{
+  display: flex;
+}
+
+
 .new{
   width: 100%;
   border-radius: 0;
@@ -57,6 +86,18 @@ export default {
   height: 15vh;
   font-size: 5rem;
   font-family: 'Noto Sans TC';
+}
+.choose-area{
+  width: 20%;
+  height: 100vh;
+  background-color: rgb(48, 48, 48);
+  overflow-y: scroll;
+}
+
+
+.edit-area{
+  flex-grow: 1;
+  height: 100%;
 }
 </style>
 

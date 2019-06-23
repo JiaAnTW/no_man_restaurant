@@ -1,33 +1,36 @@
 <template>
-    <div class="editDdish">
-        <b-button variant="dark" class="title" v-on:click="handleOpenClose">{{title}}</b-button>
-         <div id="container" class="mt-2" :style="style">
-             <b-form-group id="fieldset-3" description="Let us know your name." label="">
-            <b-form-group id="fieldset-0" description="Let us know your name." label="餐點照片" >
+    <div class="edit-dish">
+        <b-container class="con">
+            <b-form-group id="fieldset-1"  label="餐點名稱" label-cols="3" label-cols-lg="3" label-size="lg"  label-align-sm="right" label-for="input-1" >
+                <b-form-input id="input-1" v-model="name" trim></b-form-input>
+            </b-form-group>
+            <b-form-group id="fieldset-2"  label="餐點價格" label-cols="3" label-cols-lg="3" label-size="lg" label-align-sm="right" label-for="input-2" >
+                <b-form-input id="input2" type="number" v-model="price" trim></b-form-input>
+            </b-form-group>
+            <b-form-group id="fieldset-3"  label="餐點介紹" label-cols="3" label-cols-lg="3" label-size="lg"  label-align-sm="right" label-for="input-3" >
+                <b-form-textarea id="input-3" v-model="detail" rows="8"></b-form-textarea>
+            </b-form-group>
+            <b-form-group id="fieldset-4"  label="餐點類別" label-cols="3" label-cols-lg="3" label-size="lg"  label-align-sm="right" >
+                <b-form-select v-model="type" :options="options"></b-form-select>
+            </b-form-group>
+        </b-container>
+        <div class="right"> 
+         <div id="container" class="picture" :style="style">
+             <b-form-group id="fieldset-3"  label="">
+            <b-form-group id="fieldset-0"  label="餐點照片" >
                 <div>
                     <img :src="image" class="dish-pic">
                     <input type="file" name="avatar" id="uppic" accept="image/gif,image/jpeg,image/jpg,image/png" @change="changeImage($event)" ref="avatarInput" class="uppic">
                     <button v-on:click="clearImage">清除圖片</button>
                 </div>
             </b-form-group>
-            <b-form-group id="fieldset-1" description="Let us know your name." label="餐點名稱" label-cols="3" label-cols-lg="2" label-size="lg"  label-align-sm="right" label-for="input-1" :invalid-feedback="invalidFeedback" :valid-feedback="validFeedback" :state="state">
-                <b-form-input id="input-1" v-model="name" :state="state" trim></b-form-input>
             </b-form-group>
-            <b-form-group id="fieldset-2" description="Let us know your name." label="餐點價格" label-cols="3" label-cols-lg="1" label-size="lg" label-align-sm="right" label-for="input-2" :invalid-feedback="invalidFeedback" :valid-feedback="validFeedback" :state="state">
-                <b-form-input id="input2" type="number" v-model="price" :state="state" trim></b-form-input>
-            </b-form-group>
-            <b-form-group id="fieldset-3" description="Let us know your name." label="餐點介紹" label-cols="3" label-cols-lg="1" label-size="lg"  label-align-sm="right" label-for="input-3" :invalid-feedback="invalidFeedback" :valid-feedback="validFeedback" :state="state">
-                <b-form-input id="input-3" v-model="detail" :state="state" trim></b-form-input>
-            </b-form-group>
-            <b-form-group id="fieldset-4" description="Let us know your name." label="餐點類別" label-cols="3" label-cols-lg="1" label-size="lg"  label-align-sm="right"  :invalid-feedback="invalidFeedback" :valid-feedback="validFeedback" :state="state">
-                <b-form-radio v-model="type" name="radios" value="burger">漢堡</b-form-radio>
-                <b-form-radio v-model="type" name="radios" value="drinks">飲料</b-form-radio>
-                <b-form-radio v-model="type" name="radios" value="salad">沙拉</b-form-radio>
-                <b-form-radio v-model="type" name="radios" value="fried">炸物</b-form-radio>
-            </b-form-group>
+          </div>
+          <div class="btn-con">
             <button v-on:click="sendImage">送出</button>
             <button v-on:click="deleteDish">刪除</button>
-            </b-form-group>
+          </div>
+        
         </div>
     </div>
 </template>
@@ -49,8 +52,9 @@ export default {
           type:'',
           image: require('../assets/noPic.png'),
           isImage: false,
-          style: {display: "none"},
-          new: false
+          style: {display: "block"},
+          new: false,
+          options: ["漢堡","飲料","沙拉","炸物"]
       }
     },
   computed: {
@@ -133,6 +137,18 @@ export default {
         }
       },
   },
+  watch:{
+    data:function(){
+        this.id=this.data.id;
+      this.title=this.data.name;
+      this.name=(this.data.name==="點擊編輯新餐點")?'':this.data.name;
+      this.image=(this.data.image==null)?require('../assets/noPic.png'):this.data.image;
+      this.price=this.data.price;
+      this.detail=this.data.detail;
+      this.isImage=(this.data.image==null)?false:true;
+      this.new=(this.data.name==="點擊編輯新餐點")?true:false;
+    }
+  },
   mounted:function(){
       console.log(this.data)
       this.id=this.data.id;
@@ -148,15 +164,38 @@ export default {
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC');
-    .editDish{
-        width: 100rem;
+    .edit-dish{
+        width: 100%;
         display: flex;
-        flex-direction:column;
-        -webkit-flex-direction:column;
         justify-content: center;
         -webkit-justify-content:center; 
         align-items: center;
         -webkit-align-items: center;   
+    }
+
+    .con{
+      flex-grow: 1;
+      border: 1px solid green;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+        justify-content: space-around;
+        -webkit-justify-content:space-around; 
+        align-items: flex-start;
+        -webkit-align-items: flex-start;
+         
+    }
+
+    label{
+      font-family: 'Microsoft JhengHei';
+    }
+
+    .content input{
+      border: 1px solid rgb(84,177,244);
+    }
+    .picture{
+      flex-grow: 1;
+      border: 1px solid blue;
     }
     .title{
         width: 100%;
@@ -169,5 +208,34 @@ export default {
     .dish-pic{
       width: 100%;
     }
+    .form-group{
+      width: 100%;
+      font-family: 'Microsoft JhengHei';
+    }
+    .form-row legend{
+      font-family: 'Microsoft JhengHei';
+    }
+
+    .right{
+      height: 100vh;
+      flex-grow: 1;
+      display: flex;
+      border: 1px solid blueviolet;
+      flex-direction: column;
+        justify-content: space-around;
+        -webkit-justify-content:space-around; 
+        align-items: flex-start;
+        -webkit-align-items: flex-start;
+    }
+
+    .btn-con{
+        flex-grow: 1;
+        width: 100%; 
+        display: flex;
+        justify-content: space-around;
+        -webkit-justify-content:space-around; 
+        align-items: center;
+        -webkit-align-items: center;
+    }   
 </style>
 

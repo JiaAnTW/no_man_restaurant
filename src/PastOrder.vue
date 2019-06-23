@@ -1,9 +1,9 @@
 <template>
     <div class="pastOrder">
-        <div class="head">
+        <div class="head" v-if="!isLoading">
             <span style="color:white">Past Order</span>
         </div>
-        <div class="order_container">
+        <div class="order_container" v-if="!isLoading">
             <past-order-list v-for="(data,index) in order" :key="index" :data="data"  @list-method="listMethod" :isPay="false"/>
         </div>
     </div>
@@ -18,6 +18,7 @@ export default {
     data(){
         return{
             order:[],
+            isLoading:true
         }
     },
     methods:{
@@ -47,7 +48,6 @@ export default {
                 })
                 this.$emit("get-food",target)
             });
-            console.log("Center "+this.find)
             this.order=res.data.data.map((Element,Index)=>{
                 return Element.productName.map((items,id)=>{ 
                     return {
@@ -61,6 +61,8 @@ export default {
                     }
                 })
             });
+            this.isLoading=false
+            this.$emit("stop-loading")
         })
     }
 }

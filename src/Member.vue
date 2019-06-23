@@ -5,7 +5,7 @@
           <div id="inner"></div>
             <br><br>
               <div  style="width:100%;text-align:center">
-              <h1 style="color:white;font-size:6.5em" v-if="!onPay" >S | B</h1>
+              <h1 style="color:white;font-size:3.5vh" v-if="!onPay" >S | B</h1>
           </div>
         </div>
       </div>
@@ -110,11 +110,11 @@ export default {
     flex-grow:1;
     -webkit-flex-grow:1;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     -webkit-align-items: center;
     flex-direction:column;
     -webkit-flex-direction:column; 
-    font-size:15px; 
+    font-size:2.2vh; 
 }
 
 #userpic{
@@ -141,7 +141,7 @@ form{
     padding-left: 6%; 
     background-color:white;
     border-radius: 10px;
-    height: 25px; 
+    height: 3.4vh; 
     width: 100%;
     box-shadow: none;
     border: none;
@@ -151,7 +151,7 @@ form{
   display: flex;
   justify-content: center;
   background-color:rgba(0, 0, 0, 0);
-  font-size: 15px;
+  font-size: 2.2vh;
   border: 0px;
   margin: 0px;
   padding:0px;
@@ -165,15 +165,15 @@ form{
 span button{
   border: none;
   background-color: transparent;
-  font-size:15px;
+  font-size:2.2vh;
 }
 
 #forget_pass{
   border: 0px;
-  margin-top: 5px;
-  margin-bottom: 10px;
+  margin-top: 0.65vh;
+  margin-bottom: 1.3vh;
   padding:0px;
   background-color: rgba(0, 0, 0, 0);
-  font-size:10px;
+  font-size:1.2vh;
 }
 </style>

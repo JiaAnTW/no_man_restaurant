@@ -1,9 +1,10 @@
 <template>
     <div class="back-stage">
       <div class="menu">
-        <b-list-group>
-          <b-list-group-item href="/#/admin"><img class="icon" src="./assets/icon/profit.png" alt="edit"/>分析系統</b-list-group-item>
-          <b-list-group-item href="/#/admin/menu"><img class="icon" src="./assets/icon/edit.png" alt="edit"/>編輯餐點</b-list-group-item>
+        <b-list-group style="flex-grow:1">
+          <b-list-group-item href="/#/admin"><img class="icon" src="./assets/icon/profit.png" alt="edit"/><div>分析系統</div></b-list-group-item>
+          <b-list-group-item href="/#/admin/menu"><img class="icon" src="./assets/icon/edit.png" alt="edit"/><div>編輯餐點</div></b-list-group-item>
+          <b-list-group-item href="/#/admin/menu"><img class="icon" src="./assets/icon/edit.png" alt="edit"/><div>優惠設定</div></b-list-group-item>
         </b-list-group>
       </div>
       <div class="content">
@@ -32,6 +33,7 @@ export default {
     display: flex;
   }
   .menu{
+    display: flex;
     height: 100vh;
     width: 10vw;
     background-color: rgb(45,45,45)
@@ -51,9 +53,21 @@ export default {
     padding-top:4%;
   }
   .icon{
-    width: 15%;
+    width: 50%;
     margin-right: 10%;
   }
-
+  .list-group-item{
+    display: flex;
+    width: 100%;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .list-group-item div{
+    font-size: 1.5vw;
+    width: 70%;
+    font-family: 'Microsoft JhengHei';
+  }
 </style>
 

@@ -2,7 +2,7 @@
   <div class="Layout">
     <div class="slogan-container">
       <button v-show="!search_f" class="top-btn" @click="changeNowAt(before)" :style="search[0]"><div class="back"></div></button>
-      <img v-show="!search_f" src="../assets/icon/logo.png" alt="logo"/>
+      <img v-show="!search_f" src="../assets/icon/logo.png" alt="logo" style="height:65%"/>
       <div v-show="!search_f" :style="search[1]">
         <button class="top-btn" @click="changeState(search_f)"><img src="../assets/icon/icon_searcher.png" alt="search"/></button>
       </div>
@@ -27,12 +27,12 @@
       <!--這兩個屬性會幫你自動把長寬貼齊step-container，詳情請搜尋css flexbox -->
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
       <!-- <past-order v-if="nowAt==='menu'"/> -->
-      <food v-if="nowAt=== 'menu'" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :cartData="cart" :addOrder="addOrder" :token="token" />
+      <food v-if="nowAt=== 'menu'" :isAdmin="false" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :cartData="cart" :addOrder="addOrder" :token="token" />
       <order v-else-if="nowAt==='order'" @add-cart="addToCart" @add="add" :data="menu[viewDish]" :isCart="isCart"/>
       <member v-else-if="nowAt=== 'login'" @get-token="gettoken" :onPay="false" @change-now-at="changeNowAt"/>
       <!--cart v-else-if="nowAt=== 'cart'" :token="token" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/-->
       <total v-else-if="nowAt=== 'bill'" @get-food="searchCertainFood" :find="find" :bill-data="bill"/>
-      <past-order v-else-if="nowAt=== 'past'" @get-food="searchCertainFood" :find="find" @add-cart="addToCart"/>
+      <past-order v-else-if="nowAt=== 'past'" @get-food="searchCertainFood" :find="find" @add-cart="addToCart" @stop-loading="isLoading=!isLoading"/>
       <SignUp v-else-if="nowAt=== 'signUp'"/>
       <profile v-else-if="nowAt=== 'profile'"/>
       <!--把你做的component放在上面。(你可以試試看把order放進來)-->
@@ -43,7 +43,8 @@
         {{ step.name }}
       </button>
     </div>
-    <loading v-if="isLoading"/>
+    <loading v-if="isLoading" />
+    <start :show="isStart"/>
     <!--pay-center @get-food="searchCertainFood" :find="find"/-->
   </div>
 </template>
@@ -60,13 +61,14 @@ import PayCenter from "./PayCenter.vue";
 import Profile from "../Profile.vue";
 import PastOrder from "../PastOrder.vue";
 import SignUp from "../SignUp.vue";
+import Start from "./Start.vue"
 import axios from "axios";
 import Vue from "vue";
 import { defaultCipherList } from 'constants';
 Vue.prototype.$axios = axios;
 export default {
   name: 'Layout',
-  components: {Order,Total,Member,Loading,Food,Cart,Map,PayCenter,PastOrder,SignUp,Profile},//也要把你做的Component在這註冊
+  components: {Order,Total,Member,Loading,Food,Cart,Map,PayCenter,PastOrder,SignUp,Profile,Start},//也要把你做的Component在這註冊
   data () {
     return {
       menu:[],//菜單
@@ -80,7 +82,8 @@ export default {
       ],
       search: [{visibility: "hidden"}], //右上角搜尋按鍵的css
       nowAt: "loading", //目前step的顯示元件，loading時不顯示任何元件,
-      isLoading: true, //loading畫面是否顯示
+      isLoading: false, //loading畫面是否顯示
+      isStart: true,
       search_f:false,//放大鏡是否顯示
       addOrder:false,//確認是否addToCart
      //placeOrder:false,
@@ -175,7 +178,7 @@ export default {
       })
       .then((res) => {
         self.menu = res.data;
-        self.isLoading=false;//在資料抓到之前會顯示讀取畫面，抓到之後讓讀取畫面消失
+        self.isStart=false;//在資料抓到之前會顯示讀取畫面，抓到之後讓讀取畫面消失
         self.nowAt="menu";
         this.find=[]
       });
@@ -197,6 +200,7 @@ export default {
         break;
         case 'past':
           this.search=[{visibility:"visible"},{visibility:"hidden"}];
+          this.isLoading=true;
           this.before='menu'
         break;
         case 'signUp':
@@ -371,7 +375,7 @@ export default {
   width: 100%;
 } 
 .top-btn img{
-  width: 2rem;
+  height: 3.2vh;
   margin: 0 0;
 }
 
@@ -414,10 +418,10 @@ export default {
 }
 
 .back{
-  width: 1.5rem;
-  height: 1.5rem;
-  border-top:1.2px solid white;
-  border-right:1.2px solid white;
+  width: 2.7vh;
+  height: 2.7vh;
+  border-top:0.2vh solid white;
+  border-right:0.2vh solid white;
   transform:rotate(-135deg);
   font-size: 2rem;
 }

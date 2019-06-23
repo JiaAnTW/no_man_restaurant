@@ -1,6 +1,6 @@
 <template>
     <div class="Food">
-      <div class="slide">
+      <div class="slide" :style="adminStyle">
         <button class="btn" @click="open"></button>
       </div>
       <div class="choice" :style="fly">
@@ -10,13 +10,13 @@
               {{text.menu}}
             </div>
           </div>
-          <div class="cart_frame">
+          <div class="cart_frame" v-if="isAdmin">
             <cart :token="token" @foodmethod="foodmethod" :data="cartData" :place="place" />
           </div>
           <button class="btn2" @click="close"></button>
       </div>
       <div class="block-container" id="block" ref="block" @scroll="handleScroll">
-        <div class="block" v-for="(pictures,index) in lists" :key="pictures.id" :ref="pictures.type+'-'+pictures.id" :id="'dish-'+pictures.id">
+        <div class="block" :style="blockStyle" v-for="(pictures,index) in lists" :key="pictures.id" :ref="pictures.type+'-'+pictures.id" :id="'dish-'+pictures.id">
           <button class="btn3" @click="viewDish(pictures.id)"></button>
           <div class="img-container" :style="backgroundImage[index]"></div>
           <h2>{{pictures.name}} |  $ {{pictures.price}}</h2>
@@ -44,7 +44,7 @@ var options = {
 import { resolve } from 'url';
 export default {
   name: 'Food',
-  props:["data","seafood","cartData","token","addOrder"],
+  props:["data","seafood","cartData","token","addOrder","isAdmin"],
   components:{Cart},
   data(){
     return{
@@ -55,8 +55,10 @@ export default {
         {menu:'fried'},
         {menu:'salad'},
       ],
+      adminStyle:{display:(this.isAdmin)?"none":"block"},
       fly:{
         left:'-100vw',
+        display:(this.isAdmin)?"none":"block"
       },
       fly2:{
         left:'-150vw',
@@ -69,7 +71,11 @@ export default {
       postionRecord:[],
       //listColor:[],
       nowAt:1,
-      isScroll: false
+      isScroll: false,
+      blockStyle:{
+        width: (this.isAdmin)?"30vh":"40vw",
+        height: (this.isAdmin)?"30vh":"40vw",
+      }
     }
   },
   methods:{
@@ -139,6 +145,9 @@ export default {
   watch:{
     data: function(){
       this.lists= this.data;
+      this.data.forEach(Element=>{
+        this.backgroundImage.push({backgroundImage:'url('+Element.image+')'})
+      })
     },
     seafood: function(){
       var self=this;
@@ -154,12 +163,15 @@ export default {
       },
   },
   created:function(){
+
+  },
+  mounted:function(){
       this.lists= this.data;
       this.data.forEach(Element=>{
         this.backgroundImage.push({backgroundImage:'url('+Element.image+')'})
       })
-  },
-  mounted:function(){
+
+
     var watchType='',self=this;
     for(let i=0;i<this.lists.length;++i){
       if(this.lists[i].type!=watchType){
@@ -230,7 +242,7 @@ export default {
     margin-top:1.5vh;
     margin-left:1.5vw;
     width: 88vw;
-    height: 75vh;
+    height: 100%;
   }
 
   .img-container{
