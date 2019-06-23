@@ -33,7 +33,7 @@ app.delete('/api/post/menu', (...args)=> Menu.Delete(...args));
 
 var feedback = require( '../controllers/feedbackController.js');
 feedback =new feedback();
-app.get('/api/get/feedback', (...args)=> feedback.Feedback(...args));
+app.post('/api/get/feedback', (...args)=> feedback.Feedback(...args));
 app.post('/api/post/comment', (...args)=> feedback.Comment(...args));
 app.post('/api/post/reply', (...args)=> feedback.Reply(...args));
 
@@ -46,8 +46,8 @@ app.post('/api/post/login', (...args)=> User.Login(...args));
 app.post('/api/post/index',(...args)=> User.Index(...args));
 app.post('/api/post/user/edit',(...args)=> User.Edit(...args));
 app.post('/api/post/user/regist',(...args)=> User.Regist(...args));
-app.get('/api/get/user/history',(...args)=> User.History(...args));
-app.get('/api/get/user/wait',(...args)=> User.Wait(...args));
+app.post('/api/get/user/history',(...args)=> User.History(...args));
+app.post('/api/get/user/wait',(...args)=> User.Wait(...args));
 
 
 var Pay = require( '../controllers/payController.js');
