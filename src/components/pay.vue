@@ -116,18 +116,13 @@ export default {
       var details = {
         displayItems: [
           {
-            label: "餐點",
-            amount: { currency: "TWD", value : "999.00" }
+            label: "sun burger的餐點",
+            amount: { currency: "TWD", value : this.tot }
           },
-          {
-            label: "餐點",
-            amount: { currency: "TWD", value : "999.00" },
-            pending: true
-          }
         ],
         total:  {
           label: "Total",
-          amount: { currency: "TWD", value : "1998.00" }
+          amount: { currency: "TWD", value : this.tot }
         }
       };
       return new PaymentRequest(methodData, details);

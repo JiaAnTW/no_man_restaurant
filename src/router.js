@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './Home.vue'
 import Layout from './components/Layout'
 import Admin from './Admin'
+import Discount from './Discount'
 import BackStage from './BackStage'
 import Anaylsis from './components/Anaylsis'
 
@@ -33,6 +34,11 @@ export default new Router({
           path: '',
           name: 'Anaylsis',
           component: Anaylsis
+        },
+        {
+          path: 'discount',
+          name: 'Discount',
+          component: Discount
         }
       ]
     }

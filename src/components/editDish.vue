@@ -186,11 +186,11 @@ export default {
         -webkit-align-items: flex-start;
     }
     .form-control{
-      border: 1px solid rgb(84,177,244);
+      border: 0.2vw solid rgb(84,177,244);
       border-radius: 2vh;
     }
     .custom-select{
-      border: 1px solid rgb(84,177,244);
+      border: 0.2vw solid rgb(84,177,244);
       border-radius: 3vh;
     }
     label{
@@ -198,12 +198,12 @@ export default {
     }
 
     .content input{
-      border: 1px solid rgb(84,177,244);
+      border: 0.2vw solid rgb(84,177,244);
       border-radius:3vh; 
     }
     .picture{
       flex-grow: 1;
-      border: 1px solid rgb(22, 217, 173);
+      border: 0.2vw solid rgb(22, 217, 173);
       border-radius: 3vh;
       width:25vw;
       height:25vw;
@@ -264,7 +264,7 @@ export default {
     .interact{
       width:25vw;
       height:50vh;
-      border: 1px solid rgb(22, 217, 173);
+      border: 0.2vw solid rgb(22, 217, 173);
       margin:1vh 1vw 1vh 0;
       border-radius: 3vh;
     }

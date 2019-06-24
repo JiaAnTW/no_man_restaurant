@@ -30,6 +30,13 @@ app.post('/api/post/add', (...args)=> Menu.Add(...args));
 app.put('/api/post/edit', (...args)=> Menu.Edit(...args));
 app.delete('/api/post/menu', (...args)=> Menu.Delete(...args));
 
+var Discount = require( '../models/discount.js');
+Discount=new Discount();
+app.get('/api/get/discount', (...args)=> Discount.Index(...args));
+app.post('/api/post/discount', (...args)=> Discount.Add(...args));
+app.put('/api/post/discount', (...args)=> Discount.Edit(...args));
+app.delete('/api/post/discount', (...args)=> Discount.Delete(...args));
+
 
 var feedback = require( '../controllers/feedbackController.js');
 feedback =new feedback();
