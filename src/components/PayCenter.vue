@@ -4,7 +4,7 @@
             <div class="content-container">
                 <member v-if="progress.width==='0%'" :onPay="true" @change-page="changeProgress"/>
                 <Map v-else-if="progress.width==='25%'" @change-page="changeProgress"/>
-                <pay v-else-if="progress.width==='75%'" :bill="bill" @finish="finish"/>
+                <pay v-else-if="progress.width==='75%'" :index="index" :bill="bill" @finish="finish"  @get-food="getFood" :find="find"/>
                 <comment v-else-if="progress.width==='50%'" :find="find" @get-food="getFood" @change-page="changeProgress"/>
             </div>
             <div class="progress">
@@ -22,7 +22,7 @@ import Pay from "./pay";
 import Comment from "./Comment";
 import Map from "./Map.vue";
 export default {
-  props: ['find','token','bill'],
+  props: ['find','token','bill','index'],
   name: 'PayCenter',
   components:{Modal,Member,Map,Pay,Comment},
   data () {

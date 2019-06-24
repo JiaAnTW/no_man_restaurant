@@ -162,8 +162,8 @@ export default {
         })
         this.$axios({
         method: method,
-        //url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/'+route,
-        url: '/api/post/'+route,
+        url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/'+route,
+        //url: '/api/post/'+route,
         data:{
             reason: this.reason,
             id:this.viewTarget,
@@ -239,7 +239,7 @@ export default {
           selectA=selectA.map(item=>{
             return Number(item)
           })
-          var selectB=Element.selectA.split(",")
+          var selectB=Element.selectB.split(",")
           selectB=selectB.map(item=>{
             return Number(item)
           })
@@ -252,6 +252,7 @@ export default {
             selectA:selectA,selectB:selectB
           } ;
         })
+        this.viewSingleDicount(0)
     }); 
   },
 }

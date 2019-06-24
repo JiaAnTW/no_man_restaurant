@@ -25,7 +25,7 @@
               <b-col class="l-pay">
                 <button @click="linePay"></button>
               </b-col>
-              <b-col></b-col>
+              <b-col> <button @click="discountCheck"></button> </b-col>
             </b-row>
             <!--^^^ 按鈕 ^^^-->
             <b-row v-if="waitPay" class="message">
@@ -52,15 +52,45 @@
 <script>
 export default {
   name: 'Pay',
-  props: ['bill'],
+  props: ['bill',"index"],
   data () {
   return{
       waitPay: false,
       waitCheck: false,
       transactionId: 0,
+      discount:[],
+      gift:[]
   }
 },
  methods:{
+   getDiscount:function(){
+      this.$axios({
+      methods: 'get',
+      url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/discount',
+      //url: '/api/get/discount',
+      })
+      .then((res) => {
+        this.discount =res.data.map(Element=>{
+          var selectA=Element.selectA.split(",")
+          selectA.pop();
+          selectA=selectA.map(item=>{
+            return Number(item)
+          })
+          var selectB=Element.selectB.split(",")
+          selectB.pop();
+          selectB=selectB.map(item=>{
+            return Number(item)
+          })
+          return{
+            reason: Element.reason,
+            id:Element.id,
+            policy: Element.policy,
+            condition: Element.con,
+            x: Element.x,y: Element.y,
+            selectA:selectA,selectB:selectB
+          } ;
+        })})
+   },
    linePay:function(){
           const self=this;
           self.waitPay=true;
@@ -71,7 +101,7 @@ export default {
               //url: '/api/post/pay',
               data:{
               productName: "SunBurger的餐點",
-              amount: self.tot,
+              amount: this.discountCheck(),
               confirmUrl: "localhost:8080/#/",
             }
           }
@@ -93,7 +123,7 @@ export default {
           //url: '/api/post/pay/confirm',
           data:{
             transactionId:self.transactionId,
-            amount:this.tot,
+            amount:this.discountCheck(),
             product:this.product,
             id:0,
            
@@ -117,12 +147,12 @@ export default {
         displayItems: [
           {
             label: "sun burger的餐點",
-            amount: { currency: "TWD", value : this.tot }
+            amount: { currency: "TWD", value : this.discountCheck() }
           },
         ],
         total:  {
           label: "Total",
-          amount: { currency: "TWD", value : this.tot }
+          amount: { currency: "TWD", value : this.discountCheck() }
         }
       };
       return new PaymentRequest(methodData, details);
@@ -132,6 +162,136 @@ export default {
       request.show().then().catch(function(err) {
 
       });
+    },
+    discountCheck(){
+    var sum=0;
+    this.bill.forEach(Element=>{
+      sum+=Element.num*Element.price;
+    })
+
+    const searchDish=(id)=>{
+      for(let i=0;i<this.bill.length;++i){
+        if(this.bill[i].id==id)
+          return this.bill[i].num;
+      }
+      return 0;
+    }
+
+    const searchB=(id,target)=>{
+      for(let i=0;i<target.length;++i){
+        console.log("compare "+id+" with "+target[i])
+        if(target[i]==id)
+          return 1;
+      }
+      return 0;
+    }
+
+    const isReachA=(target)=>{
+      switch (target.condition){
+        case 0:
+          if(sum>=target.x){
+              return 1;
+          }
+          return 0;
+          break;
+        case 1:
+          var counter=0;
+          for(let i=0;i<target.selectA.length;++i){
+            counter+=searchDish(target.selectA[i])
+          }
+        return (counter<target.x)?0:1;
+        break;
+        case 2:
+          for(let i=0;i<target.selectA.length;++i){
+            if(searchDish(target.selectA[i])>target.x)
+              return 1;
+          }
+          return 0;
+          break;
+        case 3:
+          var counter=0;
+          counter=searchDish(target.selectA[0]);
+          for(let i=i;i<target.selectA.length;++i){
+            counter=Math.min(counter,searchDish(target.selectA[i]))
+          }
+          return counter>=target.y;
+          break;
+        case 4:
+          return 1;
+          break;
+      }
+    }
+    const fullfillB=(target)=>{
+      var output=0;
+      switch (target.policy){
+        case 0:
+          this.bill.forEach(Element=>{
+            console.log("search B is "+searchB(Element.id,target.selectB))
+              if(searchB(Element.id,target.selectB)>0)
+                output+=Element.num*Element.price*target.y*0.1;
+              else
+                output+=Element.num*Element.price;
+          })
+          return output;
+          break;
+        case 1:
+          let counter=target.y;
+          this.bill.forEach(Element=>{
+              if(searchB(Element.id,target.selectB)&&Element.num>target.y&& counter!=0){
+                output+=(Element.num-target.y)*Element.price;
+                counter=0;
+              }
+              else if(searchB(Element.id,target.selectB)>0 && counter!=0){
+                output+=0;
+                counter-=Element.num;
+              }
+              else
+                output+=Element.num*Element.price;
+          })
+          if(counter>0)
+            this.gift.push({amout: counter,name:this.index[target.selectB[1]-1]})
+          return output;
+          break;
+        case 2:
+
+          var count=0;
+          count=searchDish(target.selectB[0]);
+          for(let i=i;i<target.selectB.length;++i){
+            count=Math.min(count,searchDish(target.selectB[i]))
+          }
+
+          count=(count>target.y)?target.y:count;
+          this.bill.forEach(Element=>{
+              if(searchB(Element.id,target.selectB)&&Element.num>target.y){
+                output+=(Element.num-target.y)*Element.price;
+              }
+              else if(searchB(Element.id,target.selectB)>0){
+                output+=0;
+              }
+              else
+                output+=Element.num*Element.price;
+          })
+          if(count>target.y)
+            this.gift=this.traget.selectB.map(Element=>{
+              if(Element!=0)
+                return {amout: count-target.y,name:this.index[target.Element-1]}
+            })
+          return output;
+          break;
+
+      }
+    }
+    
+    for(let k=0;k<this.discount.length;++k){
+      console.log("test discount "+k)
+      if(isReachA(this.discount[k])){
+        console.log("A Reach!")
+        console.log(fullfillB(this.discount[k]))
+        return fullfillB(this.discount[k])
+      }
+      
+    }
+    return this.tot;
     }
  },
 computed:{
@@ -140,6 +300,7 @@ computed:{
     this.bill.forEach(Element=>{
       sum+=Element.num*Element.price;
     })
+  
     return sum;
   },
   product:function(){
@@ -149,7 +310,7 @@ computed:{
   }
 },
  mounted(){
- 
+   this.getDiscount();
  }
 }
 </script>

@@ -45,7 +45,7 @@
     </div>
     <loading v-if="isLoading" />
     <start :show="isStart"/>
-    <pay-center @finish="changeNowAt" @get-food="searchCertainFood" :find="find" :bill="cart" @close="isPay=false" v-if="isPay" :token="token" @loading="isLoading=!isLoading"/>
+    <pay-center :index="index" @finish="changeNowAt" @get-food="searchCertainFood" :find="find" :bill="cart" @close="isPay=false" v-if="isPay" :token="token" @loading="isLoading=!isLoading"/>
   </div>
 </template>
 
@@ -64,7 +64,7 @@ import SignUp from "../SignUp.vue";
 import Start from "./Start.vue"
 import axios from "axios";
 import Vue from "vue";
-import { defaultCipherList } from 'constants';
+
 Vue.prototype.$axios = axios;
 export default {
   name: 'Layout',
@@ -258,6 +258,11 @@ export default {
         return true;
       else
         return false; 
+    },
+    index:function(){
+      return this.menu.map(Element=>{
+        return {id:Element.id,name:Element.name}
+      })
     }
   }
 }
