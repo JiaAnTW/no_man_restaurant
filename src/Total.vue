@@ -4,7 +4,7 @@
       <div class="order-container">
         <div class = "order">
         <b-container >
-          <b-row class=cartdata v-for = "(cartdatas,index) in order"  :key="index">
+          <b-row class=cartdata v-for="(cartdatas,index) in order[focus]"  :key="index">
             <b-col class="image">
               <img class="foodimg" :src="cartdatas.src" style="display:block; margin:auto;" alt="cartdatas.name" />
             </b-col>
@@ -18,8 +18,9 @@
         </b-container>
         <div class="sum">Total: ${{total}}</div>
         </div>
+        <div class="btn-container"><button style="width:5px;height:5px" v-for="(element,index) in order" :key="index" @click="focus=index"></button></div>
       </div>
-      <div><button></button><button></button><button></button></div>
+      
       <div class = "send">
         <button>Guest number: 9487945</button>
       </div>
@@ -41,6 +42,7 @@ export default {
   return{
     time: null,
     order: [],
+    focus: 0,
     startTime: 0,
   }
 },
@@ -55,7 +57,7 @@ computed:{
     },
     total:function(){
       var sum=0;
-      this.order.forEach(Element=>{
+      this.order[this.focus].forEach(Element=>{
         sum+=Element.price*Element.amout
       })
       return sum;
@@ -100,6 +102,9 @@ computed:{
               size++;
             })
             const test=res.data.data[size-1]
+            const ff=res.data.data;
+            console.log("there is a "+ff[size-1])
+             console.log(ff)
             var nameArray=[]
             this.time=1;
             this.startTime=test.startTime;
@@ -111,14 +116,22 @@ computed:{
                 nameArray.push(items.name)
             });
             this.$emit("get-food",nameArray)
-            this.order=test.productName.map((items,id)=>{ 
+            this.order.push(test.productName.map((items,id)=>{ 
                     return {
                         src:this.find[0][id].image,
                         name:this.find[0][id].name,
                         price:this.find[0][id].price,
                         amout: items.amount
                     }
-                })
+                }))
+            this.order.push(test.productName.map((items,id)=>{ 
+                    return {
+                        src:this.find[0][id].image,
+                        name:this.find[0][id].name,
+                        price:87,
+                        amout: items.amount
+                    }
+                }))                  
         })
     }
  }
@@ -377,5 +390,21 @@ color:rgb(245, 245, 245);
   align-items: center;
   font-size: 3.5vh;
   font-family: 'Microsoft JhengHei';
+}
+
+.btn-container button{
+  background-color:rgba(243,243,243,0.7);
+  border-radius: 100%;
+  width: 1vh;
+  height: 1vh;
+  margin-left: 1%;
+  border: none;
+}
+
+.btn-container{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: 1%;
 }
 </style>

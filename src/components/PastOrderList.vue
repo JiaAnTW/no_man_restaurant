@@ -217,4 +217,9 @@ input{
     display: flex;
     justify-content: flex-end;
 }
+
+.img_container{
+    width: 20%;
+    border: 1px solid red;
+}
 </style>
