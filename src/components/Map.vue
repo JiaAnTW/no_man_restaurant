@@ -1,6 +1,6 @@
 <template>
     <div class="map">
-       <div class="header"><!--font-weight:700 font-size:3vh-->
+       <div class="header">
             <img class="sbpic" src="../assets/icon/icon.png" alt="vue">
             <span class="topic">Select Your location</span>
         </div>
@@ -16,15 +16,12 @@
         <br>
         <div class="list">
         <div v-bind:key="index" v-for="(data,index) in store" >
-           <div class="storedata">
+           <div class="storedata"> 
             <div  class="map_contain">
-            <iframe class="iframe_style" 
-            :src="data.site"
-            frameborder="0">
-            </iframe>
+            <img src="../assets/MAP.png">
             </div>
             <div class="info">
-                <span class="name">{{data.name}}</span><br>
+                <span class="name">{{data.name}}</span>
                 <span class="location">{{data.location}}</span>
                 <span class="time">{{data.time}}</span>
             </div>
@@ -70,50 +67,48 @@ export default {
         display:flex;
         flex-grow:1;
         flex-direction:column;
-        -webkit-flex-direction:column;    
+        -webkit-flex-direction:column; 
+           
     }
     .header{
         display: flex;
-        height:10vh;
-        margin-left: 12vw;
+        height:14vh;
+        margin-left: 2vh;
+        align-items: flex-end;
     }
     .sbpic{
         border-radius: 50%;
-        width: 25%;
-        height: auto;
-        background: white;
+        height:10vh;
+        width:auto;
     }
     .topic{
-        font-weight: bold;
         margin-left:2vw;
-        margin-top:6vh;
+        margin-bottom:1.5vh;
+        font-weight:700;
+        font-size:3vh;
     }
     .container{
         display: flex;
         flex-grow: 8;
-        /*border: 0.5px solid red;*/
         background: white;
         border-radius:5%; 
     }
     .list{
         display: flex;
-        /* border: 1px solid blue;*/
         height: 15vh;
         flex-direction:column;
         -webkit-flex-direction:column; 
         align-items: center;
-        overflow-x:hidden;
-        overflow-y:auto;
-        overflow: auto;
     }
     .storedata{
         display: flex;
-        /*border: 1px solid red;*/
+        flex-grow: 1;
         background-color:white;
         border-radius:5%; 
         justify-content: space-between;
         align-items: center;
-        overflow: hidden;
+        width: 80vw;
+        
     }
     .info{
         display: flex;
@@ -122,12 +117,12 @@ export default {
         flex-direction:column;
         -webkit-flex-direction:column;
         justify-content: flex-start;
+        
     }
     .map_contain{
-        /*border: 1px solid red;*/
-        width:50%;
-        height: 200%;
-        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        width:25%;
     }
     .iframe_style{
         width:100%;
@@ -136,26 +131,27 @@ export default {
         border:0;
     }
     .con_btn{
-        display: flex;
-        flex-direction:column;
-        -webkit-flex-direction:column;
-        justify-content: center;
         color:white;
+        background-image: linear-gradient(270deg, rgb(155,51,84) 0%, rgb(58,44,105) 80%);
         margin-right: 10px;
-        background-color: rgb(48,48,48);
-        border-radius: 25%;
+        border:none;
+        border-radius:25px; 
         height: 20%;
-        border:0px;
+        font-weight:500;
+        font-size:2vh;
     }
     .name{
         font-weight: bold;
         color: black;
+        font-family: 'Microsoft JhengHei';
     }
     .location{
         font-style: italic;
         color: black;
+        font-family: 'Microsoft JhengHei';
     }
     .time{
         color: grey;
+        font-family: 'Microsoft JhengHei';
     }
 </style>
