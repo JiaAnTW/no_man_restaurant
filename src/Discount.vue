@@ -17,7 +17,7 @@
                 <small>點擊以編輯/查看詳細</small>
               </b-list-group-item>
             </b-list-group>
-            <button class="add">新增折扣</button>
+            <button class="add" @click="reFlashDish">新增折扣</button>
         </div>
         <div class="edit">
           <div class="type">
@@ -74,7 +74,7 @@
             <h1>step4: 送出</h1>
             <div class="choose-type step4">
               <b-form-input class="topic" v-model="reason" placeholder="折扣的理由"></b-form-input>
-              <button>送出</button><button>刪除</button>
+              <button @click="editDiscount">送出</button><button @click="deleteDish">刪除</button>
             </div>
           </div>
         </div>
@@ -136,22 +136,54 @@ export default {
     }
   },
   methods:{
-      addDish:function(){
+      reFlashDish:function(){
         this.condition=0;
         this.policy=0;
         this.x=0;
         this.y=0;
         this.selectA=[];
-        this.selectB=this.discount[id].selectB;
-        this.viewTarget=this.discount[id].id;
-        this.reason=this.discount[id].reason;        
+        this.selectB=[];
+        this.viewTarget=this.discount.length;
+        this.reason="";        
+      },
+      editDiscount:function(){
+        var self=this;
+        const method=(this.viewTarget===this.discount.length)?"post":"put";
+        const route="discount";
+        var selectA='';
+        this.selectA.forEach((Element,index)=>{
+          selectA+=Element;
+          selectA+=",";
+        })
+        var selectB='';
+        this.selectB.forEach((Element,index)=>{
+          selectB+=Element;
+          selectB+=",";
+        })
+        this.$axios({
+        method: method,
+        //url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/'+route,
+        url: '/api/post/'+route,
+        data:{
+            reason: this.reason,
+            id:this.viewTarget,
+            policy: this.policy,
+            condition: this.condition,
+            x: this.x ,y: this.y,
+            selectA:selectA,selectB:selectB
+        }
+        })      
       },
       deleteDish:function(id){
-        var index=this.menu.find(function(item, index, array){
-         return item.id == id;           // 取得大於五歲的
-        });
-        this.menu.splice(index, 1);
-        this.viewDish=(this.viewDish!=0)?this.viewDish-1:this.viewDish+1;
+        var self=this;
+        this.$axios({
+        method: "delete",
+        url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/discount',
+        //url: '/api/post/'+route,
+        data:{
+            id:this.viewTarget,
+        }
+        })
       },
       viewSingleDicount: function(id){//當點擊Food.vue的其中一個block後，用這個function把選擇的餐點傳入order.vue
         this.condition=this.discount[id].condition;
@@ -198,8 +230,8 @@ export default {
 
     this.$axios({
       methods: 'get',
-      //url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/discount',
-      url: '/api/get/discount',
+      url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/discount',
+      //url: '/api/get/discount',
       })
       .then((res) => {
         this.discount =res.data.map(Element=>{

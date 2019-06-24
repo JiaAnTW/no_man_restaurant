@@ -52,7 +52,7 @@ module.exports=class discount{
         }
         const getMaxId=()=>{
             var number=-1;
-            this.con.query('SELECT MAX(`id`) FROM menu', function(err, results) {
+            this.con.query('SELECT MAX(`id`) FROM discount', function(err, results) {
                 if (err) {
                     return(err);
                 }
@@ -77,7 +77,9 @@ module.exports=class discount{
                 selectA: req.body["selectA"],
                 selectB: req.body["selectB"]
             };
-            this.con.query('INSERT INTO menu SET ?', data, function(err, rows) {
+            //console.log("data is")
+            //console.log(data)
+            this.con.query('INSERT INTO discount SET ?', data, function(err, rows) {
                 if (err) {
                     return(err);
                 }
@@ -115,7 +117,7 @@ module.exports=class discount{
                 selectA: req.body["selectA"],
                 selectB: req.body["selectB"]
             };
-            this.con.query('UPDATE menu SET ? WHERE id = ?', [data,data.id], function(err, rows) {
+            this.con.query('UPDATE discount SET ? WHERE id = ?', [data,data.id], function(err, rows) {
                 if (err) {
                     return(err);
                 }
@@ -145,7 +147,7 @@ module.exports=class discount{
                 console.log("Menu/Delete: database connect error at "+time);
         }
         try{
-            this.con.query('DELETE FROM menu WHERE id = ?',req.body['id'],function(err, rows) {
+            this.con.query('DELETE FROM discount WHERE id = ?',req.body['id'],function(err, rows) {
             if (err) {
                 return(err);
                 }
