@@ -19,7 +19,7 @@
               <b-col class="master">
                 <button></button>
               </b-col>
-              <b-col class="visa">
+              <b-col @click="Visa" class="visa">
                 <button></button>
               </b-col>
               <b-col class="l-pay">
@@ -104,6 +104,39 @@ export default {
           this.$emit("finish");
         }
       })
+    },
+    createPaymentRequest () {
+      var methodData = [{
+        supportedMethods: ['basic-card'],
+        data: {
+          supportedNetworks: ['jcb', 'mastercard','visa'], 
+          supportedTypes: ['debit', 'credit', 'prepaid']
+        },
+      }];
+      var details = {
+        displayItems: [
+          {
+            label: "餐點",
+            amount: { currency: "TWD", value : "999.00" }
+          },
+          {
+            label: "餐點",
+            amount: { currency: "TWD", value : "999.00" },
+            pending: true
+          }
+        ],
+        total:  {
+          label: "Total",
+          amount: { currency: "TWD", value : "1998.00" }
+        }
+      };
+      return new PaymentRequest(methodData, details);
+    },
+    Visa() {
+      var request = this.createPaymentRequest();
+      request.show().then().catch(function(err) {
+
+      });
     }
  },
 computed:{

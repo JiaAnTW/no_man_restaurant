@@ -161,6 +161,11 @@ export default {
       }
       self.lists=output;
       },
+    addOrder:function(){
+      if(this.addOrder==true){//若將產品放入cart則跳出sidebar
+        this.open();
+    }
+    }
   },
   created:function(){
 
@@ -170,7 +175,9 @@ export default {
       this.data.forEach(Element=>{
         this.backgroundImage.push({backgroundImage:'url('+Element.image+')'})
       })
-
+    if(this.addOrder==true){//若將產品放入cart則跳出sidebar
+      this.open();
+    }
 
     var watchType='',self=this;
     for(let i=0;i<this.lists.length;++i){
@@ -181,9 +188,7 @@ export default {
           this.postionRecord[this.postionRecord.length-1]+=50;
       }
     }
-    if(self.addOrder==true){//若將產品放入cart則跳出sidebar
-      self.open();
-    }
+
   },
 
 }

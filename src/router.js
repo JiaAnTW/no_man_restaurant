@@ -11,14 +11,9 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
       // 如果希望網頁有一固定版面，當網址改動時版面不動，只改變內容，你可以用children來放變動內容的router
       // 並在固定內容的.vue中以<router-view>表示當前路徑對應到的children
-      path: '/order',
+      path: '/',
       name: 'Layout',
       component: Layout
       // You can edit/add/remove/change the objects in children to reach SPA //

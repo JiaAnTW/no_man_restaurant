@@ -109,6 +109,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    height: 13vh;
     justify-content:center;
     -webkit-filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
     filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));

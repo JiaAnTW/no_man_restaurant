@@ -8,7 +8,7 @@
           <div class="patch">
             <h2>What's new</h2>
             <div class="info">我真的很好吃，我超級好吃。我真的真的很好吃。</div>
-            <div class="info_btn"><button>History</button></div>
+            <div class="info_btn"><button><img src="../assets/icon/arrow.png" alt="arrow"/></button></div>
           </div>
           <div class="interact" v-for="(element,index) in interact" :key="index">
               <div id="comment">
@@ -194,17 +194,24 @@ export default {
       height: 22vh;
     }
     .info_btn {
-      padding-top: 2vh;
-      padding-right: 2vh ;
+      padding-top: 1vh;
       width: 100%;
+      height: 5vh;
       display: flex;
       justify-content: flex-end;
     }
     .info_btn button{
+      
       background-color: transparent;
+      width: 30%;
       font-size: 2.3vh;
+      height: 3vh;
       color: white;
       border: none;
+    }
+
+    .info_btn button img{
+      height: 100%;
     }
     .interact{
       padding-right: 2vh;
