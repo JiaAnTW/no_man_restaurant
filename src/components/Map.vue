@@ -1,6 +1,6 @@
 <template>
     <div class="map">
-       <div class="header">
+       <div class="header"><!--font-weight:700 font-size:3vh-->
             <img class="sbpic" src="../assets/icon/icon.png" alt="vue">
             <span class="topic">Select Your location</span>
         </div>

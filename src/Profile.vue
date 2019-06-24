@@ -8,18 +8,23 @@
         </div>
 
         <div class="number">
-            <span >Email address</span>
+            <span class="text">Email address</span>
             <div class="box">
-            <span >{{email}}</span></div>
-            <span >Mobile number</span>
+            <span >{{email}}</span></div><br>
+            <span class="text">Mobile number</span>
             <div class="box">
             <span >{{mobile}}</span></div>
         </div>
 
         <div class="bottom">
-            <img class="icon" src="./assets/icon/fb icon.png">
-            <img class="icon" src="./assets/icon/ig icon.png">
-            <span style="color:white">Follow Us!</span>
+            <div class="out">
+            <div>
+            <a class="pic" href="https://www.facebook.com/groups/nckuwebdesign/"><img class="icon" border="0" src="./assets/icon/fb icon.png"></a></div>
+            <div>
+            <a class="pic" href="https://www.instagram.com/_yang1029/?hl=zh-tw"><img class="icon"  border="0" src="./assets/icon/ig icon.png"></a></div>
+            </div>
+            <div class="follow">
+            <span>Follow Us!</span></div>
             <button class="button">Save</button>
         </div>
     </div>
@@ -84,11 +89,22 @@ export default {
         flex-direction:column;
         -webkit-flex-direction:column;
         justify-content: center;  
-        
+    }
+    .box{
+        font-size:2.5vh;
+        margin-left:10%;
+        margin-right:10%;
+    }
+    .text{
+        /*border:0.5px solid red;*/
+        margin-left:10%;
+        font-size:3vh;
+        justify-content: center;  
     }
     .number{
-        border:0.5px solid red;
+        /*border:0.5px solid red;*/
         color:white;
+        margin-top:7vh;
         display:flex;
         flex-direction:column;
         -webkit-flex-direction:column;
@@ -117,23 +133,47 @@ export default {
         border-radius:50%;
     }
     .bottom{
-        border:0.5px solid red;
+        /*border:0.5px solid red;*/
         display:flex;
-       /* margin-top:40vh;*/
+        flex-grow:1;
+        align-items: flex-end;
+        margin-bottom: 5vh;
         justify-content: space-evenly; 
     }
-    .icon{
-        /*height: 20vh;
-        width:20vw;*/
-        border-radius:50%;
+    .out{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 30%;
+    }
+    .pic{
+        width: 7vh;
+        height:7vh;
+        border-radius: 10vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         background-image: linear-gradient(270deg, rgb(155,51,84) 0%, rgb(58,44,105) 80%);
+    }
+    .icon{
+        height: 70%;
+    }
+    .follow{
+        color:white;
+        display: flex;
+        font-size:3vh;
+        margin-bottom:1vh;
+        margin-left:-3vh;
     }
     .button{
         background-image: linear-gradient(270deg, rgb(155,51,84) 0%, rgb(58,44,105) 80%);
         border:none;
-        border-radius:25%; 
+        border-radius:25px; 
         height: 5vh;
-        width: 15vw;
+        width: 30vw;
         color:white;
+        font-weight:500;
+        font-size:3vh;
+        visibility: hidden;
     }
 </style>
