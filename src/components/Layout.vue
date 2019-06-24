@@ -27,7 +27,7 @@
       <!--這兩個屬性會幫你自動把長寬貼齊step-container，詳情請搜尋css flexbox -->
       <!--把你做的component放在下面。(你可以試試看把order放進來)-->
       <!-- <past-order v-if="nowAt==='menu'"/> -->
-      <food v-if="nowAt=== 'menu'" :isAdmin="false" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :cartData="cart" :addOrder="addOrder" :token="token" />
+      <food v-if="nowAt=== 'menu'" :isAdmin="false" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :cartData="cart" :addOrder="addOrder" :token="token" @start-pay="startPay"/>
       <order v-else-if="nowAt==='order'" @add-cart="addToCart" @add="add" :data="menu[viewDish]" :isCart="isCart"/>
       <member v-else-if="nowAt=== 'login'" @get-token="gettoken" :onPay="false" @change-now-at="changeNowAt"/>
       <!--cart v-else-if="nowAt=== 'cart'" :token="token" @send-bill="sendBill" @direct-to-show="changeNowAt" @delete-cart="handleCartDelete" @handle-number-change="handleCartChange" @show-loading="shouldShowLoading" :data="cart"/-->
@@ -45,7 +45,7 @@
     </div>
     <loading v-if="isLoading" />
     <start :show="isStart"/>
-    <!--pay-center @get-food="searchCertainFood" :find="find"/-->
+    <pay-center @finish="changeNowAt" @get-food="searchCertainFood" :find="find" :bill="cart" @close="isPay=false" v-if="isPay" :token="token" @loading="isLoading=!isLoading"/>
   </div>
 </template>
 
@@ -84,6 +84,7 @@ export default {
       nowAt: "loading", //目前step的顯示元件，loading時不顯示任何元件,
       isLoading: false, //loading畫面是否顯示
       isStart: true,
+      isPay: false,
       search_f:false,//放大鏡是否顯示
       addOrder:false,//確認是否addToCart
      //placeOrder:false,
@@ -167,6 +168,16 @@ export default {
         }
       }))
       console.log(this.find)
+    },
+    startPay:function(){
+      if(this.token!=""){
+        this.isPay=true;
+        this.addOrder=false
+      }
+      else{
+        alert("想要買這個餐點?哼哼哼，在沒有登入之前我是不會讓你通過這裡的",this.changeNowAt('profile'))
+      }
+      
     }
   },
     mounted: function(){ //當畫面已經渲染上DOM後，向後端請求資料

@@ -9,7 +9,7 @@
 
             </b-row>
             <!--vvv 按鈕 vvv-->
-            <b-row>
+            <b-row v-if="!waitCheck&&!waitPay">
               <b-col class="a-pay">
                 <button></button>
               </b-col>
@@ -23,12 +23,27 @@
                 <button></button>
               </b-col>
               <b-col class="l-pay">
-                <button></button>
+                <button @click="linePay"></button>
               </b-col>
               <b-col></b-col>
             </b-row>
             <!--^^^ 按鈕 ^^^-->
-  
+            <b-row v-if="waitPay" class="message">
+              處理中，請稍後
+            </b-row>
+            <b-row class="message" v-if="waitCheck" >
+              請完成您的付款<br/><br/>
+              付款完成，請按下「確認」<br/>
+              付款失敗，請按下「重新發送」
+            </b-row>
+            <b-row v-if="waitCheck">
+              <b-col>
+                <button @click="linePay" style="color:white;font-family: 'Microsoft JhengHei';font-size:2vh;background-image: linear-gradient(270deg, rgb(155,51,84) 0%, rgb(58,44,105) 80%);"> 重新發送 </button>
+              </b-col>
+              <b-col>
+                <button @click="linePayConfirm" style="color:white;font-family: 'Microsoft JhengHei';font-size:2vh;background-image: linear-gradient(270deg, rgb(155,51,84) 0%, rgb(58,44,105) 80%);"> 確認 </button>
+              </b-col>
+            </b-row>
         </b-container>
         
     </div>
@@ -37,14 +52,74 @@
 <script>
 export default {
   name: 'Pay',
+  props: ['bill'],
   data () {
   return{
-      
+      waitPay: false,
+      waitCheck: false,
+      transactionId: 0,
   }
 },
  methods:{
-
+   linePay:function(){
+          const self=this;
+          self.waitPay=true;
+          this.$axios(
+            {
+              method: "post",
+              url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/pay',
+              //url: '/api/post/pay',
+              data:{
+              productName: "SunBurger的餐點",
+              amount: self.tot,
+              confirmUrl: "localhost:8080/#/",
+            }
+          }
+        ).then(response=>{
+          window.open(response.data["url"], "_blank")
+          self.waitPay=false;
+          self.waitCheck=true;
+          self.transactionId=response.data.transactionId;
+          })     
+   },
+    linePayConfirm: function(){
+      this.waitPay=true;
+      this.waitCheck=false;
+      const self=this;
+      this.$axios(
+        {
+          method: "post",
+          url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/pay/confirm',
+          //url: '/api/post/pay/confirm',
+          data:{
+            transactionId:self.transactionId,
+            amount:this.tot,
+            product:this.product,
+            id:0,
+           
+          }
+        }
+      ).then(response=>{
+        if(response.data==='Success.'){
+          this.$emit("finish");
+        }
+      })
+    }
  },
+computed:{
+  tot:function(){
+    var sum=0;
+    this.bill.forEach(Element=>{
+      sum+=Element.num*Element.price;
+    })
+    return sum;
+  },
+  product:function(){
+    return this.bill.map(Element=>{
+      return {name:Element.name,amount:Element.num}
+    })
+  }
+},
  mounted(){
  
  }
@@ -182,5 +257,17 @@ width: 10vh;
       background-size: auto 60%;
       background-position:center center;
       background-repeat:no-repeat;
+}
+
+.message{
+  text-align: center;
+  justify-content:center;
+  align-items:center;
+  width:100%;
+  height:25vh;
+  margin-right: 0;
+  margin-left: 0;
+  font-family: 'Microsoft JhengHei';
+  font-size: 2.3vh;
 }
 </style>

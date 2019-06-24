@@ -19,6 +19,7 @@
         <div class="sum">Total: ${{total}}</div>
         </div>
       </div>
+      <div><button></button><button></button><button></button></div>
       <div class = "send">
         <button>Guest number: 9487945</button>
       </div>

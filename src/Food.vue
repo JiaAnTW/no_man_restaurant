@@ -10,7 +10,7 @@
               {{text.menu}}
             </div>
           </div>
-          <div class="cart_frame" v-if="isAdmin">
+          <div class="cart_frame" v-if="!isAdmin">
             <cart :token="token" @foodmethod="foodmethod" :data="cartData" :place="place" />
           </div>
           <button class="btn2" @click="close"></button>

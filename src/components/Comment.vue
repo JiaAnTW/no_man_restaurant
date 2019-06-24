@@ -8,7 +8,7 @@
             <past-order-list :data="order" :isPay="true" :sendData="send"/>
         </div>
         <div class="btn-container">
-                <button class="add_cart_btn">Skip</button>
+                <button class="add_cart_btn" @change="this.$emit('change-page',100)">Skip</button>
                 <button class="add_cart_btn" @click="send=!send">Send</button>
         </div>
     </div>

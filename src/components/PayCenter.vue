@@ -2,10 +2,10 @@
     <div class="PayCenter">
         <modal width="47vh" height="65vh" @change-now-at="close">
             <div class="content-container">
-                <member v-if="progress.width==='25%'" :onPay="true" @change-page="changeProgress"/>
-                <Map v-else-if="progress.width==='50%'" @change-page="changeProgress"/>
-                <pay v-else-if="progress.width==='75%'"/>
-                <comment v-else-if="progress.width==='100%'" :find="find" @get-food="getFood"/>
+                <member v-if="progress.width==='0%'" :onPay="true" @change-page="changeProgress"/>
+                <Map v-else-if="progress.width==='25%'" @change-page="changeProgress"/>
+                <pay v-else-if="progress.width==='75%'" :bill="bill" @finish="finish"/>
+                <comment v-else-if="progress.width==='50%'" :find="find" @get-food="getFood" @change-page="changeProgress"/>
             </div>
             <div class="progress">
                 <div class="bar" :style="progress"></div>
@@ -22,12 +22,12 @@ import Pay from "./pay";
 import Comment from "./Comment";
 import Map from "./Map.vue";
 export default {
-  props: ['find'],
+  props: ['find','token','bill'],
   name: 'PayCenter',
   components:{Modal,Member,Map,Pay,Comment},
   data () {
   return{
-      progress: {width:"100%"},
+      progress: {width:"0%"},
   }
 },
  methods:{
@@ -43,12 +43,21 @@ export default {
      getFood(data){
          console.log("center type get ",Array.isArray(data))
          this.$emit("get-food",data)
+     },
+     showLoading(){
+         this.$emit('loading')
+     },
+     finish(){
+         this.close();
+         this.$emit('finish',"bill");
      }
  },
  watch:{
+
  },
  mounted(){
- 
+     if(this.token!='')
+        this.progress.width="25%"
  }
 }
 </script>

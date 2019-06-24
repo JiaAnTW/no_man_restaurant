@@ -80,9 +80,12 @@ computed:{
     linePay: function(){
       var self=this;
       if(this.tot>0){
-      self.place=true;
-      this.$emit('place',self.place)//以一個變數名叫做'place'傳送place出去
-      console.log("cart"+self.place);
+        //if(this.token!=''){
+          //self.place=true;
+        this.$emit("foodmethod",'start-pay')//以一個變數名叫做'place'傳送place出去
+        //}
+        //else
+           //alert("想要買這個餐點?哼哼哼，在沒有登入之前我是不會讓你通過這裡的",this.$emit("foodmethod",'direct-to-show','profile'))
       }
      /*if(this.tot>0){
         if(this.token!=''){
