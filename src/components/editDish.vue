@@ -14,21 +14,22 @@
                 <b-form-select v-model="type" :options="options"></b-form-select>
             </b-form-group>
         </b-container>
-        <div class="right"> 
-         <div id="container" class="picture" :style="style">
+        <div class="right">
+         <div id="container" :style="style">
              <b-form-group id="fieldset-3"  label="">
-            <b-form-group id="fieldset-0"  label="餐點照片" >
-                <div>
-                    <img :src="image" class="dish-pic">
-                    <input type="file" name="avatar" id="uppic" accept="image/gif,image/jpeg,image/jpg,image/png" @change="changeImage($event)" ref="avatarInput" class="uppic">
-                    <button v-on:click="clearImage">清除圖片</button>
+                <div  class="picture">
+                  <img :src="image" class="dish-pic">
+                </div>
+                <div  class="pic-selector">
+                  <input type="file" name="avatar" id="uppic" accept="image/gif,image/jpeg,image/jpg,image/png" @change="changeImage($event)" ref="avatarInput" class="uppic">
+                  <button v-on:click="clearImage">清除圖片</button>
                 </div>
             </b-form-group>
-            </b-form-group>
           </div>
+          <div class="interact"></div>
           <div class="btn-con">
+            <button v-on:click="deleteDish">取消</button>
             <button v-on:click="sendImage">送出</button>
-            <button v-on:click="deleteDish">刪除</button>
           </div>
         
         </div>
@@ -172,30 +173,42 @@ export default {
         align-items: center;
         -webkit-align-items: center;   
     }
-
     .con{
       flex-grow: 1;
-      border: 1px solid green;
-      height: 100vh;
+      border: 1px solid rgb(22, 217, 173);
+      height: 95vh;
       display: flex;
+      margin:2vh 1vw 3vh 1vw;
       flex-direction: column;
         justify-content: space-around;
         -webkit-justify-content:space-around; 
         align-items: flex-start;
         -webkit-align-items: flex-start;
-         
     }
-
+    .form-control{
+      border: 1px solid rgb(84,177,244);
+      border-radius: 2vh;
+    }
+    .custom-select{
+      border: 1px solid rgb(84,177,244);
+      border-radius: 3vh;
+    }
     label{
       font-family: 'Microsoft JhengHei';
     }
 
     .content input{
       border: 1px solid rgb(84,177,244);
+      border-radius:3vh; 
     }
     .picture{
       flex-grow: 1;
-      border: 1px solid blue;
+      border: 1px solid rgb(22, 217, 173);
+      border-radius: 3vh;
+      width:25vw;
+      height:25vw;
+      margin:2vh 1vw 1vh 0vw;
+      padding:4vw;
     }
     .title{
         width: 100%;
@@ -220,22 +233,60 @@ export default {
       height: 100vh;
       flex-grow: 1;
       display: flex;
-      border: 1px solid blueviolet;
+      border:transparent;
       flex-direction: column;
         justify-content: space-around;
         -webkit-justify-content:space-around; 
         align-items: flex-start;
         -webkit-align-items: flex-start;
-    }
 
+    }
+    .pic-selector{
+      flex-grow: 1;
+      width: 100%; 
+      display: flex;
+      justify-content: center;
+      -webkit-justify-content:center; 
+      align-items: flex-end;
+      -webkit-align-items: flex-end;
+      color: rgb(84,177,244);
+    }
+    .pic-selector button,.uppic{
+      border:0;
+      background-color: rgb(84,177,244);
+      color: white;
+      font-family: 'Microsoft JhengHei';
+      width: 10vw;
+      border-radius:3vh;
+      height:5vh;
+      margin:0 0.7vw 0 0.7vw; 
+    }
+    .interact{
+      width:25vw;
+      height:50vh;
+      border: 1px solid rgb(22, 217, 173);
+      margin:1vh 1vw 1vh 0;
+      border-radius: 3vh;
+    }
     .btn-con{
         flex-grow: 1;
         width: 100%; 
         display: flex;
-        justify-content: space-around;
-        -webkit-justify-content:space-around; 
-        align-items: center;
-        -webkit-align-items: center;
+        justify-content: center;
+        -webkit-justify-content:center; 
+        align-items: flex-end;
+        -webkit-align-items: flex-end;
+        margin: 1vh 0 3vh 0;
     }   
+    .btn-con button{
+      border:0;
+      background-color:rgb(22, 217, 173);
+      color: white;
+      font-family: 'Microsoft JhengHei';
+      width: 10vw;
+      border-radius:3vh;
+      height:5vh;
+      margin:0 0.7vw 0 0.7vw; 
+    }
 </style>
 
