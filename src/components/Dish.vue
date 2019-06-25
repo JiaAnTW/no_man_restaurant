@@ -8,7 +8,7 @@
           <div class="patch">
             <h2>What's new</h2>
             <div class="info">我真的很好吃，我超級好吃。我真的真的很好吃。</div>
-            <div class="info_btn"><button><img src="../assets/icon/arrow.png" alt="arrow"/></button></div>
+            <div class="info_btn"><button style="outline:none;" @click="scroll"><img src="../assets/icon/arrow.png" alt="arrow"/></button></div>
           </div>
           <div class="interact" v-for="(element,index) in interact" :key="index">
               <div id="comment">
@@ -22,6 +22,20 @@
 </template>
 
 <script>
+import VueScrollTo from 'vue-scrollto';
+var options = {
+     container: ".detail",
+     easing: "ease",
+     offset: -10,
+     force: true,
+     cancelable: true,
+     onStart: false,
+     onDone: false,
+     onCancel: false,
+     x: false,
+     y: true
+ }
+
 export default {
   name: 'Dish',
   props: ["image","color"],
@@ -64,6 +78,10 @@ export default {
   methods:{
     changeOpen:function(){
       this.isOpen=!this.isOpen;
+    },    
+    scroll:function(){
+
+      VueScrollTo.scrollTo('.interact',1000,options)
     }
   },
   watch:{

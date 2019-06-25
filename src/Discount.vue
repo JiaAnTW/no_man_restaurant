@@ -13,15 +13,16 @@
                 <p class="mb-12">
                   折扣內容 : {{discountName[index][1]}}
                 </p>
-                <small>優惠編號 {{element.id}} </small>
+                <small>優惠編號 {{element.id}} </small><br/>
                 <small>點擊以編輯/查看詳細</small>
               </b-list-group-item>
             </b-list-group>
-            <button class="add" @click="reFlashDish">新增折扣</button>
+            <button class="add" v-if="viewTarget!=discount.length" @click="reFlashDish">新增折扣</button>
+            <button class="add" v-else style="height:4vw;width:17vw">更改右方內容並送出 即可新增折扣<br/>點選上方折扣即可返回編輯</button>
         </div>
         <div class="edit">
           <div class="type">
-            <h1>step1: 選擇折扣類型</h1>
+            <h1>Step1: 選擇折扣類型</h1>
             <div class="choose-type">
               <div class="condition">
                 <b-form-select v-model="condition" :options="optionA" name="hi">
@@ -43,12 +44,12 @@
           </div>
           <div class="target">
             <div class="choose-A">
-              <h1>step2: 選擇A</h1>
+              <h1>Step2: 選擇A</h1>
               <b-container class="list-A-B">
                     <b-form-group>
                       <b-form-checkbox-group v-model="fliterA" :options="listFliter" name="flavour-1a "></b-form-checkbox-group>
                     </b-form-group>
-                    <b-container>
+                    <b-container class="option-container">
                     <b-form-group class="list-A">
                       <b-form-checkbox-group v-model="selectA" :options="menu" name="flavour-1a " stacked></b-form-checkbox-group>
                     </b-form-group>
@@ -56,12 +57,12 @@
               </b-container>
             </div>
             <div class="choose-B">
-              <h1>step3: 選擇B</h1>
+              <h1>Step3: 選擇B</h1>
                 <b-container class="list-A-B">
                     <b-form-group>
                       <b-form-checkbox-group v-model="fliterB" :options="listFliter" name="flavour-1b "></b-form-checkbox-group>
                     </b-form-group>
-                    <b-container>
+                    <b-container class="option-container">
                     <b-form-group class="list-B">
                       <b-form-checkbox-group v-model="selectB" :options="menu" name="flavour-1b " stacked></b-form-checkbox-group>
                     </b-form-group>
@@ -71,9 +72,9 @@
             
           </div>
           <div class="result">
-            <h1>step4: 送出</h1>
+            <h1>Step4: 填寫理由並送出</h1>
             <div class="choose-type step4">
-              <b-form-input class="topic" v-model="reason" placeholder="折扣的理由"></b-form-input>
+              折扣理由:<b-form-input class="topic" v-model="reason" placeholder="折扣的理由"></b-form-input>
               <button @click="editDiscount">送出</button><button @click="deleteDish">刪除</button>
             </div>
           </div>
@@ -125,6 +126,42 @@ export default {
           ]
       }
   },
+  watch:{
+    fliterA:function(){
+      this.selectA=[];
+      this.menu.forEach(Element=>{
+        this.fliterA.forEach(item=>{
+          if(Element.type===item)
+            this.selectA.push(Element.value)
+        })
+      })
+      this.fliterA.forEach(item=>{
+      if(item==="all"){
+          this.selectA=[];
+          this.menu.forEach(Element=>{
+            this.selectA.push(Element.value)
+          })
+        }
+      })
+    },
+    fliterB:function(){
+      this.selectB=[];
+      this.menu.forEach(Element=>{
+        this.fliterB.forEach(item=>{
+          if(Element.type===item)
+            this.selectB.push(Element.value)
+        })
+      })
+      this.fliterB.forEach(item=>{
+      if(item==="all"){
+          this.selectB=[];
+          this.menu.forEach(Element=>{
+            this.selectB.push(Element.value)
+          })
+        }
+      })
+    }
+  },
   computed:{
     discountName:function(){
       return this.discount.map(Element=>{
@@ -172,7 +209,30 @@ export default {
             x: this.x ,y: this.y,
             selectA:selectA,selectB:selectB
         }
-        })      
+        })
+          if(this.viewTarget===this.discount.length){
+            this.discount.push(
+              {
+                reason: this.reason,
+                id:this.viewTarget,
+                policy: this.policy,
+                condition: this.condition,
+                x: this.x ,y: this.y,
+                selectA:this.selectA,selectB:this.selectB
+              }
+              
+            )
+          }
+          else{
+            this.discount[this.viewTarget]={
+                reason: this.reason,
+                id:this.viewTarget,
+                policy: this.policy,
+                condition: this.condition,
+                x: this.x ,y: this.y,
+                selectA:this.selectA,selectB:this.selectB
+              }
+          }      
       },
       deleteDish:function(id){
         var self=this;
@@ -265,25 +325,52 @@ export default {
 .edit{
   flex-grow: 3;
   flex-direction: column;
+  border: 0.4vw solid rgb(22, 217, 173);
+  border-radius: 20px;
 }
 
-.target{
 
-}
 
 .list,.choose-A,.type,.choose-B{
   flex-grow: 1;
   height: 100vh;
+  padding: 2% 2%;
 }
 
 .list{
-  border: 1px solid red;
+  border: 0.4vw solid rgb(84,177,244);
+  border-radius: 20px;
   width: 20vw;
   overflow-y: scroll;
 }
 
+.list::-webkit-scrollbar,.list-A::-webkit-scrollbar,.list-B::-webkit-scrollbar
+{
+  width: 3px;
+  background-color: transparent;
+  border: none;
+}
+
+.list::-webkit-scrollbar-thumb,.list-A::-webkit-scrollbar-thumb,.list-B::-webkit-scrollbar-thumb
+{
+  border-radius: 10px;
+  background-color: rgba(45, 45, 45,0.2);
+  opacity: 0.5;
+}
+
+.list::-webkit-scrollbar-track,.list-A::-webkit-scrollbar-track,.list-B::-webkit-scrollbar-track
+{
+background-color: transparent;
+border: 0px solid;
+}
+
+.list::-webkit-scrollbar-track-piece,.list-A::-webkit-scrollbar-track-piece,.list-B::-webkit-scrollbar-track-piece{
+ /* 4 */ 
+ border: none;
+}
+
 .choose-A{
-  border: 1px solid blue;
+  
 }
 
 .choose-A,.choose-B{
@@ -292,11 +379,12 @@ export default {
 }
 
 .type{
-  border: 1px solid yellow;
-  height: 20vh;
+  border-bottom: 0.1vw solid rgba(22, 217, 173,0.8);
+  height: 18vh;
 }
 .choose-B{
-  border: 1px solid green;
+  border-left: 0.1vw solid rgba(22, 217, 173,0.8);
+  
 }
 
 
@@ -334,7 +422,9 @@ export default {
 
 
 .result{
-  height: 15vh;
+  height: 20vh;
+  border-top: 0.1vw solid rgba(22, 217, 173,0.8);
+  padding: 2% 2%;
 }
 
 .step4{
@@ -343,6 +433,65 @@ export default {
 
 .add{
   width: 100%s;
+}
+
+h1{
+  font-family: 'Microsoft JhengHei';
+  margin-bottom: 1vw;
+  font-size: 1.5vw;
+  color: rgb(45, 45, 45);
+}
+
+.list-group{
+
+}
+
+.list-group p,.list-group div{
+  font-family: 'Microsoft JhengHei';
+}
+
+.list-group h5{
+  font-weight: 600;
+}
+
+.result input{
+  font-family: 'Microsoft JhengHei';
+}
+
+.step4{
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.result button{
+
+    border:0;
+      background-color:rgb(22, 217, 173);
+      color: white;
+      font-family: 'Microsoft JhengHei';
+      width: 10vw;
+      border-radius:3vh;
+      height:5vh;
+      margin:0 0.7vw 0 0.7vw; 
+}
+
+.add{
+      border:0;
+      background-color: rgb(84,177,244);
+      color: white;
+      font-family: 'Microsoft JhengHei';
+      width: 10vw;
+      border-radius:3vh;
+      height:5vh;
+      margin:0.7vw 0.7vw 0 0.7vw; 
+}
+
+span{
+  font-family: 'Microsoft JhengHei';
+}
+
+.option-container{
+  border: 0.2vw solid rgba(22, 217, 173,0.8);
 }
 </style>
 

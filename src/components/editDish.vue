@@ -55,7 +55,8 @@ export default {
           isImage: false,
           style: {display: "block"},
           new: false,
-          options: ["漢堡","飲料","沙拉","炸物"]
+          options: ["漢堡","飲料","沙拉","炸物"],
+          comments: {}
       }
     },
   computed: {
@@ -76,6 +77,47 @@ export default {
       }
     },
     methods: {
+      getComment(){
+          this.$axios({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'post',
+            url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/feedback',
+            data: {
+                id: 2
+            },
+        })//等到get後才執行接下來的code
+        .then((res)=>{
+            var size=0;
+            res.data.data.forEach(Element=>{
+              size++;
+            })
+            const test=res.data.data[size-1]
+            var nameArray=[]
+            test.productName.forEach(items=>{
+                nameArray.push(items.name)
+            });
+            console.log(Array.isArray(nameArray))
+            const getData=new Promise(resolve=>{
+                this.$emit("get-food",nameArray)
+                resolve()
+                //console.log(nameArray)
+            })
+            getData.then(resolve=>{
+                this.order=test.productName.map((items,id)=>{ 
+                    return {
+                        src:this.find[0][id].image,
+                        name:this.find[0][id].name,
+                        price:this.find[0][id].price,
+                        amout: items.amount
+                    }
+                })
+            })
+            console.log("find is "+this.find)
+
+        })
+      },
       handleOpenClose: function(){
         if(this.style.display==="none")
           this.style.display="block";
@@ -175,7 +217,7 @@ export default {
     }
     .con{
       flex-grow: 1;
-      border: 1px solid rgb(22, 217, 173);
+      border: 0.2vw solid rgb(22, 217, 173);
       height: 95vh;
       display: flex;
       margin:2vh 1vw 3vh 1vw;
@@ -288,5 +330,8 @@ export default {
       height:5vh;
       margin:0 0.7vw 0 0.7vw; 
     }
+
+    
+
 </style>
 

@@ -165,6 +165,8 @@ export default {
       if(this.addOrder==true){//若將產品放入cart則跳出sidebar
         this.open();
     }
+      else  
+        this.close()
     }
   },
   created:function(){

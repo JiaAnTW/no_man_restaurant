@@ -64,11 +64,12 @@ import SignUp from "../SignUp.vue";
 import Start from "./Start.vue"
 import axios from "axios";
 import Vue from "vue";
+import Alert from "./Alert"
 
 Vue.prototype.$axios = axios;
 export default {
   name: 'Layout',
-  components: {Order,Total,Member,Loading,Food,Cart,Map,PayCenter,PastOrder,SignUp,Profile,Start},//也要把你做的Component在這註冊
+  components: {Order,Total,Member,Loading,Food,Cart,Map,PayCenter,PastOrder,SignUp,Profile,Start,Alert},//也要把你做的Component在這註冊
   data () {
     return {
       menu:[],//菜單
@@ -85,6 +86,7 @@ export default {
       isLoading: false, //loading畫面是否顯示
       isStart: true,
       isPay: false,
+      isAlert: false,
       search_f:false,//放大鏡是否顯示
       addOrder:false,//確認是否addToCart
      //placeOrder:false,
@@ -170,13 +172,8 @@ export default {
       console.log(this.find)
     },
     startPay:function(){
-      if(this.token!=""){
-        this.isPay=true;
-        this.addOrder=false
-      }
-      else{
-        alert("想要買這個餐點?哼哼哼，在沒有登入之前我是不會讓你通過這裡的",this.changeNowAt('profile'))
-      }
+      this.isPay=true;
+      this.addOrder=false
       
     }
   },

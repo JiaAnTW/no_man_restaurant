@@ -179,10 +179,13 @@ module.exports=class menu{
                 console.log("Menu/Comment: database connect error at "+time);
         }
         console.log("get "+content)
+
+        
+
         const startAdd=()=>{
             var dt=new Date();
             const data={
-                feedback:{
+                feedback:[{
                     comment:{
                         date:dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate(),
                         score: score,
@@ -192,7 +195,7 @@ module.exports=class menu{
                         date:null,
                         content: null                    
                     }
-                }
+                }]
             };
             data.feedback=JSON.stringify(data.feedback)
             this.con.query('UPDATE menu SET ? WHERE id = ?', [data,id], function(err, rows) {
@@ -203,7 +206,36 @@ module.exports=class menu{
             });
         }
         try{
-            startAdd();
+            var getData=this.GetFeedBack(id)
+            getData.then(res=>{
+                console.log("res is"+res)
+                if(res==null){
+                    startAdd();
+                }
+                else{
+                    var dt=new Date();
+                    var input={feedback:res};
+                    input.feedback.push({
+                        comment:{
+                            date:dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate(),
+                            score: score,
+                            content: content
+                        },
+                        reply:{
+                            date:null,
+                            content: null                    
+                        }
+                    })
+                    input.feedback=JSON.stringify(input.feedback)
+                    this.con.query('UPDATE menu SET ? WHERE id = ?', [input,id], function(err, rows) {
+                        if (err) {
+                            console.log(err)
+                            return(err);
+                        }
+                    });
+                }
+            })
+
         }catch(error){
             var dt=new Date();
             const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();
@@ -234,12 +266,12 @@ module.exports=class menu{
                         console.log(err);
                         return;
                     }
-                    if(rows[0].feedback){
+                    try{
                         var data = JSON.parse(rows[0].feedback);
                         resolve(data);
-                    }
-                    else
+                    }catch(err){
                         resolve(null);
+                    }
                 });
             })
             return getData;
@@ -252,7 +284,7 @@ module.exports=class menu{
     }
 
 
-    Reply(id,content){
+    Reply(id,index,content){
         try{
             this.con.connect(function(err) {
                 if (err) {
@@ -267,8 +299,8 @@ module.exports=class menu{
         console.log("get "+content)
         const startAdd=(data)=>{
             var dt=new Date();
-            data.feedback.reply.date=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate();
-            data.feedback.reply.content=content;
+            data.feedback[index].reply.date=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate();
+            data.feedback[index].reply.content=content;
             data.feedback=JSON.stringify(data.feedback)
             this.con.query('UPDATE menu SET ? WHERE id = ?', [data,id], function(err, rows) {
                 if (err) {
@@ -278,7 +310,11 @@ module.exports=class menu{
             });
         }
         try{
-            this.getData.then((value)=>{startAdd(value);})
+            var getData=this.GetFeedBack(id)
+            getData.then((value)=>{
+                var input={feedback:value};
+                startAdd(input);
+            })
         }catch(error){
             var dt=new Date();
             const time=dt.getFullYear()+"/"+(dt.getMonth()+1)+"/"+dt.getDate()+"/"+dt.getHours()+"/"+dt.getMinutes();

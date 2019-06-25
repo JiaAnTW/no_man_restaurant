@@ -28,7 +28,7 @@ module.exports=class feedbackController{
         try{
             var Menu = require( '../models/menu.js');
             Menu=new Menu();
-            Menu.Comment(req.body.id,req.body.content);
+            Menu.Reply(req.body.id,req.body.index,req.body.content);
         }catch(error){
             console.log("FeedbackController/ Reply error: "+error);
         }

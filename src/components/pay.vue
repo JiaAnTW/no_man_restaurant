@@ -25,7 +25,7 @@
               <b-col class="l-pay">
                 <button @click="linePay"></button>
               </b-col>
-              <b-col> <button @click="discountCheck"></button> </b-col>
+              <b-col></b-col>
             </b-row>
             <!--^^^ 按鈕 ^^^-->
             <b-row v-if="waitPay" class="message">
@@ -110,7 +110,7 @@ export default {
           self.waitPay=false;
           self.waitCheck=true;
           self.transactionId=response.data.transactionId;
-          })     
+          }) 
    },
     linePayConfirm: function(){
       this.waitPay=true;
@@ -133,7 +133,10 @@ export default {
         if(response.data==='Success.'){
           this.$emit("finish");
         }
-      })
+      }).catch(error=>{
+        this.waitPay=false;
+        this.waitCheck=true;      
+      })    
     },
     createPaymentRequest () {
       var methodData = [{

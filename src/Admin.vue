@@ -99,5 +99,30 @@ export default {
   flex-grow: 1;
   height: 100%;
 }
+
+.choose-area::-webkit-scrollbar,.list-A::-webkit-scrollbar,.list-B::-webkit-scrollbar
+{
+  width: 6px;
+  background-color: transparent;
+  border: none;
+}
+
+.choose-area::-webkit-scrollbar-thumb,.list-A::-webkit-scrollbar-thumb,.list-B::-webkit-scrollbar-thumb
+{
+  border-radius: 10px;
+  background-color: rgb(84,177,244);
+  opacity: 0.5;
+}
+
+.choose-area::-webkit-scrollbar-track,.list-A::-webkit-scrollbar-track,.list-B::-webkit-scrollbar-track
+{
+background-color: transparent;
+border: 0px solid;
+}
+
+.choose-area::-webkit-scrollbar-track-piece,.list-A::-webkit-scrollbar-track-piece,.list-B::-webkit-scrollbar-track-piece{
+ /* 4 */ 
+ border: none;
+}
 </style>
 
