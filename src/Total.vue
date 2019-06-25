@@ -90,8 +90,8 @@ computed:{
                 'Content-Type': 'application/json'
             },
             method: 'post',
-            url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/user/history',
-            //url: '/api/post/login',
+            //url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/user/history',
+            url: '/api/get/user/history',
             data: {
                 id: 0
             },
@@ -101,41 +101,29 @@ computed:{
             res.data.data.forEach(Element=>{
               size++;
             })
-            var getTest=res.data;
-            const test=getTest.data[10]
+            const test=res.data.data[size-1]
             const ff=res.data.data;
-            //console.log("there is a "+ff[size-1])
-             //console.log(test)
-            
-            //this.time=1;
-            //this.startTime=test.startTime;
-            //console.log("now is "+Date.now());
-            //console.log("start is "+test.startTime);
-            //this.esttime();
-            //setInterval(this.esttime.bind(this) , 1000)
-            getTest.data.forEach(Element=>{
-              var nameArray=[]
-              //if(Date.now()-Element.startTime<=30){
-              test.productName.forEach(items=>{
+            console.log("there is a "+ff[size-1])
+             console.log(ff)
+            var nameArray=[]
+            this.time=1;
+            this.startTime=test.startTime;
+            console.log("now is "+Date.now());
+            console.log("start is "+test.startTime);
+            this.esttime();
+            setInterval(this.esttime.bind(this) , 1000)    
+            test.productName.forEach(items=>{
                 nameArray.push(items.name)
-              });
-              this.$emit("get-food",nameArray)
-              //}
-            })  
-            //this.$emit("get-food",nameArray)
-            getTest.data.forEach((Element,index)=>{
-              if((Date.now()-Element.startTime)/1000/60<=30){
-              this.order.push(test.productName.map((items,id)=>{ 
+            });
+            this.$emit("get-food",nameArray)
+            this.order.push(test.productName.map((items,id)=>{ 
                     return {
-                        src:this.find[index][id].image,
-                        name:this.find[index][id].name,
-                        price:this.find[index][id].price,
+                        src:this.find[0][id].image,
+                        name:this.find[0][id].name,
+                        price:this.find[0][id].price,
                         amout: items.amount
                     }
                 }))
-              }
-            })
-            if(this.order.length==0){
             this.order.push(test.productName.map((items,id)=>{ 
                     return {
                         src:this.find[0][id].image,
@@ -143,7 +131,7 @@ computed:{
                         price:87,
                         amout: items.amount
                     }
-            }))}                   
+                }))                  
         })
     }
  }

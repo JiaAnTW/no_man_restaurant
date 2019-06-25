@@ -64,8 +64,8 @@ computed:{
       this.$axios(
           {
             method: "post",
-            url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/index',
-            //url: '/api/post/index',
+            //url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/index',
+            url: '/api/post/index',
             data:{
               token:this.token
           }

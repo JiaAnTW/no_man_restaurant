@@ -76,8 +76,8 @@ export default {
             this.order.forEach(Element=>{
                 this.$axios({
                     method: "post",
-                    url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/comment',
-                    //url: '/api/post/pay/confirm',
+                    //url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/comment',
+                    url: '/api/post/comment',
                     data:{
                         id:Element.id,
                         score: Element.rating,

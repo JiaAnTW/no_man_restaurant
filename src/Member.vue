@@ -53,8 +53,8 @@ export default {
     var self=this;
     this.$axios({
       method: 'post',
-      url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/login',
-      //url: '/api/post/login',
+      //url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/login',
+      url: '/api/post/login',
       data: {
         username:self.email,
         password:self.password,
@@ -63,7 +63,7 @@ export default {
         this.token=res.data["token"];
         this.$emit('get-token',self.token);/*傳送代碼*/ 
         if(this.onPay)
-          this.$emit('change-page',50);
+          this.$emit('change-page',25);
 
       });
   },

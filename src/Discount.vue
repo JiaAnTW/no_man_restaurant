@@ -199,8 +199,8 @@ export default {
         })
         this.$axios({
         method: method,
-        url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/'+route,
-        //url: '/api/post/'+route,
+        //url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/'+route,
+        url: '/api/post/'+route,
         data:{
             reason: this.reason,
             id:this.viewTarget,
@@ -238,8 +238,8 @@ export default {
         var self=this;
         this.$axios({
         method: "delete",
-        url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/discount',
-        //url: '/api/post/'+route,
+        //url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/discount',
+        url: '/api/post/discount',
         data:{
             id:this.viewTarget,
         }
@@ -260,8 +260,8 @@ export default {
     var self=this;
     this.$axios({
       methods: 'get',
-      url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/menu',
-      //url: '/api/get/menu',
+      //url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/menu',
+      url: '/api/get/menu',
       })
       .then((res) => {
         self.menu =res.data.map(Element=>{
@@ -290,8 +290,8 @@ export default {
 
     this.$axios({
       methods: 'get',
-      url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/discount',
-      //url: '/api/get/discount',
+      //url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/discount',
+      url: '/api/get/discount',
       })
       .then((res) => {
         this.discount =res.data.map(Element=>{

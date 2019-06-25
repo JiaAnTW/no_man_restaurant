@@ -25,7 +25,7 @@ export default {
   }
 }
 </script>
-<style scope>
+<style scoped>
     .message-container{
         flex-grow: 1;
         width: 100%;     

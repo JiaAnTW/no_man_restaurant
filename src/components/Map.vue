@@ -49,7 +49,7 @@ export default {
     },
     methods:{
         changePage:function(){
-            this.$emit('change-page',75);
+            this.$emit('change-page',50);
         }
     },
     beforeMount:function(){

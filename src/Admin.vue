@@ -57,8 +57,8 @@ export default {
     var self=this;
     this.$axios({
       methods: 'get',
-      url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/menu',
-      //url: '/api/get/menu',
+      //url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/menu',
+      url: '/api/get/menu',
       })
       .then((res) => {
         self.menu = res.data;
@@ -77,7 +77,8 @@ export default {
                 'Content-Type': 'application/json'
             },
             method: 'post',
-            url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/feedback',
+            //url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/feedback',
+            url: '/api/get/feedback',
             data: {
                 id: this.viewDish+1
             },
@@ -93,7 +94,8 @@ export default {
                 'Content-Type': 'application/json'
             },
             method: 'post',
-            url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/feedback',
+            //url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/feedback',
+            url: '/api/get/feedback',
             data: {
                 id: this.viewDish+1
             },

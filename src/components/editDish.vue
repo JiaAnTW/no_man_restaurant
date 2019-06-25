@@ -27,7 +27,7 @@
             </b-form-group>
           </div>
           <div class="interact">
-            <div class="interact-container">
+            <!--div class="interact-container">
               <b-list-group>
               <b-list-group-item button href="#"  class="flex-column align-items-start" v-for="(data,index) in comments" :key="index" @click="changeFouceComment(index)">
                 <p class="mb-1">
@@ -43,11 +43,11 @@
                 
               <b-form-textarea id="input-4" v-model="comments[focusComment].reply.content" placeholder="你可以在這裡回覆留言" rows="2"></b-form-textarea>
                         
-            </div>
+            </div-->
 
           </div>
           <div class="btn-con">
-            <button v-on:click="deleteDish">取消</button>
+            <button v-on:click="deleteDish">刪除</button>
             <button v-on:click="sendImage">送出</button>
           </div>
         
@@ -113,8 +113,8 @@ export default {
         var self=this;
         this.$axios({
         method: "post",
-        url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/reply',
-        //url: '/api/post/'+route,
+        //url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/reply',
+        url: '/api/post/reply'+route,
         data:{
             id:self.id,
             index: i,
@@ -135,8 +135,8 @@ export default {
         const compareImg=require('../assets/noPic.png');
         this.$axios({
         method: method,
-        url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/'+route,
-        //url: '/api/post/'+route,
+        //url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/'+route,
+        url: '/api/post/'+route,
         data:{
             id:self.id,
             name: self.name,
@@ -170,8 +170,8 @@ export default {
         if(check==true){
           this.$axios({
           method: "delete",
-          url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/menu',
-          //url: '/api/post/menu',
+          //url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/menu',
+          url: '/api/post/menu',
           data:{
               id:self.id,
           }
@@ -308,6 +308,7 @@ export default {
     }
     .interact{
       width:25vw;
+      height:30vh;
       max-height:30vh;
       border: 0.2vw solid rgb(22, 217, 173);
       margin:1vh 1vw 1vh 0;
@@ -346,8 +347,9 @@ export default {
     }
 
     #input-4{
-      width: 50%;
-      height: 30vh;
+      width: 40%;
+      height: 25vh;
+      align-self: center;
       flex-grow: 1;
     }
 

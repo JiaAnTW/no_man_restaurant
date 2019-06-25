@@ -66,8 +66,8 @@ export default {
    getDiscount:function(){
       this.$axios({
       methods: 'get',
-      url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/discount',
-      //url: '/api/get/discount',
+      //url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/discount',
+      url: '/api/get/discount',
       })
       .then((res) => {
         this.discount =res.data.map(Element=>{
@@ -97,8 +97,8 @@ export default {
           this.$axios(
             {
               method: "post",
-              url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/pay',
-              //url: '/api/post/pay',
+              //url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/pay',
+              url: '/api/post/pay',
               data:{
               productName: "SunBurger的餐點",
               amount: this.discountCheck(),
@@ -119,8 +119,8 @@ export default {
       this.$axios(
         {
           method: "post",
-          url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/pay/confirm',
-          //url: '/api/post/pay/confirm',
+          //url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/pay/confirm',
+          url: '/api/post/pay/confirm',
           data:{
             transactionId:self.transactionId,
             amount:this.discountCheck(),

@@ -35,8 +35,8 @@ export default {
                 'Content-Type': 'application/json'
             },
             method: 'post',
-            url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/user/history',
-            //url: '/api/post/login',
+            //url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/user/history',
+            url: '/api/get/user/history',
             data: {
                 id: 0
             },

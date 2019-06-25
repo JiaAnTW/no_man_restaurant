@@ -181,8 +181,8 @@ export default {
       var self=this;
       this.$axios({
         methods: 'get',
-        url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/menu',//DataBase的資料 
-        //url: '/api/get/menu',
+        //url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/menu',//DataBase的資料 
+        url: '/api/get/menu',
       })
       .then((res) => {
         self.menu = res.data;

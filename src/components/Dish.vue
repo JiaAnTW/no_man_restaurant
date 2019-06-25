@@ -121,7 +121,8 @@ export default {
                 'Content-Type': 'application/json'
             },
             method: 'post',
-            url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/feedback',
+            //url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/feedback',
+            url: '/api/get/feedback',
             data: {
                 id: this.id
             },
