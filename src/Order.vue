@@ -3,7 +3,7 @@
         <div class="title"><h1>{{ name }}</h1></div>
         <div class="dish">
           <div class="info-container">
-            <dish :image="image" :color="colorSet[this.data.id%5]"/>
+            <dish :id="data.id" :image="image" :color="colorSet[this.data.id%5]"/>
            </div> 
         </div>
         <div class="number">

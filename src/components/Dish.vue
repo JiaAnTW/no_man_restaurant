@@ -8,14 +8,14 @@
           <div class="patch">
             <h2>What's new</h2>
             <div class="info">我真的很好吃，我超級好吃。我真的真的很好吃。</div>
-            <div class="info_btn"><button style="outline:none;" @click="scroll"><img src="../assets/icon/arrow.png" alt="arrow"/></button></div>
+            <div class="info_btn"><button style="outline:none;" @click="scroll" v-if="comments.length>0"><img src="../assets/icon/arrow.png" alt="arrow"/></button></div>
           </div>
-          <div class="interact" v-for="(element,index) in interact" :key="index">
+          <div class="interact" v-for="(element,index) in comments" :key="index">
               <div id="comment">
-                <h3 class="date">{{element.date}}</h3>
-                {{element.comment}}</div>
+                <h3 class="date">{{element.comment.date}}</h3>
+                {{element.comment.content}}</div>
                 <h3 class="res">Responese</h3>
-              <div id="comment">{{element.reply}}</div>
+              <div id="comment">{{element.reply.content}}</div>
           </div>
       </div>
     </div>
@@ -38,7 +38,7 @@ var options = {
 
 export default {
   name: 'Dish',
-  props: ["image","color"],
+  props: ["image","color","id"],
   data () {
     return {
       score: 3,
@@ -48,6 +48,7 @@ export default {
       detailStyle:{ marginTop:"0"},
       btnStyle:{top:0},
       madeof:["小麥麵包","法式香草醬"],
+      comments:[],
       interact:[
           { date:"2019-06-09", comment:"不知道有沒有提供兒童餐?", reply:"您好!請問您的兒童餐要快樂的嗎?"},
           { date:"2019-06-09", comment:"東西很好吃，希望有快樂分享餐，可以給多人一起吃", reply:"您好!請問您的分享餐要快樂的嗎?"},
@@ -113,6 +114,21 @@ export default {
   },
   created:function(){
     this.backgroundStyle={marginTop:"0%",backgroundImage:this.color};
+  },
+  mounted:function(){
+      this.$axios({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'post',
+            url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/feedback',
+            data: {
+                id: this.id
+            },
+        })//等到get後才執行接下來的code
+        .then((res)=>{
+            this.comments=res.data
+        })   
   }
 }
 </script>

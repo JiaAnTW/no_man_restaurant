@@ -4,7 +4,7 @@
             <food :isAdmin="true" @view-dish="viewSingleDish" :data="menu" :seafood="searchfood"/>
         </div>
         <div class="edit-area">
-          <edit-Dish :data="menu[viewDish]" @delete-dish="deleteDish"/>
+          <edit-Dish :data="menu[viewDish]" @delete-dish="deleteDish" :comments="comments"/>
           <!--b-button variant="dark" class="new" v-on:click="addDish">+新增餐點</b-button-->
         </div>
     </div>
@@ -22,6 +22,7 @@ export default {
   data(){
       return{
           menu: [],
+          comments:[],
           searchfood: "",
           viewDish: 0,
       }
@@ -69,7 +70,37 @@ export default {
           type:"burger",
         })
     });
+      this.$axios({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'post',
+            url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/feedback',
+            data: {
+                id: this.viewDish+1
+            },
+        })//等到get後才執行接下來的code
+        .then((res)=>{
+            this.comments=res.data
+        })
   },
+  watch:{
+    viewDish:function(){
+            this.$axios({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'post',
+            url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/feedback',
+            data: {
+                id: this.viewDish+1
+            },
+        })//等到get後才執行接下來的code
+        .then((res)=>{
+            this.comments=res.data
+        })
+    }
+  }
 }
 </script>
 

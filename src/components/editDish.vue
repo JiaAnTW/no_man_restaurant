@@ -26,7 +26,26 @@
                 </div>
             </b-form-group>
           </div>
-          <div class="interact"></div>
+          <div class="interact">
+            <div class="interact-container">
+              <b-list-group>
+              <b-list-group-item button href="#"  class="flex-column align-items-start" v-for="(data,index) in comments" :key="index" @click="changeFouceComment(index)">
+                <p class="mb-1">
+                  {{data.comment.content}}
+                </p>
+                <p class="mb-1">
+                  {{data.reply.content}}
+                </p>
+                <small>{{data.comment.date}}</small><br/>
+                <small>點選以回覆留言</small>
+              </b-list-group-item>
+              </b-list-group>
+                
+              <b-form-textarea id="input-4" v-model="comments[focusComment].reply.content" placeholder="你可以在這裡回覆留言" rows="2"></b-form-textarea>
+                        
+            </div>
+
+          </div>
           <div class="btn-con">
             <button v-on:click="deleteDish">取消</button>
             <button v-on:click="sendImage">送出</button>
@@ -42,7 +61,7 @@ import Vue from "vue";
 Vue.prototype.$axios = axios
 export default {
   name: 'editDish',
-  props: ["data","key"],
+  props: ["data","key","comments"],
   data(){
       return{
           id:0,
@@ -55,8 +74,8 @@ export default {
           isImage: false,
           style: {display: "block"},
           new: false,
-          options: ["漢堡","飲料","沙拉","炸物"],
-          comments: {}
+          options: ["burger","drinks","salad","fried"],
+          focusComment:0
       }
     },
   computed: {
@@ -74,49 +93,14 @@ export default {
       },
       validFeedback() {
         return this.state === true ? true : true;
+      },
+      commentData(){
+        return this.comments;
       }
     },
     methods: {
-      getComment(){
-          this.$axios({
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: 'post',
-            url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/feedback',
-            data: {
-                id: 2
-            },
-        })//等到get後才執行接下來的code
-        .then((res)=>{
-            var size=0;
-            res.data.data.forEach(Element=>{
-              size++;
-            })
-            const test=res.data.data[size-1]
-            var nameArray=[]
-            test.productName.forEach(items=>{
-                nameArray.push(items.name)
-            });
-            console.log(Array.isArray(nameArray))
-            const getData=new Promise(resolve=>{
-                this.$emit("get-food",nameArray)
-                resolve()
-                //console.log(nameArray)
-            })
-            getData.then(resolve=>{
-                this.order=test.productName.map((items,id)=>{ 
-                    return {
-                        src:this.find[0][id].image,
-                        name:this.find[0][id].name,
-                        price:this.find[0][id].price,
-                        amout: items.amount
-                    }
-                })
-            })
-            console.log("find is "+this.find)
-
-        })
+      changeFouceComment(index){
+        this.focusComment=index;
       },
       handleOpenClose: function(){
         if(this.style.display==="none")
@@ -124,7 +108,26 @@ export default {
         else
           this.style.display="none";
       },
+      sendReply:function(){
+        for(var i=0;i<this.comments.length;++i){
+        var self=this;
+        this.$axios({
+        method: "post",
+        url: 'http://luffy.ee.ncku.edu.tw:10152/api/post/reply',
+        //url: '/api/post/'+route,
+        data:{
+            id:self.id,
+            index: i,
+            content: this.comments[i].reply.content
+        }
+      })
+      .then((res) => {
+            
+        });
+        }
+      },
       sendImage: function(){
+        this.sendReply()
         this.title=this.name;
         var self=this;
         const method=(this.new===true)?"post":"put";
@@ -193,8 +196,7 @@ export default {
     }
   },
   mounted:function(){
-      console.log(this.data)
-      this.id=this.data.id;
+        this.id=this.data.id;
       this.title=this.data.name;
       this.name=(this.data.name==="點擊編輯新餐點")?'':this.data.name;
       this.image=(this.data.image==null)?require('../assets/noPic.png'):this.data.image;
@@ -202,6 +204,7 @@ export default {
       this.detail=this.data.detail;
       this.isImage=(this.data.image==null)?false:true;
       this.new=(this.data.name==="點擊編輯新餐點")?true:false;
+
   }
 }
 </script>
@@ -305,7 +308,7 @@ export default {
     }
     .interact{
       width:25vw;
-      height:50vh;
+      max-height:30vh;
       border: 0.2vw solid rgb(22, 217, 173);
       margin:1vh 1vw 1vh 0;
       border-radius: 3vh;
@@ -329,6 +332,23 @@ export default {
       border-radius:3vh;
       height:5vh;
       margin:0 0.7vw 0 0.7vw; 
+    }
+    .interact-container{
+      display: flex;
+      width: 100%;
+      max-height: 30vh;
+    }
+
+
+    .list-group{
+      width: 50%;
+      height: 100%;
+    }
+
+    #input-4{
+      width: 50%;
+      height: 30vh;
+      flex-grow: 1;
     }
 
     
