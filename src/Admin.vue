@@ -52,6 +52,8 @@ export default {
       },
   },
   mounted: function(){
+
+    
     var self=this;
     this.$axios({
       methods: 'get',

@@ -66,7 +66,7 @@ export default {
   }
   .list-group-item div{
     font-size: 1.5vw;
-    width: 70%;
+    width: 90%;
     font-family: 'Microsoft JhengHei';
   }
 </style>

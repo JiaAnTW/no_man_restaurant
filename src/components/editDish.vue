@@ -251,7 +251,7 @@ export default {
       border: 0.2vw solid rgb(22, 217, 173);
       border-radius: 3vh;
       width:25vw;
-      height:25vw;
+      height:23vw;
       margin:2vh 1vw 1vh 0vw;
       padding:4vw;
     }

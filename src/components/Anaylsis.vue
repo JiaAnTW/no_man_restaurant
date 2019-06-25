@@ -16,9 +16,9 @@
             <div class="chart">
                 <ve-bar :data="chartData"></ve-bar>
             </div>
-            <div class="chart">
+            <!--div class="chart" style="visibility:hidden">
                 <ve-line :data="chartData2" :settings="chartSettings" :data-zoom="dataZoom"></ve-line>
-            </div>
+            </div-->
         </div>
     </div>
 </template>
@@ -43,15 +43,14 @@ export default {
         }
       ]
       return {
+        getData:0,
+        menu:[],
+        order:[],
         chartData: {
           columns: ['餐點', '銷售量','銷售額'],
           rows: [
-            { '餐點': 'hi', '銷售量': 1393,'銷售額': 1393},
-            { '餐點': '漢堡', '銷售量': 3530,'銷售額': 1393},
-            { '餐點': '漢堡', '銷售量': 2923,'銷售額': 1393},
-            { '餐點': '漢堡', '銷售量': 1723,'銷售額': 1393},
-            { '餐點': '漢堡', '銷售量': 3792,'銷售額': 1393},
-            { '餐點': '漢堡', '銷售量': 4593,'銷售額': 1393}
+            { '餐點': '請選擇左側餐點及比較項目', '銷售量': 0,'銷售額': 0},
+
           ]
         },
         chartData2: {
@@ -92,9 +91,87 @@ export default {
               this.chartData.rows.push(Element)
           })
       },
+      getData:function(){
+          if(this.getData==2){
+              //console.log(this.menu)
+              //console.log(this.order)
+            this.options=this.menu.map(Element=>{
+              var amount=0;
+              this.order.forEach(items=>{
+                items.productName.forEach(child=>{
+                  //console.log("compare "+Element.name+" with "+child.name)
+                  if(child.name===Element.name){
+                    amount+=child.amount
+                  }
+                })
+              })
+              return {
+                text:Element.name,
+                value:{'餐點': Element.name,'銷售量': amount,'銷售額': amount*Element.price}};
+            })
+            /*this.options=this.options.map(Element=>{
+            var amout=0;
+            var price= 100;
+            Element.history.forEach(Item => {
+                amout+=Item.amout;
+            })
+            return{
+                text: Element.name,
+                value: {'餐點': Element.name,'銷售量': amout,'銷售額': amout*price}
+              }
+            })*/ 
+          }
+      }
+  },
+  created:function(){
+       var self=this;
+    this.$axios({
+      methods: 'get',
+      url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/menu',
+      //url: '/api/get/menu',
+      })
+      .then((res) => {
+        self.menu = res.data;
+        this.getData++;
+
+    });
+        
+        this.$axios({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'post',
+            url: 'http://luffy.ee.ncku.edu.tw:10152/api/get/user/history',
+            //url: '/api/post/login',
+            data: {
+                id: 0
+            },
+        })//等到get後才執行接下來的code
+        .then((res)=>{
+            var size=0;
+            res.data.data.forEach(Element=>{
+              size++;
+            })
+            this.order=res.data.data;
+            this.getData++;
+
+
+                /*this.order=this.order.map((items,id)=>{ 
+                    return {
+                        name:this.menu[items.id].name,
+                        price:this.menu[items.id].price,
+                        amout: items.amount
+                    }
+                })*/
+
+        })
   },
   mounted:function(){
-      const fakeHistory=[
+
+
+
+
+      /*const fakeHistory=[
             { year: '2019', month: '5', day: '20', amout: 1 },
             { year: '2019', month: '5', day: '21', amout: 4 },
             { year: '2019', month: '5', day: '22', amout: 2 },
@@ -111,18 +188,8 @@ export default {
                 history:fakeHistory
             }
           ]
-      }
-      this.options=fakeData.data.map(Element=>{
-        var amout=0;
-        var price= 100;
-        Element.history.forEach(Item => {
-            amout+=Item.amout;
-        })
-          return{
-            text: Element.name,
-            value: {'餐點': Element.name,'銷售量': amout,'銷售額': amout*price}
-          }
-        })
+      }*/
+
 
   }
 }
@@ -132,20 +199,32 @@ export default {
     width: 100%;
     height: 100%;
     display: flex;
+    align-items: center;
 }
 .product{
     flex-grow: 1;
-    height: 100%;
+    height: 80%;
+    padding: 5% 5%;
+    margin-left: 2%;
+    border: 0.4vw solid rgb(22, 217, 173);
+    border-radius: 50px;
+    font-family: 'Microsoft JhengHei';
 }
 .items{
     flex-grow: 1;
-    height: 100%;
+    height: 80%;
+    padding: 5% 5%;
+    margin-left: 2%;
+    border: 0.4vw solid rgb(22, 217, 173);
+    border-radius: 50px;
 }
 .chart-container{
-    flex-grow: 1;
-    height: 100%;
+    flex-grow: 3;
+    height: 80%;
     display: flex;
     flex-direction:column;
+    padding: 5% 0%;
+    
 }
 .chart{
     

@@ -9,7 +9,7 @@
         </div>
         <div class="btn-container">
                 <button class="add_cart_btn" @click="$emit('change-page',75)">Skip</button>
-                <button class="add_cart_btn" @click="send=!send">Send</button>
+                <button class="add_cart_btn" @click="sendData">Send</button>
         </div>
     </div>
 </template>
@@ -27,8 +27,9 @@ export default {
         }   
     },
     methods:{
-        skip(){
-            
+        sendData(){
+            this.send=!this.send
+            this.$emit('change-page',75)
         }
     },
     mounted:function(){
