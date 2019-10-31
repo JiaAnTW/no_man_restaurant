@@ -8,7 +8,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "base64-to-image": "^1.0.2",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
