@@ -1,8 +1,10 @@
 # Order system of no man restaurant(SWR 2019)
 ## Overview
 * menu UI
-![](https://i.imgur.com/vDsKYhm.png)![](https://i.imgur.com/VCSJM01.png)
+![](https://i.imgur.com/vDsKYhm.png)
+![](https://i.imgur.com/VCSJM01.png)
 ![](https://i.imgur.com/rfKddOx.png)
+
 * order record
 ![](https://i.imgur.com/xIri13m.png)
 ## backstage
